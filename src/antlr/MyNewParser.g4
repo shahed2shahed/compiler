@@ -91,7 +91,7 @@ functionDeclaration:
         #namedFunctionDecl
 
     | arrowFunction
-    
+
         #arrowFunctionAsFunctionDecl
 
     | variable_type IDENTIFIER EQUAL FUNCTION parameters? (COLON type)? CURLY_OPEN_BRACKET functionBody CURLY_CLOSE_BRACKET
