@@ -1,0 +1,32 @@
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div>
+      <button (click)="showExpensive = !showExpensive">
+        {{ showExpensive ? 'Show Cheap Products' : 'Show Expensive Products' }}
+      </button>
+
+      <ul>
+        <li *ngFor="let product of products" *ngIf="product.price > 50 === showExpensive">
+          {{ product.name }} - {{ product.price }}$
+        </li>
+      </ul>
+
+      <p *ngIf="!products.some(product => product.price > 50 === showExpensive)">
+        No {{ showExpensive ? 'expensive' : 'cheap' }} products available.
+      </p>
+    </div>
+  `,
+})
+export class AppComponent {
+  products = [
+    { name: 'Phone', price: 100 },
+    { name: 'Book', price: 20 },
+    { name: 'Watch', price: 150 },
+    { name: 'Pen', price: 5 },
+  ];
+  showExpensive = false;
+}

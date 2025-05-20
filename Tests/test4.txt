@@ -1,0 +1,28 @@
+import { Component } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div>
+      <button (click)="counter = counter + 1">Increase</button>
+      <button (click)="counter = counter - 1">Decrease</button>
+
+      <p>
+        {{ counter > 0
+          ? 'The number is positive: ' + counter
+          : counter < 0
+          ? 'The number is negative: ' + counter
+          : 'The number is zero' }}
+      </p>
+    </div>
+  `,
+})
+export class AppComponent {
+  counter = 0 ;
+}
+
+ bootstrapApplication(AppComponent)
+   .catch(err => console.error(err));
+
+

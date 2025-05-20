@@ -1,0 +1,22 @@
+ import { Component } from '@angular/core';
+ import { bootstrapApplication } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div>
+      <p>
+        {{ attendees.length > 0
+          ? 'There are ' + attendees.length + ' attendee(s) at the event'
+          : 'There are no attendees registered for the event' }}
+      </p>
+    </div>
+  `,
+})
+export class AppComponent {
+  attendees = ['Ahmed', 'Mona', 'Khalid'];
+}
+
+ bootstrapApplication(AppComponent)
+   .catch(err => console.error(err));
+

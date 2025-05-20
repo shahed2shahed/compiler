@@ -1,0 +1,32 @@
+import { Component } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div>
+      <button (click)="showFruits = !showFruits">
+        {{ showFruits ? 'Hide Fruits' : 'Show Fruits' }}
+      </button>
+
+      <ul *ngIf="showFruits">
+        <li *ngFor="let item of items">
+          {{ item }}
+        </li>
+      </ul>
+
+      <p *ngIf="!items.length">No items to display.</p>
+    </div>
+  `,
+  standalone: true,
+  imports: [CommonModule],
+})
+export class AppComponent {
+  items = ['Apple', 'Banana', 'Orange', 'Grapes'];
+  showFruits = true;
+}
+
+bootstrapApplication(AppComponent)
+  .catch(err => console.error(err));
+
