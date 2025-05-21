@@ -1,6 +1,6 @@
 package AST;
 
-public class Any extends Type {
+public class Any extends PrimitiveTypeNode {
     private String value;
 
     public Any(String value) {

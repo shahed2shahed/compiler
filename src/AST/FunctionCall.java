@@ -1,6 +1,6 @@
 package AST;
 
-public class FunctionCall extends Program{
+public class FunctionCall extends StatementNode {
 
 //    private String functionName;
 //    private String argument;

@@ -1,6 +1,6 @@
 package AST;
 
-public class Identifier extends Type {
+public class Identifier extends PrimitiveTypeNode {
 
     private String value;
 

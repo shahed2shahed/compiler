@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComponentDeclaration extends Program{
+public class ComponentDeclaration extends StatementNode{
 
     List<ComponentBody> componentBodies ;
 
@@ -49,3 +49,26 @@ public class ComponentDeclaration extends Program{
         }
 
 }
+
+
+
+/*public class ComponentDeclarationNode extends StatementNode {
+    private List<ComponentPropertyNode> properties;
+
+    public ComponentDeclarationNode(List<ComponentPropertyNode> properties) {
+        this.properties = properties;
+    }
+
+    public List<ComponentPropertyNode> getProperties() {
+        return properties;
+    }
+
+    @Override
+    public String toString() {
+        return "ComponentDeclarationNode{" +
+                "properties=" + properties +
+                '}';
+    }
+}
+
+ */

@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HtmlBody extends Types{
+public class HtmlBody extends AstNode{
 
     List<Types> content ;
 

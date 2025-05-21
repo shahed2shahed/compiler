@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TemplateElement extends ComponentBody {
+public class TemplateElement extends ComponentPropertyNode  {
      List<HtmlDeclare> templateBody;
 
     public TemplateElement() {
@@ -35,3 +35,26 @@ public class TemplateElement extends ComponentBody {
         return sb.toString();
     }
 }
+
+
+/*import java.util.List;
+
+public class TemplatePropertyNode extends ComponentPropertyNode {
+    private List<HtmlNode> htmlNodes;
+
+    public TemplatePropertyNode(List<HtmlNode> htmlNodes) {
+        this.htmlNodes = htmlNodes;
+    }
+
+    public List<HtmlNode> getHtmlNodes() {
+        return htmlNodes;
+    }
+
+    @Override
+    public String toString() {
+        return "TemplatePropertyNode{" +
+                "htmlNodes=" + htmlNodes +
+                '}';
+    }
+}
+ */

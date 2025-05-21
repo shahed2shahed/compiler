@@ -1,6 +1,6 @@
 package AST;
 
-public class CloseTag{
+public class CloseTag extends AstNode {
      String identifier;
 
     public CloseTag(String identifier) {

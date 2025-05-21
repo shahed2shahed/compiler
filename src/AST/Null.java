@@ -1,6 +1,6 @@
 package AST;
 
-public class Null extends Type{
+public class Null extends PrimitiveTypeNode{
 
     private String value;
 

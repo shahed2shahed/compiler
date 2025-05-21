@@ -2,7 +2,11 @@ package AST;
 
 import java.util.ArrayList;
 
-public class Program {
+public class Program extends AstNode {
+
+    //  constructor(
+    // public statements: StatementNode[] 
+  
     ArrayList<Object> children;
 
     public Program() {

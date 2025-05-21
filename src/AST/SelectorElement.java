@@ -1,6 +1,6 @@
 package AST;
 
-public class SelectorElement extends ComponentBody {
+public class SelectorElement extends ComponentPropertyNode {
     private String value;
 
     public SelectorElement(String value) {
@@ -20,3 +20,26 @@ public class SelectorElement extends ComponentBody {
         return "Selector: " + value;
     }
 }
+
+
+/*
+ public class SelectorPropertyNode extends ComponentPropertyNode {
+    private String selector;
+
+    public SelectorPropertyNode(String selector) {
+        this.selector = selector;
+    }
+
+    public String getSelector() {
+        return selector;
+    }
+
+    @Override
+    public String toString() {
+        return "SelectorPropertyNode{" +
+                "selector='" + selector + '\'' +
+                '}';
+    }
+}
+
+ */

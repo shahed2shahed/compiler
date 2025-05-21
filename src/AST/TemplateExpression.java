@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TemplateExpression extends Type {
+public class TemplateExpression extends AstNode {
 
 
         private List<Types> content;

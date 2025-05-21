@@ -2,7 +2,7 @@ package AST;
 
 import java.util.List;
 
-public class ClassStatement extends Node{
+public class ClassStatement extends StatementNode{
     private String export;
     private String className;
     List<ClassBody> classBody ;
@@ -38,4 +38,26 @@ public class ClassStatement extends Node{
     }
 
 }
+
+
+/*public class ClassStatement extends StatementNode {
+    private List<ClassPropertyNode> properties;
+
+    public ClassStatement(List<ClassPropertyNode> properties) {
+        this.properties = properties;
+    }
+
+    public List<ClassPropertyNode> getProperties() {
+        return properties;
+    }
+
+    @Override
+    public String toString() {
+        return "ClassPropertyNode{" +
+                "properties=" + properties +
+                '}';
+    }
+}
+
+ */
 

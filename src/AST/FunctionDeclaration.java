@@ -1,6 +1,6 @@
 package AST;
 
-public class FunctionDeclaration extends Node {
+public class FunctionDeclaration extends ClassPropertyNode {
      Parameters parameters;
      Type returnType;
      FunctionBody functionBody;

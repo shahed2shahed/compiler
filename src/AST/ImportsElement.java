@@ -4,7 +4,7 @@ import org.stringtemplate.v4.ST;
 
 import java.util.List;
 
-public class ImportsElement extends ComponentBody {
+public class ImportsElement extends ComponentPropertyNode {
 //     List<String> identifiers;
      String identifiers;
 
@@ -29,3 +29,25 @@ public class ImportsElement extends ComponentBody {
 
     }
 }
+
+/*import java.util.List;
+
+public class ImportsPropertyNode extends ComponentPropertyNode {
+    private List<String> imports;
+
+    public ImportsPropertyNode(List<String> imports) {
+        this.imports = imports;
+    }
+
+    public List<String> getImports() {
+        return imports;
+    }
+
+    @Override
+    public String toString() {
+        return "ImportsPropertyNode{" +
+                "imports=" + imports +
+                '}';
+    }
+}
+ */

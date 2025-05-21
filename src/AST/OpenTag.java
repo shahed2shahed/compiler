@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenTag {
+public class OpenTag extends AstNode  {
 
     List<Types> content ;
 

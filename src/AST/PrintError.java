@@ -1,6 +1,6 @@
 package AST;
 
-public class PrintError extends Node {
+public class PrintError extends ClassPropertyNode {
     private String console;
     private String error;
     private String identifier;

@@ -1,6 +1,6 @@
 package AST;
 
-public class Void extends Type {
+public class Void extends PrimitiveTypeNode {
 
     private String value;
 

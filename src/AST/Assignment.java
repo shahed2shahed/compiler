@@ -1,6 +1,6 @@
 package AST;
 
-public class Assignment extends Node {
+public class Assignment extends ClassPropertyNode {
      String identifier;
      Expression expression;
      Type type;

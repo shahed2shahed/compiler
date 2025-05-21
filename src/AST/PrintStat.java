@@ -1,6 +1,6 @@
 package AST;
 
-public class PrintStat extends Node {
+public class PrintStat extends ClassPropertyNode {
     private String console;
     private String log;
     private String identifier;

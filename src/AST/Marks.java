@@ -1,6 +1,6 @@
 package AST;
 
-public class Marks extends Type {
+public class Marks extends Types {
     private String mark;
 
     public Marks(String mark) {

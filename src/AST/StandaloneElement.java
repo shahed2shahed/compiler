@@ -1,6 +1,6 @@
 package AST;
 
-public class StandaloneElement extends ComponentBody {
+public class StandaloneElement extends ComponentPropertyNode {
     private boolean value;
 
     public StandaloneElement(boolean value) {
@@ -20,3 +20,23 @@ public class StandaloneElement extends ComponentBody {
         return "Standalone: " + value;
     }
 }
+
+/*public class StandalonePropertyNode extends ComponentPropertyNode {
+    private boolean standalone;
+
+    public StandalonePropertyNode(boolean standalone) {
+        this.standalone = standalone;
+    }
+
+    public boolean isStandalone() {
+        return standalone;
+    }
+
+    @Override
+    public String toString() {
+        return "StandalonePropertyNode{" +
+                "standalone=" + standalone +
+                '}';
+    }
+}
+ */
