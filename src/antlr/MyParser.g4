@@ -1,374 +1,295 @@
-/*parser grammar MyParser;
-
-options{tokenVocab= MyLexer;}
-
-program:
-(importStatment
-|componentDeclaration
-|classStatment
-|functionCall)* ;
-
-importStatment: IMPORT CURLY_OPEN_BRACKET IDENTIFIER (COMMA IDENTIFIER)* CURLY_CLOSE_BRACKET FROM STRING SEMI_COLON;
-
-componentDeclaration: COMPONENT OPEN_BRACKET CURLY_OPEN_BRACKET componentBody* CURLY_CLOSE_BRACKET CLOSE_BRACKET;
-
-componentBody:
-  (
-  (SELECTOR COLON STRING)
-  |(STANDALONE COLON BOOLEAN)
-  |(IMPORTS COLON SQUARE_OPEN_BRACKET IDENTIFIER (COMMA IDENTIFIER)* SQUARE_CLOSE_BRACKET)
-  |(TEMPLATE COLON QUOT htmlDeclare+ QUOT)
-  ) COMMA
-;
-
-classStatment: EXPORT CLASS IDENTIFIER CURLY_OPEN_BRACKET classBody* CURLY_CLOSE_BRACKET;
-
-functionCall
-    : IDENTIFIER OPEN_BRACKET IDENTIFIER CLOSE_BRACKET DOT CATCH OPEN_BRACKET parameters ARROW print_error CLOSE_BRACKET SEMI_COLON
-    | IDENTIFIER OPEN_BRACKET IDENTIFIER CLOSE_BRACKET DOT CATCH OPEN_BRACKET IDENTIFIER ARROW print_error CLOSE_BRACKET SEMI_COLON
-    ;
-
-
-htmlDeclare: (openTag htmlBody closeTag | selfClosingTag);
-
-openTag:
-   LT
-    (types)*
-   GT
- ;
-
- types : type|expression|htmlDeclare;
-
-closeTag: LT SLASH IDENTIFIER GT;
-
-selfClosingTag
-    :
-      LT (types)* SLASH GT
-    ;
-
-htmlBody
-    : (types)*
-    ;
-
-classBody
-     : variableDeclaration
-     |functionDeclaration
-     |print_stat
-     |print_error
-;
-
-variable_type
-    : LET|VAR|CONST
-    ;
-
-variableDeclaration
-    : variable_type? IDENTIFIER COLON ((type BIT_OR type)|type) EQUAL (types) SEMI_COLON
-    | variable_type? IDENTIFIER EQUAL expression SEMI_COLON
-    ;
-
-arrowFunction
-    : variable_type IDENTIFIER EQUAL parameters COLON type ARROW (IDENTIFIER ((PLUS|MIN) IDENTIFIER)? | STRING) SEMI_COLON
-    ;
-
-functionDeclaration
-    : FUNCTION? IDENTIFIER parameters? (COLON type)? CURLY_OPEN_BRACKET functionBody CURLY_CLOSE_BRACKET
-    | arrowFunction
-    | variable_type IDENTIFIER EQUAL FUNCTION parameters? (COLON type)? CURLY_OPEN_BRACKET functionBody CURLY_CLOSE_BRACKET
-    ;
-
-type
-    : IDENTIFIER
-    | NUMBER
-    | STRING_EX
-    | VOID
-    | NULL
-    | ANY
-    | CLASS
-    | ARRAY_STRING
-    | ARRAY_NUMBER
-    | ARRAY_TUPLE
-    | templateExpression
-    | marks
-    ;
-
-marks:
-    SEMI_COLON
-    |COMMA
-    |COLON
-    |DOT
-    |QUESTION_MARK
-    |HASH_TAG
-    |EQUAL
-    |LT
-    |GT
-    |PLUS
-    |MIN
-    |S_DOlOR
-    |SQUARE_OPEN_BRACKET
-    |SQUARE_CLOSE_BRACKET
-    |OPEN_BRACKET
-    |CLOSE_BRACKET
-    |CURLY_OPEN_BRACKET
-    |CURLY_CLOSE_BRACKET
-    ;
-
-expression:
-      STRING
-    |NUMBER_VAL
-    | arrayDeclaration
-    | ifElseStat
-    | CURLY_OPEN_BRACKET IDENTIFIER COLON expression (COMMA IDENTIFIER COLON expression)* CURLY_CLOSE_BRACKET
-    ///////////{m:'kk' , m:'kk' }
-    | BOOLEAN
-    | directivesStatment
-    ;
-
-templateExpression
-    :
-   CURLY_OPEN_BRACKET+
-    (types)*
-   CURLY_CLOSE_BRACKET+
-    ;
-
-
-arrayDeclaration
-    : SQUARE_OPEN_BRACKET (expression (COMMA expression)* COMMA*)? SQUARE_CLOSE_BRACKET
-    ;
-
-parameters
-    : OPEN_BRACKET IDENTIFIER COLON type (COMMA IDENTIFIER COLON type)* CLOSE_BRACKET
-    | OPEN_BRACKET IDENTIFIER COLON type (EQUAL (STRING|NUMBER_VAL|BOOLEAN))? (COMMA IDENTIFIER COLON type (EQUAL (STRING|NUMBER_VAL|BOOLEAN))? )* CLOSE_BRACKET
-    ;
-
-functionBody
-    : (variableDeclaration
-      |assignment
-      |print_stat
-      |print_error)*
-    ;
-
-
-assignment
-    : IDENTIFIER EQUAL expression SEMI_COLON
-    | IDENTIFIER DOT IDENTIFIER (EQUAL type)? SEMI_COLON
-    ;
-
-print_error
-    : CONSOLE DOT ERROR OPEN_BRACKET (IDENTIFIER|STRING|NUMBER_VAL) CLOSE_BRACKET
-    ;
-
-print_stat
-    : CONSOLE DOT LOG OPEN_BRACKET (IDENTIFIER|STRING|NUMBER_VAL) CLOSE_BRACKET SEMI_COLON
-    ;
-
-directivesStatment
-    : DIRECTIVES EQUAL STRING
-    ;
-
-
-ifElseStat
-    : IDENTIFIER QUESTION_MARK type COLON type
-    ;*/
-
-
-
-
-
 parser grammar MyParser;
 
 options { tokenVocab = MyLexer; }
 
-//program:
-//    (importStatment   #importStmtLabel
-//    | componentDeclaration #componentDeclLabel
-//    | classStatment   #classStmtLabel
-//    | functionCall    #functionCallLabel
-//    )* ;
+program: ////////////
+    (statement)*
+    ;
 
+statement: /////////////
+      importStatment ///////
+    | componentDeclaration ////////
+    | classStatment ////
+    | functionCall /////
+    ;
 
+importStatment: ///////////
+    IMPORT CURLY_OPEN_BRACKET (IDENTIFIER|BEHAVIORSUBJECT) (COMMA IDENTIFIER)* CURLY_CLOSE_BRACKET FROM STRING SEMI_COLON
+    ;
 
+module: //////
+      COMPONENT
+    | NGMODULE
+    | INJECTABLE
+    ;
 
+componentDeclaration: //////////
+    module OPEN_BRACKET CURLY_OPEN_BRACKET componentBody CURLY_CLOSE_BRACKET CLOSE_BRACKET;
 
+componentBody: ///////////////
+    componentEle (COMMA componentEle)* COMMA?
+    ;
 
+selectorProperty: //////////////
+    SELECTOR COLON STRING
+    ;
 
+standaloneProperty: //////////////
+    STANDALONE COLON BOOLEAN
+    ;
 
+propertyStat: ///////////
+    COLON SQUARE_OPEN_BRACKET (IDENTIFIER|functionCall) (COMMA IDENTIFIER)* SQUARE_CLOSE_BRACKET
+    ;
 
+importsProperty: /////////////
+    IMPORTS propertyStat
+    ;
 
+exportsProperty: ///////////
+    EXPORTS propertyStat
+    ;
 
+bootstrapProperty: //////////
+    IDENTIFIER propertyStat
+    ;
 
+templateProperty: //////////////
+      TEMPLATE COLON QUOT htmlDeclare+ QUOT #templateHtmlDeclaration ///////////
+    | IDENTIFIER COLON STRING #templateHtmlUrl ////////
+    ;
 
+componentEle: //////////
+      selectorProperty  /////////
+    | standaloneProperty ////////
+    | importsProperty ///////
+    | exportsProperty /////////
+    | bootstrapProperty ////////
+    | templateProperty //////////
+    ;
 
-
-
-
-
-
-
-
-
-
-
-
-
-program: (statement)*;
-
-statement:
-importStatment   #importStmtLabel
-|componentDeclaration #componentDeclLabel
-|classStatment   #classStmtLabel
-|functionCall    #functionCallLabel
+classType: //////////
+      IMPLEMENTS
+    | INTERFACE
+    | variable_type
 ;
 
+classRelation: /////////
+        CLASS IDENTIFIER (classType IDENTIFIER)?       #commonRelation ///////
+      | classType IDENTIFIER (COLON IDENTIFIER EQUAL)? #otherRelation ////////
+      ;
 
-importStatment:
-    IMPORT CURLY_OPEN_BRACKET IDENTIFIER (COMMA IDENTIFIER)* CURLY_CLOSE_BRACKET FROM STRING SEMI_COLON;
+classStatment: //////////
+      EXPORT classRelation CURLY_OPEN_BRACKET? body* CURLY_CLOSE_BRACKET?
+      ;
 
-componentDeclaration:
-    COMPONENT OPEN_BRACKET CURLY_OPEN_BRACKET componentBody* CURLY_CLOSE_BRACKET CLOSE_BRACKET;
 
-//componentBody:
-//    ( selectorProperty    #selectorLabel
-//    | standaloneProperty  #standaloneLabel
-//    | importsProperty     #importsLabel
-//    | templateProperty    #templateLabel
-//    ) COMMA ;
+types: ///////////
+      type /////////
+    | marks ///////
+    | expression ////
+    | eventBinding //////
+    | htmlDeclare /////////
+    ;
 
-componentBody: componentEle COMMA (componentEle COMMA)*;
 
-selectorProperty:SELECTOR COLON STRING;
-standaloneProperty:STANDALONE COLON BOOLEAN;
-importsProperty:IMPORTS COLON SQUARE_OPEN_BRACKET IDENTIFIER (COMMA IDENTIFIER)* SQUARE_CLOSE_BRACKET;
-templateProperty:TEMPLATE COLON QUOT htmlDeclare+ QUOT;
+brackets:
+    OPEN_BRACKET SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET CLOSE_BRACKET
+    ;
 
-componentEle:
-selectorProperty    #selectorLabel
-|standaloneProperty  #standaloneLabel
-|importsProperty     #importsLabel
-|templateProperty    #templateLabel
+stateManagement:
+    variable_type IDENTIFIER S_DOlOR EQUAL IDENTIFIER BEHAVIORSUBJECT LT simpleArray GT brackets SEMI_COLON
+    ;
+
+
+body:
+//      variableDeclaration
+//    |
+      functionDeclaration ////
+    | print_stat ///
+    | print_error ////
+    | expression ////
+    | stateManagement
+    | returnStat
+    ;
+
+print_error: ////
+    CONSOLE DOT ERROR OPEN_BRACKET values CLOSE_BRACKET
+    ;
+
+print_stat: ////
+    CONSOLE DOT LOG OPEN_BRACKET values CLOSE_BRACKET SEMI_COLON
+    ;
+
+functionCall: ///////////
+      IDENTIFIER parameters DOT CATCH OPEN_BRACKET parameters ARROW print_error CLOSE_BRACKET SEMI_COLON #callFunctionPara ///////
+    | propertyAccess IDENTIFIER? parameters (AS simpleArray)? SEMI_COLON #methodCallWithValue //////////
+    | propertyAccess OPEN_BRACKET argumentList? CLOSE_BRACKET SEMI_COLON? #methodCallWithListValue //////////
+    ;
+
+
+argumentList /////////
+    : objectLiteral  #objectLiteralArgumentList ////////
+    | SQUARE_OPEN_BRACKET objectProperty SQUARE_CLOSE_BRACKET #withObjectPropertyArgumentList /////////
+    | expression (COMMA expression)*     #withExpressionArgumentList //////////
+    ;
+
+conditions: ///////////////
+      propertyAccess OPEN_BRACKET IDENTIFIER ARROW propertyAccess (EQUALTHIRD|NOT_EQUAL_EQUAL) propertyAccess CLOSE_BRACKET #conditionEqualty ///////
+    | propertyAccess OPEN_BRACKET parameters ARROW propertyAccess parameters COMMA NUMBER_VAL CLOSE_BRACKET operations NUMBER_VAL #conditionValue ////////
 ;
 
+returnType:
+  argumentList //////
+ |functionCall ////////
+ |conditions /////////
+ |values /////////
+;
 
-classStatment:
-    EXPORT CLASS IDENTIFIER CURLY_OPEN_BRACKET classBody* CURLY_CLOSE_BRACKET;
-
-classBody:
-    variableDeclaration       #varDeclLabel
-    | functionDeclaration     #funcDeclLabel
-    | assignment              #assignmentLabel
-    | functionCall            #methodCallLabel
-    | print_stat              #printStatLabel
-    | print_error             #printErrLabel
+returnStat:
+ RETURN returnType SEMI_COLON?
     ;
 
-
-print_error:
-    CONSOLE DOT ERROR OPEN_BRACKET (IDENTIFIER|STRING|NUMBER_VAL) CLOSE_BRACKET
+objectLiteral //////////
+    : CURLY_OPEN_BRACKET objectProperty (COMMA objectProperty)* CURLY_CLOSE_BRACKET
     ;
 
-print_stat:
-    CONSOLE DOT LOG OPEN_BRACKET (IDENTIFIER|STRING|NUMBER_VAL) CLOSE_BRACKET SEMI_COLON
+objectProperty ///////////
+    : IDENTIFIER COLON expression #identifierObjectProperty /////////
+    | IMPORTS COLON expression #importsObjectProperty ////////
+    | EXPORTS COLON expression #exportsObjectProperty ///////
+    | DOT* propertyAccess #dotPropertyAccessObjectProperty //////////
     ;
 
-functionCall:
-    IDENTIFIER OPEN_BRACKET IDENTIFIER CLOSE_BRACKET DOT CATCH OPEN_BRACKET parameters ARROW print_error CLOSE_BRACKET SEMI_COLON
-    | IDENTIFIER OPEN_BRACKET IDENTIFIER CLOSE_BRACKET DOT CATCH OPEN_BRACKET IDENTIFIER ARROW print_error CLOSE_BRACKET SEMI_COLON
+propertyAccess ///////////
+    : IDENTIFIER (DOT IDENTIFIER S_DOlOR? (SQUARE_OPEN_BRACKET IDENTIFIER SQUARE_CLOSE_BRACKET)? )*
     ;
 
+functionDeclarationStat: //////////
+     (EQUAL FUNCTION)? parameters? (COLON unionType)? #simpleDecStat ///////
+    | S_DOlOR parameters COLON IDENTIFIER LT simpleArray GT #simpleArrayDecStat ////////
+    ;
+
+normalfunctionDecl: ////////
+      (FUNCTION|variable_type)? IDENTIFIER functionDeclarationStat CURLY_OPEN_BRACKET body* CURLY_CLOSE_BRACKET
+    ;
 
 functionDeclaration:
-    FUNCTION? IDENTIFIER parameters? (COLON type)? CURLY_OPEN_BRACKET functionBody CURLY_CLOSE_BRACKET
-        #namedFunctionDecl
-
+      normalfunctionDecl //////////
     | arrowFunction
-        #arrowFunctionAsFunctionDecl
-
-    | variable_type IDENTIFIER EQUAL FUNCTION parameters? (COLON type)? CURLY_OPEN_BRACKET functionBody CURLY_CLOSE_BRACKET
-        #assignedFunctionDecl
-    ;
-parameters:
-    OPEN_BRACKET IDENTIFIER COLON type (COMMA IDENTIFIER COLON type)* CLOSE_BRACKET    #paramList
-    | OPEN_BRACKET IDENTIFIER COLON type (EQUAL (STRING|NUMBER_VAL|BOOLEAN))? (COMMA IDENTIFIER COLON type (EQUAL (STRING|NUMBER_VAL|BOOLEAN))? )* CLOSE_BRACKET  #paramWithDefault
     ;
 
-functionBody:
-    (variableDeclaration
-    |assignment
-    |print_stat
-    |print_error)* ;
+parametersType: ///////////
+       (COMMA AccessModifiers? IDENTIFIER COLON type)*  #paraWithType ///
+     | EQUAL values (COMMA IDENTIFIER COLON type EQUAL values)* #paraValue ///
+     ;
 
-assignment:
-    IDENTIFIER EQUAL expression SEMI_COLON             #simpleAssignment
-    | IDENTIFIER DOT IDENTIFIER (EQUAL type)? SEMI_COLON  #dotAssignment
+parametersContent: //////////
+       AccessModifiers? IDENTIFIER (COLON type parametersType)? #paraHasAccessModifiers //////////
+     | propertyAccess (COMMA propertyAccess)* #paraHasPropertyAccess ///////////
+     ;
+
+parameters: ////////////
+        OPEN_BRACKET parametersContent* CLOSE_BRACKET
+        ;
+
+values: /////////////
+          STRING
+        | NUMBER_VAL
+        | BOOLEAN
+        | IDENTIFIER
+        ;
+
+operations: ///////////
+          PLUS
+        | MIN
+        | MULT
+        ;
+
+subDotAssignment: ///////////
+        (QUESTION_MARK DOT SQUARE_OPEN_BRACKET values SQUARE_CLOSE_BRACKET)*
+        ;
+
+assignment: /////////////
+      IDENTIFIER EQUAL expression SEMI_COLON             #simpleAssignment //////////
+    | propertyAccess subDotAssignment (EQUAL NOT? type (operations values)? )? SEMI_COLON?  #dotAssignment /////////
+    | assignment EQUAL assignment (AS primitiveType SEMI_COLON)? #assignmentStatement /////////
+  //  | assignment EQUAL assignment (AS primitiveType SEMI_COLON)* #assignmentStatement
+    | propertyAccess EQUAL objectLiteral SEMI_COLON #assignmentStatementIniti //////
     ;
 
-templateExpression:
-CURLY_OPEN_BRACKET (types)* CURLY_CLOSE_BRACKET  ;
-
-
-types:
-     type            #typeLabel
-    | marks          #marksLabel
-    | expression     #expressionLabel
-    | htmlDeclare    #nestedHtmlLabel
+templateExpression: /////////////
+    CURLY_OPEN_BRACKET+ (types)* (BIT_OR types+)? CURLY_CLOSE_BRACKET+
     ;
 
-htmlDeclare:
-      normalHtmlTag    #normalHtmlTagLabel
-    | selfClosingTag   #selfClosingTagLabel
+eventBinding: ////////////
+     OPEN_BRACKET CLICK CLOSE_BRACKET2 EQUAL3 DQUOT5 ID3 OPEN_BRACKET2 (ID3 (DOT3 ID3)*)? CLOSE_BRACKET2 DQUOT6
+     ;
+
+htmlDeclare: //////////
+      normalHtmlTag ////////////
+    | selfClosingTag
     ;
 
-normalHtmlTag:
-    openTag htmlBody closeTag
+normalHtmlTag: //////////
+    openTag (types)* closeTag
     ;
 
-selfClosingTag:
+selfClosingTag: /////////
     LT (types)* SLASH GT
     ;
 
-openTag:
+openTag: //////////
     LT (types)* GT
     ;
 
-closeTag:
+closeTag: /////////////
     LT SLASH IDENTIFIER GT
     ;
 
-htmlBody:
-    (types)*
+simpleArray: //////////////
+    IDENTIFIER SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET
     ;
 
-
-
-type
-    : primitiveType
-    | arrayType
-    | tupleType
-    | genericType
-    ;
-    
-primitiveType
-    : STRING_EX
-    | NUMBER
-    | BOOLEAN
-    | VOID
-    | NULL
-    | ANY
-    | IDENTIFIER 
+map: /////////
+    IDENTIFIER LT values (COMMA values)* GT
     ;
 
-arrayType
-    : type '[]'
+type //////////
+    : primitiveType ////////
+    | arrayStringType ///////
+    | simpleArray ////////
+    | map ////////
+    | arrayNumberType /////////
+    | tupleType ////////
     ;
 
-genericType
-    : 'Array' LT type GT
+primitiveType //////////
+    : IDENTIFIER #idPrimitiveType ////////
+    | NUMBER #numberPrimitiveType /////////
+    | VOID #voidPrimitiveType ////////
+    | NULL #nullPrimitiveType //////
+    | ANY #anyPrimitiveType /////////
+    | STRING_EX #stringEXPrimitiveType //////
+    | CLASS #classPrimitiveType //////
+    | templateExpression #templateExPrimitiveType ///////////
     ;
 
-tupleType
+arrayStringType ////////
+    :
+    ARRAY LT STRING_EX GT
+    ;
+
+arrayNumberType ///////
+    :
+    NUMBER SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET
+    ;
+
+tupleType ///////////
     : SQUARE_OPEN_BRACKET type (COMMA type)+ SQUARE_CLOSE_BRACKET
     ;
 
-marks:
+marks: //////////////
     SEMI_COLON
     |COMMA
     |COLON
@@ -378,8 +299,7 @@ marks:
     |EQUAL
     |LT
     |GT
-    |PLUS
-    |MIN
+    |operations
     |S_DOlOR
     |SQUARE_OPEN_BRACKET
     |SQUARE_CLOSE_BRACKET
@@ -387,75 +307,123 @@ marks:
     |CLOSE_BRACKET
     |CURLY_OPEN_BRACKET
     |CURLY_CLOSE_BRACKET
+    |NOT
+    ;
+
+arrayDeclaration: /////////////
+    SQUARE_OPEN_BRACKET (expression (COMMA expression COMMA*)* )? SQUARE_CLOSE_BRACKET
+    ;
+
+conditionStat: ////////////
+    CURLY_OPEN_BRACKET expression* CURLY_CLOSE_BRACKET
+    ;
+
+tryStat:////////
+    TRY conditionStat
+    ;
+
+catchStat: /////////////
+     CATCH conditionStat
+    ;
+
+operationExpr://///////
+      values (operations values)?
+     ;
+
+questionCondition: ///////////
+    propertyAccess QUESTION_MARK+ values
+    ;
+
+expression: ///////////
+      values //////////
+    | arrayDeclaration //////////
+    | variableDeclaration /////
+    | ifElseStat //////
+    | tryStat //////////
+    | catchStat /////////
+    | objectLiteral /////////
+    | directivesStatment ///////////
+    | propertyAccess ////////
+    | functionCall //////////
+    | assignment //////////
+    | questionCondition /////////
+    | operationExpr ///////////
+    ;
+
+directivesStatment: ////////////
+      NgFor EQUAL1 ngForValue          #ngForDirective //////////////
+    | NgIf EQUAL2 ngIfValue            #ngIfDirective ////////////
+    ;
+
+ngForValue: //////////
+      DQUOT1 ngForExpression* DQUOT2
+    ;
+
+ngForExpression: ////////////
+      LET1 ID1 OF1 ID1
+    | LET1 ID1 EQUAL1 ID1
+    ;
+
+ngIfValue: ////////////
+      DQUOT3 conditionExpression DQUOT4
+    ;
+
+conditionExpression: /////////////
+      ID2 (equalOperation NULL1)? #equalNull //////////
+    | logicalTerm ((GT1 NUMBER_VAL1)? equalOperation (ID2|NUMBER_VAL1))? #comparisonExp /////////
+    | logicalTerm (OPEN_BRACKET1 ID2 ARROW1 logicalTerm (GT1 NUMBER_VAL1)? equalOperation ID2 CLOSE_BRACKET1)? #comparisonWithEqualExp /////////
+    ;
+
+equalOperation: //////////
+        EQUAL2
+       |EQUAL_EQUAL1
+       |EQUAL_EQUAL2
+       |NOT_EQUAL1
+       |NOT_EQUAL2;
+
+logicalTerm: /////////
+     NOT1? ID2 (DOT1 ID2)?
     ;
 
 
-
-arrayDeclaration:
-    SQUARE_OPEN_BRACKET (expression (COMMA expression)* )? SQUARE_CLOSE_BRACKET 
+ifStat: /////////
+    IF OPEN_BRACKET types* CLOSE_BRACKET
     ;
 
-
-
-expression:
-      STRING                            #stringExpr
-    | NUMBER_VAL                        #numberExpr
-    | arrayDeclaration                  #arrayExpr
-    | ifElseStat                        #ifElseExpr
-    | CURLY_OPEN_BRACKET IDENTIFIER COLON expression (COMMA IDENTIFIER COLON expression)* CURLY_CLOSE_BRACKET
-                                        #objectExpr
-    | BOOLEAN                           #booleanExpr
-    | directivesStatment                #directiveExpr
+ifElseStat: ///////////
+      IDENTIFIER QUESTION_MARK type COLON type #ifQuestionMark ///////
+    | ifStat RETURN SEMI_COLON #ifReturn //////
+    | ifStat conditionStat (ELSE conditionStat)? #ifElse //////////
     ;
 
-directivesStatment:
-      DIRECTIVES EQUAL ngForValue           #ngForDirective
-    | DIRECTIVES  EQUAL ngIfValue            #ngIfDirective
+variable_type ////////////
+    : LET
+    | VAR
+    | CONST
+    | AccessModifiers
     ;
 
-ngForValue:
-      QUOT ngForExpression QUOT          #quotedNgFor
-    | STRING                              #rawStringNgFor
-    ;
-
-ngForExpression:
-      LET IDENTIFIER OF IDENTIFIER                         #basicNgForExpr
-    | LET IDENTIFIER OF IDENTIFIER BIT_OR IDENTIFIER       #ngForWithPipeExpr
-    ;
-
-ngIfValue:
-      QUOT conditionExpression QUOT      #quotedNgIf
-    | STRING                              #rawStringNgIf
-    ;
-
-conditionExpression:
-    logicalTerm ((AND | OR) logicalTerm)* ;
-
-
-
-logicalTerm:
-    NOT? IDENTIFIER (DOT IDENTIFIER)* ;
-
-ifElseStat:
-    IDENTIFIER QUESTION_MARK type COLON type ;
-
-variable_type
-    : LET|VAR|CONST
-    ;
-
-unionType:
+unionType: /////////////
     type (BIT_OR type)? ;
 
+newObjectFromClass: ////////////
+    IDENTIFIER* parameters (DOT toString)?;
 
-variableDeclaration:
-    variable_type? IDENTIFIER COLON unionType EQUAL types SEMI_COLON   #typedVariableDecl
-    | variable_type? IDENTIFIER EQUAL expression SEMI_COLON            #inferredVariableDecl
+toString : //////////
+    TOSTRING parameters
     ;
 
-arrowFunction:
-    variable_type IDENTIFIER EQUAL parameters COLON type ARROW arrowBody SEMI_COLON #arrowFunctionDecl;
+variableDeclarationStat: ////////////
+      COLON unionType (SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET)* EQUAL types #typedVariableDecl //////////
+    | (EQUAL|COLON) (types|conditions) #inferredVariableDecl //////////
+    | EQUAL newObjectFromClass  #objectFromClass //////////////
+;
 
-arrowBody:
-    IDENTIFIER ((PLUS | MIN) IDENTIFIER)?     #simpleArrowBody
-    | STRING                                  #stringArrowBody
+variableDeclaration: ////////////
+      variable_type? propertyAccess+ QUESTION_MARK? variableDeclarationStat SEMI_COLON?
+    ;
+
+arrowFunction
+    : variable_type IDENTIFIER EQUAL parameters (COLON type)? ARROW body SEMI_COLON   #varArrowFunction /////
+    | propertyAccess EQUAL parameters? (COLON type)? ARROW CURLY_OPEN_BRACKET body* CURLY_CLOSE_BRACKET SEMI_COLON #eventHandlerArrowFunction
     ;

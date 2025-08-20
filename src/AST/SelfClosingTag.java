@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelfClosingTag{
+public class SelfClosingTag extends HtmlDeclare{
 
     List<Types> content ;
 

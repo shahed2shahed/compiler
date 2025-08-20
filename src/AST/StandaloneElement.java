@@ -1,6 +1,6 @@
 package AST;
 
-public class StandaloneElement extends ComponentPropertyNode {
+public class StandaloneElement extends ComponentEle {
     private boolean value;
 
     public StandaloneElement(boolean value) {

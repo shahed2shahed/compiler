@@ -2,7 +2,7 @@ package AST;
 
 public class UnionTypeNode extends AstNode {
     private Type left;
-    private Type right; // يمكن أن تكون null
+    private Type right;
 
     public UnionTypeNode(Type left, Type right) {
         this.left = left;
@@ -19,5 +19,20 @@ public class UnionTypeNode extends AstNode {
 
     public boolean isUnion() {
         return right != null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Typed Variable Declaration :\n");
+        if (right != null) {
+            sb.append(right).append("\n");
+
+        } else {
+            sb.append(" No  type \n");
+
+        }
+        sb.append(left).append("\n");
+        return sb.toString();
     }
 }

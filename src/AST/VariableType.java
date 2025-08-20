@@ -1,6 +1,6 @@
 package AST;
 
-public class VariableType {
+public class VariableType extends AstNode{
     private String value;
 
     public VariableType(String value) {

@@ -3,15 +3,23 @@ package AST;
 import java.util.List;
 
 public class ClassStatement extends StatementNode{
-    private String export;
-    private String className;
-    List<ClassBody> classBody ;
+    String export;
+    ClassRelation classRelation;
+    List<Body> classBody ;
 
 
-    public ClassStatement(String export, String className,  List<ClassBody> classBody) {
+    public ClassStatement(){
+    }
+
+    public ClassStatement(String export , ClassRelation classRelation ,List<Body> classBody) {
         this.export = export;
-        this.className = className;
         this.classBody = classBody;
+        this.classRelation = classRelation;
+    }
+
+    public ClassStatement(String export , ClassRelation classRelation) {
+        this.export = export;
+        this.classRelation = classRelation;
     }
 
 
@@ -22,11 +30,15 @@ public class ClassStatement extends StatementNode{
 
         sb.append(export);
         sb.append(" class\n");
-        sb.append("  Class Name: ").append(className).append("\n");
+
+        sb.append("classRelation");
+        sb.append(classRelation);
+        sb.append("\n");
+
         sb.append("  Class Body: {\n");
 
         if (classBody != null && !classBody.isEmpty()) {
-            for (ClassBody bodyElement : classBody) {
+            for (Body bodyElement : classBody) {
                 sb.append("    ").append(bodyElement).append("\n");
             }
         } else {

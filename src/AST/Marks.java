@@ -2,9 +2,14 @@ package AST;
 
 public class Marks extends Types {
     private String mark;
+    Operations operations;
 
     public Marks(String mark) {
         this.mark = mark;
+    }
+
+    public Marks(Operations operations) {
+        this.operations = operations;
     }
 
     public String getMark() {
@@ -17,6 +22,14 @@ public class Marks extends Types {
 
     @Override
     public String toString() {
-         return   mark;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Marks : \n");
+        if (mark != null) {
+            sb.append(mark);
+        }
+        else {
+            sb.append(operations.toString());
+        }
+        return sb.toString();
     }
 }

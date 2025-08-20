@@ -1,689 +1,915 @@
 package Visitor;
-
 import AST.*;
-import AST.Class;
-import AST.Number;
+import AST.Map;
+import AST.Module;
 import AST.Void;
-import SymbolTableStructure.SymbolTable2;
-import antlr.*;
-
+import AST.Number;
 import java.util.*;
 
-public class MyVisitor extends MyParserBaseVisitor {
+import ErrorHandling.*;
+import SymbolTableStructure.*;
 
-    public SymbolTable2 s = new SymbolTable2();
+import antlr.*;
+
+public class MyVisitor extends MyParserBaseVisitor<AstNode> {
+
+    public SymbolTable symbolTable2 = new SymbolTable();
+
+    String[] ngModel = {"input" , "textarea" , "select"};
+
+    private void visitFunctionFirst(MyParser.ProgramContext ctx){
+        for (var c : ctx.statement()) {
+            if (c.classStatment() != null) {
+                visit(c.classStatment());
+            }
+        }
+    }
 
     @Override
     public Program visitProgram(MyParser.ProgramContext ctx) {
-        Program program = new Program();
-
-        for (var child : ctx.children) {
-            Object node = visit(child);
-            if (node != null) {
-                program.addChild(node);
-            }
+            visitFunctionFirst(ctx);
+            Program program = new Program();
+        for (var child : ctx.statement()){
+            program.addChild( (StatementNode) visit(child));
         }
-
         return program;
     }
 
     @Override
-    public ImportStatment visitImportStatment(MyParser.ImportStatmentContext ctx) {
-        String string = ctx.IMPORT().getText() + ctx.IDENTIFIER().toString() + ctx.FROM().getText() + ctx.STRING().getText();
-
-        ImportStatment importStatment = new ImportStatment(string);
-        return importStatment;
+    public StatementNode visitImportStatment(MyParser.ImportStatmentContext ctx) {
+        String string;
+        if (ctx.IMPORT().getText()!=null){
+            string = ctx.IMPORT().getText() + ctx.IDENTIFIER().toString() + ctx.FROM().getText() + ctx.STRING().getText();
+        }
+         string = ctx.BEHAVIORSUBJECT().getText() + ctx.IDENTIFIER().toString() + ctx.FROM().getText() + ctx.STRING().getText();
+        return new ImportStatment(string);
     }
 
     @Override
-    public ComponentDeclaration visitComponentDeclaration(MyParser.ComponentDeclarationContext ctx) {
+    public StatementNode visitComponentDeclaration(MyParser.ComponentDeclarationContext ctx) {
         ComponentDeclaration componentDeclaration = new ComponentDeclaration();
+        return new ComponentDeclaration( (Module) visitModule(ctx.module())  , (ComponentBody) visitComponentBody(ctx.componentBody()) );
+    }
 
-        for (var child : ctx.componentBody()) {
-            ComponentBody node = visitComponentBody(child);
-            if (node != null) {
-                componentDeclaration.addComponentBody(node);
-            }
 
+    @Override
+    public ComponentDeclaration visitModule(MyParser.ModuleContext ctx) {
+        String mark = ctx.getText();
+        return new Module(mark);    }
+
+    @Override
+    public ComponentDeclaration visitComponentBody(MyParser.ComponentBodyContext ctx) {
+        ComponentBody componentBody = new ComponentBody();
+        for (var child : ctx.componentEle()){
+            componentBody.addComponentEle( (ComponentEle) visit(child));
         }
-        return componentDeclaration;
-
+        return componentBody;
     }
 
     @Override
-    public ComponentBody visitComponentBody(MyParser.ComponentBodyContext ctx) {
-
-        if (ctx.SELECTOR() != null) {
-            return visitSelector(ctx);
-        } else if (ctx.STANDALONE() != null) {
-            return visitStandalone(ctx);
-        } else if (ctx.IMPORTS() != null) {
-            return visitImports(ctx);
-        } else if (ctx.TEMPLATE() != null) {
-            return visitTemplate(ctx);
-        }
-        return null;
-    }
-
-    public SelectorElement visitSelector(MyParser.ComponentBodyContext ctx) {
+    public ComponentEle visitSelectorProperty(MyParser.SelectorPropertyContext ctx) {
         String selector = ctx.STRING().getText();
-        s.addVariable("selector", ctx.SELECTOR().toString(), ctx.STRING().getText());
 
+        if(symbolTable2.getSelectorTable().isSelectorValueDuplicated(selector)){
+            ErrorHandler.logError(new SelectorRepaitException("Selector Value " + ctx.STRING().getText() + " is already exist"),  ctx.STRING().getSymbol().getLine(), ctx.STRING().getSymbol().getCharPositionInLine());
+            throw new RuntimeException("Selector Value " + ctx.STRING().getText() + " is already exist");
+        }
+
+        symbolTable2.getSelectorTable().addSelector(ctx.SELECTOR().getText(),selector);
         return new SelectorElement(selector);
     }
 
-    public StandaloneElement visitStandalone(MyParser.ComponentBodyContext ctx) {
+    @Override
+    public ComponentEle visitStandaloneProperty(MyParser.StandalonePropertyContext ctx) {
         boolean isStandalone = Boolean.parseBoolean(ctx.BOOLEAN().getText());
-        s.addVariable("Standalone", ctx.STANDALONE() .toString(), Boolean.parseBoolean(ctx.BOOLEAN().getText()));
-
         return new StandaloneElement(isStandalone);
     }
 
-    public ImportsElement visitImports(MyParser.ComponentBodyContext ctx) {
+    @Override
+    public ComponentEle visitImportsProperty(MyParser.ImportsPropertyContext ctx) {
+    ImportsElement importsElement = new ImportsElement();
 
-        String string = ctx.IMPORTS().getText() + ':' + ctx.IDENTIFIER().toString();
+    PropertyStat property = (PropertyStat) visit(ctx.propertyStat());
+    importsElement.setProperty(property);
 
-        ImportsElement importsElement = new ImportsElement(string);
-        s.addVariable("imports", ctx.IMPORTS() .toString(), string);
+    for (String id : property.getIdentifiers()) {
+        importsElement.addChild(id);
 
-        return importsElement;
+        symbolTable2.getFormsModuleTracker().addImport(ctx.IMPORTS().getText(), id);
+        symbolTable2.getComponentTable().addImport(ctx.IMPORTS().getText(), id);
     }
 
-    public TemplateElement visitTemplate(MyParser.ComponentBodyContext ctx) {
+    if (property.getFunc() != null) {
+        String funcName = property.getFunc().toString();
+        importsElement.addChild(funcName);
 
-        TemplateElement templateElement = new TemplateElement();
+        symbolTable2.getFormsModuleTracker().addImport(ctx.IMPORTS().getText(), funcName);
+        symbolTable2.getComponentTable().addImport(ctx.IMPORTS().getText(), funcName);
+    }
 
-        for (var child : ctx.htmlDeclare()) {
-            HtmlDeclare node = visitHtmlDeclare(child);
-            if (node != null) {
-                templateElement.addHtmlDeclare(node);
-            }
+    return importsElement;
+}
+
+    @Override
+    public ComponentEle visitExportsProperty(MyParser.ExportsPropertyContext ctx) {
+        ExportsElement exportsElement = new ExportsElement();
+
+        PropertyStat property = (PropertyStat) visit(ctx.propertyStat());
+        exportsElement.setProperty(property);
+
+        for (String id : property.getIdentifiers()) {
+            exportsElement.addChild(id);
         }
 
+        if (property.getFunc() != null) {
+            String funcName = property.getFunc().toString();
+            exportsElement.addChild(funcName);
+        }
+
+        return exportsElement;
+    }
+
+    @Override
+    public ComponentEle visitBootstrapProperty(MyParser.BootstrapPropertyContext ctx) {
+        BootstrapElement bootstrapElement = new BootstrapElement();
+
+        PropertyStat property = (PropertyStat) visit(ctx.propertyStat());
+        bootstrapElement.setProperty(property);
+
+        for (String id : property.getIdentifiers()) {
+            bootstrapElement.addChild(id);
+        }
+
+        if (property.getFunc() != null) {
+            String funcName = property.getFunc().toString();
+            bootstrapElement.addChild(funcName);
+        }
+
+        return bootstrapElement;
+    }
+
+    @Override
+    public AstNode visitPropertyStat(MyParser.PropertyStatContext ctx) {
+        PropertyStat property = new PropertyStat();
+        if (ctx.functionCall() != null) {
+            property.setFunc((FunctionCall) visit(ctx.functionCall()));
+        }
+        for (var id : ctx.IDENTIFIER()) {
+            property.addIdentifier(id.getText());
+        }
+
+        return property;
+    }
+
+    @Override
+    public TemplateElement visitTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx) {
+        TemplateHtmlDeclaration templateElement = new TemplateHtmlDeclaration();
+        for (var child : ctx.htmlDeclare()){
+            templateElement.addHtmlDeclare( (HtmlDeclare) visit(child));
+        }
         return templateElement;
     }
 
     @Override
-    public HtmlDeclare visitHtmlDeclare(MyParser.HtmlDeclareContext ctx) {
+    public TemplateElement visitTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx) {
+         String string = ctx.IDENTIFIER().getText() + ctx.COLON() + ctx.STRING().getText();
 
-        if (ctx.openTag() != null && ctx.htmlBody() != null && ctx.closeTag() != null) {
-            OpenTag openTag = visitOpenTag(ctx.openTag());
-
-            CloseTag closeTag = visitCloseTag(ctx.closeTag());
-
-            if (visitHtmlBody(ctx.htmlBody()) != null) {
-                List<Types> htmlBody = new ArrayList<>(visitHtmlBody(ctx.htmlBody()).getContent()) ;
-                return new HtmlDeclare(openTag,htmlBody,closeTag);
-
-            }
-                else {
-                return new HtmlDeclare(openTag,null,closeTag);
-
-            }
-
-        } else if (ctx.selfClosingTag() != null) {
-            SelfClosingTag selfClosingTag = visitSelfClosingTag(ctx.selfClosingTag());
-            return new HtmlDeclare(selfClosingTag);
-        }
-
-        return null;
+        return new TemplateHtmlUrl(string);
     }
 
-
     @Override
-    public SelfClosingTag visitSelfClosingTag(MyParser.SelfClosingTagContext ctx) {
-        SelfClosingTag selfClosingTag = new SelfClosingTag();
-        for (var child : ctx.types()) {
-            Types node = visitTypes(child);
-            if (node != null) {
-                selfClosingTag.addTypes(node);
-            }
-            s.addVariable(ctx.types(0).getText(), "selfClosingTag" , " ");
-
+    public HtmlDeclare visitNormalHtmlTag(MyParser.NormalHtmlTagContext ctx) {
+        OpenTag openTag = visitOpenTag(ctx.openTag());
+        List <Types> typesHtml = new ArrayList<>();
+        for (var child : ctx.types()){
+            typesHtml.add((Types) visit(child));
         }
+        CloseTag closeTag = visitCloseTag(ctx.closeTag());
 
-        return selfClosingTag;
+        return new NormalHtmlTagNode(openTag , typesHtml , closeTag);
     }
 
     @Override
     public OpenTag visitOpenTag(MyParser.OpenTagContext ctx) {
-
         OpenTag openTag = new OpenTag();
+        Boolean isExisted = false;
+        for (var child : ctx.types()){
+            openTag.addTypes( (Types) visit(child));
+            if (child.getText().equals("ngModel")){
+//                if(!formsModule.check()){
+//                    ErrorHandler.logError(new FormsModuleException("Can't bind to '" + child.getText() + "' since it isn't a known property of " + ctx.types(0).getText()), child.getStart().getLine() , child.getStart().getCharPositionInLine());
+//                }
 
-        for (var child : ctx.types()) {
-            Types node = visitTypes(child);
-            if (node != null) {
-                openTag.addTypes(node);
-            }
-            s.addVariable(ctx.types(0).getText(), "openTag" , " ");
-        }
+                for(var i : ngModel) {
+                    if (i.equals(ctx.types(0).getText())){
+                        isExisted = true;
+                    }
+                }
 
-        return openTag;
+                if (!isExisted){
+                    ErrorHandler.logError(new NgModelSupportedElementException("[(ngModel)] cannot be used on "+ ctx.types(0).getText()+". Only supported on form elements like <input>, <select>, or <textarea>."), ctx.types(0).getStart().getLine(), ctx.types(0).getStart().getCharPositionInLine());
+                    throw new RuntimeException("[(ngModel)] cannot be used on "+ ctx.types(0).getText()+". Only supported on form elements like <input>, <select>, or <textarea>.");
 
-    }
-
-    @Override
-    public Types visitTypes(MyParser.TypesContext ctx) {
-
-         if (ctx.expression() != null) {
-            return visitExpression(ctx.expression());
-        }
-         if (ctx.type() != null) {
-            return visitType(ctx.type());
-        }
-         if (ctx.htmlDeclare() != null) {
-            return visitHtmlDeclare(ctx.htmlDeclare());
-        }
-        return null;
-    }
-
-    @Override
-    public CloseTag visitCloseTag(MyParser.CloseTagContext ctx) {
-        String tagName = ctx.IDENTIFIER().getText();
-        s.addVariable(tagName.toString(), "closeTag" , " ");
-
-        return new CloseTag(tagName) ;
-
-    }
-
-    @Override
-    public HtmlBody visitHtmlBody(MyParser.HtmlBodyContext ctx) {
-
-        HtmlBody htmlBody = new HtmlBody();
-        if (ctx.types() != null) {
-
-            for (var child : ctx.types()) {
-                Types node = visitTypes(child);
-                if (node != null) {
-                    htmlBody.addNode(node);
                 }
             }
-            return htmlBody;
         }
+        return openTag;
+    }
 
-        return null;
+    /// visit types
+    ///1 visit type
+    ///1.1 visit primitive type
+    @Override
+    public PrimitiveTypeNode visitIdPrimitiveType(MyParser.IdPrimitiveTypeContext ctx) {
+        return new Identifier(ctx.IDENTIFIER().getText());
     }
 
     @Override
-    public Expression visitExpression(MyParser.ExpressionContext ctx) {
+    public PrimitiveTypeNode visitNumberPrimitiveType(MyParser.NumberPrimitiveTypeContext ctx) {
+        return new Number(ctx.NUMBER().getText());    }
 
-         List<Expression> expressions = new ArrayList<>();
-
-        if (ctx.STRING() != null) {
-            return new StringExpression(ctx.STRING().getText());
-        }
-
-        if (ctx.NUMBER_VAL() != null) {
-            return new NumberValExpression(Double.parseDouble(ctx.NUMBER_VAL().getText()));
-        }
-
-        if (ctx.arrayDeclaration() != null) {
-            return visitArrayDeclaration(ctx.arrayDeclaration());
-        }
-
-        if (ctx.ifElseStat() != null) {
-            return visitIfElseStat(ctx.ifElseStat());
-        }
-
-        if (ctx.directivesStatment() != null) {
-            return visitDirectivesStatment(ctx.directivesStatment());
-        }
-
-        if (ctx.BOOLEAN() != null) {
-            return new BooleanVal(ctx.BOOLEAN().getText());
-        }
-
-        if (ctx.expression() != null && ctx.expression().size() > 1) {
-            StringBuilder sb = new StringBuilder();
-            for (var child : ctx.expression()) {
-                Expression e = visitExpression(child);
-                expressions.add(e);
-                sb.append(e.toString());
-            }
-            return new StringExpression(sb.toString());
-        }
-
-
-
-
-//        if (ctx.ngForStatment() != null) {
-//            return visitNgForStatment(ctx.ngForStatment());
-//        }
-//
-//        if (ctx.ngIfStatment() != null) {
-//            return visitNgIfStatment(ctx.ngIfStatment());
-//        }
-
-        return null;
+    @Override
+    public PrimitiveTypeNode visitVoidPrimitiveType(MyParser.VoidPrimitiveTypeContext ctx) {
+        return new Void(ctx.VOID().getText());
     }
 
     @Override
-    public Type visitType(MyParser.TypeContext ctx) {
-        String string = ctx.getText();
-
-
-        if (ctx.IDENTIFIER() != null) {
-            return new Identifier(ctx.IDENTIFIER().getText() );
-        }
-        else if (ctx.NUMBER() != null) {
-            return new Number(ctx.NUMBER().getText());
-        }
-
-        else if (ctx.VOID() != null) {
-            return new Void(ctx.VOID().getText());
-        }
-        else if (ctx.NULL() != null) {
-            return new Null(ctx.NULL().getText());
-        }
-        else if (ctx.ANY() != null) {
-            return new Any(ctx.ANY().getText());
-        }
-        else if (ctx.CLASS() != null) {
-            return new Class(ctx.CLASS().getText());
-        }
-        else if (ctx.templateExpression() != null) {
-            return visitTemplateExpression(ctx.templateExpression());
-        }
-        else if (ctx.marks() != null) {
-            return visitMarks(ctx.marks());
-        }
-
-        return null;
-    }
-
+    public PrimitiveTypeNode visitNullPrimitiveType(MyParser.NullPrimitiveTypeContext ctx) {
+        return new Null(ctx.NULL().getText());    }
 
     @Override
-    public Marks visitMarks(MyParser.MarksContext ctx) {
+    public PrimitiveTypeNode visitAnyPrimitiveType(MyParser.AnyPrimitiveTypeContext ctx) {
+        return new Any(ctx.ANY().getText());
+    }
+
+    @Override
+    public PrimitiveTypeNode visitStringEXPrimitiveType(MyParser.StringEXPrimitiveTypeContext ctx) {
+        return new StringExpression(ctx.STRING_EX().getText());
+    }
+
+    @Override
+    public PrimitiveTypeNode visitClassPrimitiveType(MyParser.ClassPrimitiveTypeContext ctx) {
+        return new ClassEx(ctx.CLASS().getText());
+    }
+
+    @Override
+    public PrimitiveTypeNode visitTemplateExPrimitiveType(MyParser.TemplateExPrimitiveTypeContext ctx) {
+        TemplateExpression templateExpression = new TemplateExpression();
+        for (var child : ctx.templateExpression().types()){
+            templateExpression.addTypes( (Types) visit(child));
+        }
+        return templateExpression;
+    }
+    ///1.2 visit array string type
+    @Override
+    public Type visitArrayStringType(MyParser.ArrayStringTypeContext ctx) {
+        String string1 = ctx.ARRAY().getText();
+        String string2 =  ctx.STRING_EX().getText();
+        return new ArrayStringType(string1 , string2);
+    }
+    ///1.3 visit array number type
+    @Override
+    public Type visitArrayNumberType(MyParser.ArrayNumberTypeContext ctx) {
+        String string = ctx.NUMBER().getText();
+        return new ArrayNumberType(string);
+    }
+    ///1.4 visit tuple type
+    @Override
+    public Type visitTupleType(MyParser.TupleTypeContext ctx) {
+        TupleType tupleType = new TupleType();
+        for (var child : ctx.type()){
+            Type node = (Type) visit(child);
+            tupleType.addChild(node);
+        }
+        return tupleType;
+    }
+
+    /// 1.5 visit simple array
+    @Override
+    public AstNode visitSimpleArray(MyParser.SimpleArrayContext ctx) {
+        String mark = ctx.getText();
+        return new SimpleArray(mark);
+    }
+
+    ///  1.6 visit map
+    @Override
+    public Type visitMap(MyParser.MapContext ctx) {
+        Map map = new Map();
+        for (var child : ctx.values()){
+            map.addChild( (Values) visit(child));
+        }
+        return map;
+    }
+
+    @Override
+    public AstNode visitValues(MyParser.ValuesContext ctx) {
+        String mark = ctx.getText();
+        return new Values(mark);
+    }
+
+    ///2 visit marks
+    @Override
+    public Types visitMarks(MyParser.MarksContext ctx) {
+        if (ctx.operations() != null){
+            return new Marks((Operations) visit(ctx.operations()));
+        }
         String mark = ctx.getText();
         return new Marks(mark);
     }
 
     @Override
-    public ArrayDeclaration visitArrayDeclaration(MyParser.ArrayDeclarationContext ctx) {
+    public AstNode visitOperations(MyParser.OperationsContext ctx) {
+        String mark = ctx.getText();
+        return new Operations(mark);
+    }
+
+    ///3 visit expression
+    /// 3.1  array declaration Expr
+    @Override
+    public Expression visitArrayDeclaration(MyParser.ArrayDeclarationContext ctx) {
         ArrayDeclaration arrayDeclaration = new ArrayDeclaration();
-        List<Expression> expressions = new ArrayList<>();
-
-         if (ctx.expression() != null) {
-             for (var child : ctx.expression()) {
-                 expressions.add(visitExpression(child));
-             }
-             arrayDeclaration.setExpressions(expressions);
-              return arrayDeclaration;
-         }
-
-        return null;
-
-    }
-
-    @Override
-    public TemplateExpression visitTemplateExpression(MyParser.TemplateExpressionContext ctx) {
-        TemplateExpression templateExpression = new TemplateExpression();
-
-        for (var child : ctx.types()) {
-            Types node = visitTypes(child);
-            if (node != null) {
-                templateExpression.addTypes(node);
-            }
+        for (var child : ctx.expression()){
+            arrayDeclaration.addExpressions((Expression) visit(child));
         }
-        s.addVariable(templateExpression.toString(), "templateExpression" ,"") ;
-
-        return templateExpression;
+        return arrayDeclaration;
     }
 
+    /// 3.2 directiveExpr
     @Override
-    public IfElseStat visitIfElseStat(MyParser.IfElseStatContext ctx) {
-        String identifier = ctx.IDENTIFIER().getText();
+    public DirectiveStatementNode visitNgForDirective(MyParser.NgForDirectiveContext ctx) {
+        if (!symbolTable2.getComponentTable().checkCommon()){
+            ErrorHandler.logError(new CommonModuleException("Missing Module Import , Directive " + ctx.NgFor().getText() + " requires CommonModule to be imported"),  ctx.NgFor().getSymbol().getLine(), ctx.NgFor().getSymbol().getCharPositionInLine());
+            throw new RuntimeException("Missing Module Import , Directive " + ctx.NgFor().getText() + " requires CommonModule to be imported");
 
-        Type type1 = (Type) visit(ctx.type(0));
-
-        Type type2 = (Type) visit(ctx.type(1));
-
-        s.addVariable("", "IfElseStat" ,ctx.IDENTIFIER().getText()) ;
-
-        return new IfElseStat(identifier, type1, type2);
-    }
-
-    @Override
-    public DirectivesStatment visitDirectivesStatment(MyParser.DirectivesStatmentContext ctx) {
-        String condition = ctx.STRING().getText();
-        String id = ctx.DIRECTIVES().getText();
-        s.addVariable("Directives", "DirectivesStatment" ,ctx.STRING().getText()) ;
-
-        return new DirectivesStatment(id + " " + condition);
-    }
-
-   @Override
-    public FunctionCall visitFunctionCall(MyParser.FunctionCallContext ctx) {
-
-        Parameters parameters = null;
-
-        if (ctx.parameters() != null) {
-            parameters = visitParameters(ctx.parameters());
         }
 
-        PrintError block = visitPrint_error(ctx.print_error());
+        return new NgForDirective(visitNgForValue(ctx.ngForValue()));
+    }
 
-        if (parameters != null) {
-            return new FunctionCall(parameters, block);
+    @Override
+    public DirectiveStatementNode visitNgIfDirective(MyParser.NgIfDirectiveContext ctx) {
 
+        if (!symbolTable2.getComponentTable().checkCommon()){
+            ErrorHandler.logError(new CommonModuleException("Missing Module Import , Directive " + ctx.NgIf().getText() + " requires CommonModule to be imported"),  ctx.NgIf().getSymbol().getLine(), ctx.NgIf().getSymbol().getCharPositionInLine());
+            throw new RuntimeException("Missing Module Import , Directive " + ctx.NgIf().getText() + " requires CommonModule to be imported");
+        }
+        return new NgIfDirective(visitNgIfValue(ctx.ngIfValue()));
+    }
+
+    @Override
+    public NgForValue visitNgForValue(MyParser.NgForValueContext ctx) {
+        NgForValue ngForValue = new NgForValue();
+        for (var child : ctx.ngForExpression()){
+            ngForValue.addChild(visitNgForExpression(child));
+        }
+        return ngForValue;
+    }
+
+    @Override
+    public NgForExpression visitNgForExpression(MyParser.NgForExpressionContext ctx) {
+        String value;
+        if(ctx.OF1()!=null){
+            value = ctx.LET1() + " " + ctx.ID1(0) + " " + ctx.OF1() + " " + ctx.ID1(1);
         }
         else {
-            return new FunctionCall(null, block);
-
+            value = ctx.LET1() + " " + ctx.ID1(0) + " " + ctx.EQUAL1() + " " + ctx.ID1(1);
         }
+        return new NgForExpression(value);
     }
 
     @Override
-    public ClassStatement visitClassStatment(MyParser.ClassStatmentContext ctx) {
-        String export = ctx.EXPORT().getText();
+    public NgIfValue visitNgIfValue(MyParser.NgIfValueContext ctx) {
+        return new NgIfValue( (ConditionExpression) visit(ctx.conditionExpression()));
+    }
 
-        String className = ctx.IDENTIFIER().getText();
+    @Override
+    public ConditionExpression visitEqualNull(MyParser.EqualNullContext ctx) {
+        return new EqualNull(visitEqualOperation(ctx.equalOperation()));
+    }
 
-        List<ClassBody> bodyElements = new ArrayList<>();
+    @Override
+    public EqualOperation visitEqualOperation(MyParser.EqualOperationContext ctx) {
+        return new EqualOperation(ctx.getText());
+    }
 
-        if (ctx.classBody() != null) {
-            for (MyParser.ClassBodyContext bodyCtx : ctx.classBody()) {
-                bodyElements.add(visitClassBody(bodyCtx));
+    @Override
+    public ConditionExpression visitComparisonExp(MyParser.ComparisonExpContext ctx) {
+        LogicalTerm logicalTerm;
+        EqualOperation equalOperation;
+        logicalTerm = visitLogicalTerm(ctx.logicalTerm());
+        if(ctx.equalOperation() != null){
+            equalOperation = visitEqualOperation(ctx.equalOperation());
+            return new ComparisonExp(logicalTerm,equalOperation);
+        }
+        return new ComparisonExp(logicalTerm,null);
+    }
+
+    @Override
+    public LogicalTerm visitLogicalTerm(MyParser.LogicalTermContext ctx) {
+        return new LogicalTerm(ctx.getText());
+    }
+
+    @Override
+    public ConditionExpression visitComparisonWithEqualExp(MyParser.ComparisonWithEqualExpContext ctx) {
+        EqualOperation equalOperation = visitEqualOperation(ctx.equalOperation());
+        LogicalTerm logicalTerm2 = visitLogicalTerm(ctx.logicalTerm(1));
+        LogicalTerm logicalTerm1 = visitLogicalTerm(ctx.logicalTerm(0));
+        return new ComparisonWithEqualExp(equalOperation , logicalTerm1 , logicalTerm2);
+    }
+
+    /// 3.3 variable declaration expression
+    @Override
+    public Expression visitVariableDeclaration(MyParser.VariableDeclarationContext ctx) {
+
+        List <PropertyAccess> propertyAccess = new ArrayList<>();
+
+        VariableDeclarationStat variableDeclarationStat = (VariableDeclarationStat) visit(ctx.variableDeclarationStat());
+
+        for (var child : ctx.propertyAccess()){
+            propertyAccess.add( (PropertyAccess) visit(child));
+        }
+
+        if (ctx.variable_type() != null){
+            return new VariableDeclaration(visitVariable_type(ctx.variable_type()) , propertyAccess , variableDeclarationStat);
+        }
+        return new VariableDeclaration(propertyAccess , variableDeclarationStat);
+    }
+
+    /// variable declaration stat
+    /// 1.1 Typed Variable Decl
+    @Override
+    public VariableDeclarationStat visitTypedVariableDecl(MyParser.TypedVariableDeclContext ctx) {
+        return new TypedVariableDecl(visitUnionType(ctx.unionType()));
+    }
+
+    /// 1.2 Inferred Variable Decl
+    @Override
+    public VariableDeclarationStat visitInferredVariableDecl(MyParser.InferredVariableDeclContext ctx) {
+        if (ctx.types() != null){
+            return new InferredVariableDecl((Types) visit(ctx.types()));
+        }
+        return new InferredVariableDecl((Conditions) visit(ctx.conditions()));
+    }
+
+    /// conditions
+    @Override
+    public Conditions visitConditionEqualty(MyParser.ConditionEqualtyContext ctx) {
+        return new ConditionEqualty((PropertyAccess) visitPropertyAccess(ctx.propertyAccess(0)) , (PropertyAccess) visitPropertyAccess(ctx.propertyAccess(1)) , (PropertyAccess) visitPropertyAccess(ctx.propertyAccess(2)) );
+    }
+
+    @Override
+    public Conditions visitConditionValue(MyParser.ConditionValueContext ctx) {
+        return new ConditionValue((PropertyAccess) visitPropertyAccess(ctx.propertyAccess(0)) , (Parameters) visitParameters(ctx.parameters(0)) , (PropertyAccess) visitPropertyAccess(ctx.propertyAccess(1)) , (Parameters) visitParameters(ctx.parameters(1)) , (Operations) visitOperations(ctx.operations()));
+    }
+
+    /// parameters
+    @Override
+    public AstNode visitParameters(MyParser.ParametersContext ctx) {
+        Parameters parameters = new Parameters();
+        for (var child : ctx.parametersContent()){
+            parameters.addChild( (ParametersContent) visit(child));
+        }
+        return parameters;
+    }
+
+    ///parameters content
+    @Override
+    public ParametersContent visitParaHasAccessModifiers(MyParser.ParaHasAccessModifiersContext ctx) {
+        return new ParaHasAccessModifiers( (Type) visit(ctx.type()) , (ParametersType) visit(ctx.parametersType()));
+    }
+
+    @Override
+    public ParametersContent visitParaHasPropertyAccess(MyParser.ParaHasPropertyAccessContext ctx) {
+        ParaHasPropertyAccess paraHasPropertyAccess = new ParaHasPropertyAccess();
+        for (var child : ctx.propertyAccess()){
+            paraHasPropertyAccess.addChild( (PropertyAccess) visit(child));
+        }
+        return paraHasPropertyAccess;
+    }
+
+    /// parameters type
+    @Override
+    public ParaWithType visitParaWithType(MyParser.ParaWithTypeContext ctx) {
+        ArrayList<Type> type1 = new ArrayList<>() ;
+        for (var child : ctx.type()){
+            type1.add((Type) visit(child));
+        }
+        String name = ctx.IDENTIFIER().toString() + ctx.COLON().toString();
+        return new ParaWithType( type1 , name);
+    }
+
+    @Override
+    public ParametersType visitParaValue(MyParser.ParaValueContext ctx) {
+
+        if (ctx.type() != null){
+
+            ArrayList<Type> type = new ArrayList<>() ;
+            for (var child : ctx.type()){
+                type.add((Type) visit(child));
+            }
+
+            ArrayList<Values> values = new ArrayList<>() ;
+            for (var child : ctx.values()){
+                values.add((Values) visit(child));
+            }
+
+            return new ParaValue((Values) visitValues(ctx.values(0)) , type ,  values);
+        }
+
+        return new ParaValue((Values) visitValues(ctx.values(0)));
+    }
+
+    /// 1.3 Object From Class Variable Decl
+    @Override
+    public VariableDeclarationStat visitObjectFromClass(MyParser.ObjectFromClassContext ctx) {
+        return new ObjectFromClass((NewObjectFromClass) visitNewObjectFromClass(ctx.newObjectFromClass()));
+    }
+
+    @Override
+    public VariableDeclarationStat visitNewObjectFromClass(MyParser.NewObjectFromClassContext ctx) {
+        if (ctx.toString()!= null){
+            return new NewObjectFromClass((Parameters) visitParameters(ctx.parameters()) , (ToString) visitToString(ctx.toString()));
+        }
+        return new NewObjectFromClass((Parameters) visitParameters(ctx.parameters()));
+    }
+
+    @Override
+    public NewObjectFromClass visitToString(MyParser.ToStringContext ctx) {
+        return new ToString(ctx.TOSTRING().getText() , (Parameters) visitParameters(ctx.parameters()));
+    }
+
+    @Override
+    public AstNode visitPropertyAccess(MyParser.PropertyAccessContext ctx) {
+        return new PropertyAccess(ctx.getText());
+    }
+
+    /// 3.4 IfElse Statement
+    @Override
+    public IfElseStat visitIfQuestionMark(MyParser.IfQuestionMarkContext ctx) {
+        return new IfQuestionMark((Type) visit(ctx.type(0)) , (Type)visit(ctx.type(1)));
+    }
+
+    @Override
+    public IfElseStat visitIfReturn(MyParser.IfReturnContext ctx) {
+        return new IfReturn((IfStat)visitIfStat(ctx.ifStat()));
+    }
+
+    @Override
+    public IfElseStat visitIfStat(MyParser.IfStatContext ctx) {
+        IfStat types = new IfStat() ;
+        for (var child : ctx.types()){
+            types.addChild((Types) visit(child));
+        }
+
+        return types;
+    }
+
+    @Override
+    public IfElseStat visitIfElse(MyParser.IfElseContext ctx) {
+        if (ctx.conditionStat(1)!= null){
+            return new IfElse((IfStat) visitIfStat(ctx.ifStat()) , (ConditionStat) visitConditionStat(ctx.conditionStat(0)) , (ConditionStat) visitConditionStat(ctx.conditionStat(1)));
+        }
+        return new IfElse((IfStat) visitIfStat(ctx.ifStat()) , (ConditionStat) visitConditionStat(ctx.conditionStat(0)));
+    }
+
+    @Override
+    public AstNode visitConditionStat(MyParser.ConditionStatContext ctx) {
+        ConditionStat expression = new ConditionStat() ;
+        for (var child : ctx.expression()){
+            expression.addChild((Expression) visit(child));
+        }
+
+        return expression;
+    }
+
+    /// 3.5 try Statement
+    @Override
+    public Expression visitTryStat(MyParser.TryStatContext ctx) {
+        return new TryStat(ctx.TRY().getText() , (ConditionStat) visitConditionStat(ctx.conditionStat()));
+    }
+
+    /// 3.6 catch Statement
+    @Override
+    public Expression visitCatchStat(MyParser.CatchStatContext ctx) {
+        return new CatchStat(ctx.CATCH().getText() , (ConditionStat) visitConditionStat(ctx.conditionStat()));
+    }
+
+    ///  3.7 assignment
+    @Override
+    public Assignment visitSimpleAssignment(MyParser.SimpleAssignmentContext ctx) {
+        Expression expression = (Expression) visit(ctx.expression());
+        return new SimpleAssignment(expression);
+    }
+
+    @Override
+    public Assignment visitDotAssignment(MyParser.DotAssignmentContext ctx) {
+        if (ctx.type() != null){
+            if (ctx.operations() != null && ctx.values() != null){
+                return new DotAssignment((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (SubDotAssignment) visitSubDotAssignment(ctx.subDotAssignment())
+                , (Type) visit(ctx.type()) , (Operations) visitOperations(ctx.operations()) , (Values) visitValues(ctx.values()));
+            }
+            return new DotAssignment((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (SubDotAssignment) visitSubDotAssignment(ctx.subDotAssignment())
+                    , (Type) visit(ctx.type()));
+        }
+        return new DotAssignment((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (SubDotAssignment) visitSubDotAssignment(ctx.subDotAssignment()));
+    }
+
+    @Override
+    public Assignment visitSubDotAssignment(MyParser.SubDotAssignmentContext ctx) {
+        SubDotAssignment subDotAssignment = new SubDotAssignment() ;
+        for (var child : ctx.values()){
+            subDotAssignment.addChild((Values) visitValues(child));
+        }
+        return subDotAssignment;
+    }
+
+    @Override
+    public Assignment visitAssignmentStatement(MyParser.AssignmentStatementContext ctx) {
+       if(ctx.primitiveType() != null){
+           return new AssignmentStatement((Assignment) visit(ctx.assignment(0)) ,(Assignment) visit(ctx.assignment(1)) , (PrimitiveTypeNode) visit(ctx.primitiveType()));
+       }
+        return new AssignmentStatement((Assignment) visit(ctx.assignment(0)) ,(Assignment) visit(ctx.assignment(1)));
+    }
+
+    @Override
+    public Assignment visitAssignmentStatementIniti(MyParser.AssignmentStatementInitiContext ctx) {
+        return new AssignmentStatementIniti((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (ObjectLiteral) visitObjectLiteral(ctx.objectLiteral()));
+    }
+
+    @Override
+    public AstNode visitObjectLiteral(MyParser.ObjectLiteralContext ctx) {
+        ObjectLiteral objectLiteral = new ObjectLiteral() ;
+        for (var child : ctx.objectProperty()){
+            objectLiteral.addChild((ObjectProperty) visit(child));
+        }
+        return objectLiteral;
+    }
+
+    /// object property
+    @Override
+    public ObjectProperty visitIdentifierObjectProperty(MyParser.IdentifierObjectPropertyContext ctx) {
+        return new IdentifierObjectProperty(ctx.IDENTIFIER().getText() , (Expression) visit(ctx.expression()));
+    }
+
+    @Override
+    public ObjectProperty visitImportsObjectProperty(MyParser.ImportsObjectPropertyContext ctx) {
+        return new ImportsObjectProperty(ctx.IMPORTS().getText() , (Expression) visit(ctx.expression()));
+    }
+
+    @Override
+    public ObjectProperty visitExportsObjectProperty(MyParser.ExportsObjectPropertyContext ctx) {
+        return new ExportsObjectProperty(ctx.EXPORTS().getText() , (Expression) visit(ctx.expression()));
+    }
+
+    @Override
+    public ObjectProperty visitDotPropertyAccessObjectProperty(MyParser.DotPropertyAccessObjectPropertyContext ctx) {
+        return new IdentifierObjectProperty(ctx.DOT().toString() , (Expression) visit(ctx.propertyAccess()));
+    }
+
+    /// 3.8 question condition
+    @Override
+    public Expression visitQuestionCondition(MyParser.QuestionConditionContext ctx) {
+        return new QuestionCondition((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (Values) visitValues(ctx.values()));
+    }
+
+    /// 3.9 operation Expression
+    @Override
+    public Expression visitOperationExpr(MyParser.OperationExprContext ctx) {
+        if (ctx.operations() != null){
+            return new OperationExpr((Values) visitValues(ctx.values(0)) , (Operations) visitOperations(ctx.operations()) , (Values) visitValues(ctx.values(1)));
+        }
+        return new OperationExpr((Values) visitValues(ctx.values(0)));
+    }
+
+    ///  function call
+    @Override
+    public FunctionCall visitCallFunctionPara(MyParser.CallFunctionParaContext ctx) {
+        return new CallFunctionPara((Parameters) visitParameters(ctx.parameters(0)) , (Parameters) visitParameters(ctx.parameters(1)) , (PrintError) visitPrint_error(ctx.print_error()));
+    }
+
+    @Override
+    public FunctionCall visitMethodCallWithValue(MyParser.MethodCallWithValueContext ctx) {
+        if(ctx.simpleArray()!= null){
+            return new MethodCallWithValue((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (Parameters) visitParameters(ctx.parameters()) , (SimpleArray) visitSimpleArray(ctx.simpleArray()));
+        }
+        return new MethodCallWithValue((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (Parameters) visitParameters(ctx.parameters()));
+    }
+
+    @Override
+    public FunctionCall visitMethodCallWithListValue(MyParser.MethodCallWithListValueContext ctx) {
+        if(ctx.argumentList()!= null){
+            return new MethodCallWithListValue((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (ArgumentList) visit(ctx.argumentList()));
+        }
+        return new MethodCallWithListValue((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()));
+    }
+
+    //argument list
+    @Override
+    public ArgumentList visitWithObjectPropertyArgumentList(MyParser.WithObjectPropertyArgumentListContext ctx) {
+        return new WithObjectPropertyArgumentList((ObjectProperty) visit(ctx.objectProperty()));
+    }
+
+    @Override
+    public ArgumentList visitWithExpressionArgumentList(MyParser.WithExpressionArgumentListContext ctx) {
+        WithExpressionArgumentList withExpressionArgumentList = new WithExpressionArgumentList();
+        for (var child : ctx.expression()){
+            withExpressionArgumentList.addChild((Expression) visit(child));
+        }
+        return withExpressionArgumentList;
+    }
+
+    @Override
+    public CloseTag visitCloseTag(MyParser.CloseTagContext ctx) {
+        String string = ctx.IDENTIFIER().getText();
+        return new CloseTag(string);
+    }
+
+    @Override
+    public HtmlDeclare visitSelfClosingTag(MyParser.SelfClosingTagContext ctx) {
+        SelfClosingTag selfClosingTag = new SelfClosingTag();
+        Boolean isExisted = false;
+
+        for (var child : ctx.types()){
+            selfClosingTag.addTypes( (Types) visit(child));
+            if (child.getText().equals("ngModel")){
+                if(!symbolTable2.getFormsModuleTracker().checkForms()){
+                    ErrorHandler.logError(new FormsModuleException("Can't bind to '" + child.getText() + "' since it isn't a known property of " + ctx.types(0).getText()), child.getStart().getLine() , child.getStart().getCharPositionInLine());
+                    throw new RuntimeException("Can't bind to '" + child.getText() + "' since it isn't a known property of " + ctx.types(0).getText());
+
+                }
+                for(var i : ngModel) {
+                    if (i.equals(ctx.types(0).getText())){
+                        isExisted = true;
+                    }
+                }
+                if (!isExisted){
+                    ErrorHandler.logError(new NgModelSupportedElementException("[(ngModel)] cannot be used on "+ ctx.types(0).getText()+". Only supported on form elements like <input>, <select>, or <textarea>."), ctx.types(0).getStart().getLine(), ctx.types(0).getStart().getCharPositionInLine());
+                    throw new RuntimeException("[(ngModel)] cannot be used on "+ ctx.types(0).getText()+". Only supported on form elements like <input>, <select>, or <textarea>.");
+                }
             }
         }
-
-        s.addVariable(className, "ClassStatement" , /*classBody*/"") ;
-
-        return new ClassStatement(export, className, bodyElements);
+        return selfClosingTag;
     }
 
     @Override
-    public ClassBody visitClassBody(MyParser.ClassBodyContext ctx) {
-        if (ctx.variableDeclaration() != null) {
-            VariableDeclaration variableDeclarationNode = visitVariableDeclaration(ctx.variableDeclaration());
-            return new ClassBody(variableDeclarationNode);
+    public StatementNode visitClassStatment(MyParser.ClassStatmentContext ctx) {
+        if (ctx.body()!= null){
+            List<Body> bodyList = new ArrayList<>();
+            for (var child : ctx.body()){
+                bodyList.add((Body) visit(child));
+            }
+            return new ClassStatement(ctx.EXPORT().getText() , (ClassRelation) visit(ctx.classRelation()) , bodyList);
         }
+        return new ClassStatement(ctx.EXPORT().getText() , (ClassRelation) visit(ctx.classRelation()));
+    }
 
-        if (ctx.functionDeclaration() != null) {
-            FunctionDeclaration functionDeclarationNode = visitFunctionDeclaration(ctx.functionDeclaration());
-            return new ClassBody(functionDeclarationNode);
-
+    //class relation
+    @Override
+    public ClassRelation visitCommonRelation(MyParser.CommonRelationContext ctx) {
+        if(ctx.classType() != null){
+            return new CommonRelation(ctx.IDENTIFIER(0).getText() , (ClassType)visitClassType(ctx.classType()));
         }
+        return new CommonRelation(ctx.IDENTIFIER(0).getText());
+    }
 
-        if (ctx.print_error() != null) {
-            PrintError printErrorNode = visitPrint_error(ctx.print_error());
-            return new ClassBody(printErrorNode);
+    @Override
+    public ClassRelation visitOtherRelation(MyParser.OtherRelationContext ctx) {
+        return new OtherRelation((ClassType)visitClassType(ctx.classType()) , ctx.IDENTIFIER(0).getText());
+    }
 
+    //class type
+    @Override
+    public ClassRelation visitClassType(MyParser.ClassTypeContext ctx) {
+        if (ctx.variable_type()!= null){
+            return new ClassType(visitVariable_type(ctx.variable_type()));
         }
-
-        if (ctx.print_stat() != null) {
-            PrintStat printStatNode = visitPrint_stat(ctx.print_stat());
-            return new ClassBody(printStatNode);
-
-        }
-        return null;
+        return new ClassType(ctx.getText());
     }
 
     @Override
     public VariableType visitVariable_type(MyParser.Variable_typeContext ctx) {
-        if (ctx.VAR() != null) {
-            return new VariableType(ctx.VAR().getText());
-        }
-        else if (ctx.CONST() != null) {
-            return new VariableType(ctx.CONST().getText());
-        }
-
-        else if (ctx.LET() != null) {
-            return new VariableType(ctx.LET().getText());
-        }
-        else {
-            return null;
-        }
+        return new VariableType(ctx.getText());
     }
 
     @Override
-    public VariableDeclaration visitVariableDeclaration(MyParser.VariableDeclarationContext ctx) {
-        VariableType variable_type;
-        Types types;
-        Expression expression;
-        String identifier = ctx.IDENTIFIER().getText();
-        List<Type> type = new ArrayList<>();
-
-
-        if (ctx.expression() == null && ctx.variable_type() != null) {
-             variable_type = visitVariable_type(ctx.variable_type());
-             types = visitTypes(ctx.types());
-            if (ctx.type().size() > 1) {
-
-                for (MyParser.TypeContext typeCtx : ctx.type()) {
-                    type.add(visitType(typeCtx));
-                }
-
-
-            } else {
-                type.add(visitType(ctx.type(0)));
-            }
-            return new VariableDeclaration(variable_type , identifier, type, types);
+    public UnionTypeNode visitUnionType(MyParser.UnionTypeContext ctx) {
+        if (ctx.type(1) !=null){
+            return new UnionTypeNode((Type) visit(ctx.type(0)) , (Type) visit (ctx.type(1)));
         }
+        return new UnionTypeNode((Type) visit(ctx.type(0)) , null);
+    }
 
-        else if (ctx.expression() == null && ctx.variable_type() == null){
-             types = visitTypes(ctx.types());
-            if (ctx.type().size() > 1) {
-                for (MyParser.TypeContext typeCtx : ctx.type()) {
-                    type.add(visitType(typeCtx));
-                }
-
-            } else {
-                type.add(visitType(ctx.type(0)));
-            }
-
-            return new VariableDeclaration(identifier, type, types);
+    /// visit body
+    /// 1.1  function declaration
+    @Override
+    public FunctionDeclaration visitNormalfunctionDecl(MyParser.NormalfunctionDeclContext ctx) {
+        VariableType returnType = null;
+        if (ctx.FUNCTION() != null || ctx.variable_type() != null) {
+            returnType = new VariableType(ctx.getStart().getText());
         }
-
-        else if (ctx.expression() != null && ctx.variable_type() != null){
-             expression = visitExpression(ctx.expression());
-             variable_type = visitVariable_type(ctx.variable_type());
-            return new VariableDeclaration(variable_type,identifier,expression);
+        // FunctionDeclarationStat
+        FunctionDeclarationStat stat = (FunctionDeclarationStat) visit(ctx.functionDeclarationStat());
+        symbolTable2.getEventBindingTable().addFunctionName(ctx.IDENTIFIER().getText());
+        // Body
+        List<Body> bodyList = new ArrayList<>();
+        for (var b : ctx.body()) {
+            bodyList.add((Body) visit(b));
         }
+        return new NormalfunctionDecl(returnType, stat, bodyList);
+    }
 
-        else {
-             expression = visitExpression(ctx.expression());
-            return new VariableDeclaration(identifier,expression);
+    /// function Declaration Stat
+    @Override
+    public FunctionDeclarationStat visitSimpleDecStat(MyParser.SimpleDecStatContext ctx) {
+        String returnType = null;
+        if (ctx.FUNCTION() != null) {
+            returnType = ctx.FUNCTION().getText();
         }
+        // Parameters
+        Parameters para = null;
+        para = (Parameters) visitParameters(ctx.parameters());
 
-//        s.addVariable(identifier, "VariableDeclaration", type.isEmpty() ? expression : type );
+        UnionTypeNode union = null;
+        union = visitUnionType(ctx.unionType());
 
+        return new SimpleDecStat(returnType, para, union);
     }
 
     @Override
-    public FunctionDeclaration visitFunctionDeclaration(MyParser.FunctionDeclarationContext ctx) {
-        ArrowFunction arrowFunction;
-        FunctionBody functionBody;
-        Parameters parameters;
-        Type type;
-        VariableType variable_type;
-
-       if (ctx.arrowFunction() != null) {
-           arrowFunction = visitArrowFunction(ctx.arrowFunction());
-           return new FunctionDeclaration(arrowFunction);
-       }
-
-        if (ctx.parameters() !=null && ctx.type() != null && ctx.functionBody() != null) {
-            functionBody = visitFunctionBody(ctx.functionBody());
-            parameters = visitParameters(ctx.parameters());
-            type = visitType(ctx.type());
-            return new FunctionDeclaration(parameters,type,functionBody);
-        }
-
-        if (ctx.variable_type() !=null && ctx.parameters() !=null && ctx.type() != null && ctx.functionBody() != null) {
-            functionBody = visitFunctionBody(ctx.functionBody());
-            variable_type = visitVariable_type(ctx.variable_type());
-            parameters = visitParameters(ctx.parameters());
-            type = visitType(ctx.type());
-            return new FunctionDeclaration(variable_type,parameters,type,functionBody);
-        }
-
-        if (ctx.type() != null && ctx.functionBody() != null) {
-            functionBody = visitFunctionBody(ctx.functionBody());
-            type = visitType(ctx.type());
-            return new FunctionDeclaration(type,functionBody);
-        }
-
-        if (ctx.variable_type() !=null && ctx.type() != null && ctx.functionBody() != null) {
-            functionBody = visitFunctionBody(ctx.functionBody());
-            variable_type = visitVariable_type(ctx.variable_type());
-            type = visitType(ctx.type());
-            return new FunctionDeclaration(variable_type,type,functionBody);
-        }
-
-        if (ctx.parameters() !=null && ctx.functionBody() != null) {
-            functionBody = visitFunctionBody(ctx.functionBody());
-            parameters = visitParameters(ctx.parameters());
-            return new FunctionDeclaration(parameters,functionBody);
-        }
-
-        if (ctx.variable_type() !=null && ctx.parameters() !=null && ctx.functionBody() != null) {
-            functionBody = visitFunctionBody(ctx.functionBody());
-            variable_type = visitVariable_type(ctx.variable_type());
-            parameters = visitParameters(ctx.parameters());
-            return new FunctionDeclaration(variable_type,parameters,functionBody);
-        }
-
-        if (ctx.functionBody() != null) {
-            functionBody = visitFunctionBody(ctx.functionBody());
-            return new FunctionDeclaration(functionBody);
-        }
-
-        if (ctx.variable_type() !=null && ctx.functionBody() != null) {
-            functionBody = visitFunctionBody(ctx.functionBody());
-            variable_type = visitVariable_type(ctx.variable_type());
-            return new FunctionDeclaration(variable_type,functionBody);
-        }
-    return null;
+    public FunctionDeclarationStat visitSimpleArrayDecStat(MyParser.SimpleArrayDecStatContext ctx) {
+        return new SimpleArrayDecStat((Parameters) visitParameters(ctx.parameters()) , (SimpleArray) visitSimpleArray(ctx.simpleArray()));
     }
 
+    /// arrow function
     @Override
-    public Parameters visitParameters(MyParser.ParametersContext ctx) {
-        List<Parameter> parametersList = new ArrayList<>();
+    public ArrowFunction visitVarArrowFunction(MyParser.VarArrowFunctionContext ctx) {
+        symbolTable2.getEventBindingTable().addFunctionName(ctx.IDENTIFIER().getText());
+        Type returnType = null;
 
-        if (ctx.IDENTIFIER() != null) {
-            String firstIdentifier = ctx.IDENTIFIER(0).getText();
-            Type firstType = (Type) visit(ctx.type(0));
-            parametersList.add(new Parameter(firstIdentifier, firstType));
-
-            for (int i = 1; i < ctx.IDENTIFIER().size(); i++) {
-                String identifier = ctx.IDENTIFIER(i).getText();
-                Type type = (Type) visit(ctx.type(i));
-                parametersList.add(new Parameter(identifier, type));
-            }
-        }
-
-        s.addVariable(parametersList.toString(), "Parameters", "");
-        return new Parameters(parametersList);
-    }
-
-    @Override
-    public FunctionBody visitFunctionBody(MyParser.FunctionBodyContext ctx) {
-        FunctionBody body = new FunctionBody();
-
-        for (var child : ctx.children) {
-            Object node = visit(child);
-            if (node != null) {
-                body.addChild(node);
-            }
-        }
-
-        return body;
-    }
-
-    @Override
-    public Assignment visitAssignment(MyParser.AssignmentContext ctx) {
-        if (ctx.expression() != null) {
-            String identifier = ctx.IDENTIFIER(0).getText();
-            Expression expression = visitExpression(ctx.expression());
-            s.updateVariable(identifier, expression);
-
-            return new Assignment(identifier, expression);
-        }
         if (ctx.type() != null) {
-            String identifier = ctx.IDENTIFIER(0).getText();
-            String memberIdentifier = ctx.IDENTIFIER(1).getText();
-            Type type = visitType(ctx.type());
-            s.updateType(identifier, type.toString());
-
-            return new Assignment(identifier +"."+ memberIdentifier, type);
+            returnType = (Type) visit(ctx.type());
         }
-        if(ctx.expression() == null && ctx.type() == null){
-            String identifier = ctx.IDENTIFIER(0).getText();
-            String memberIdentifier = ctx.IDENTIFIER(1).getText();
-
-
-            return new Assignment(identifier +"."+ memberIdentifier);
-        }
-
-        return null;
-    }
-
-
-    @Override
-    public PrintError visitPrint_error(MyParser.Print_errorContext ctx) {
-        String console = ctx.CONSOLE().getText();
-        String error = ctx.ERROR().getText();
-
-        String identifier;
-        if ( ctx.IDENTIFIER() != null) {
-            identifier = ctx.IDENTIFIER().getText();
-            s.addVariable(identifier, "Block", console+error+identifier);
-
-            return new PrintError(console, error, identifier);
-        }
-        if ( ctx.STRING() != null) {
-            identifier = ctx.STRING().getText();
-            s.addVariable(identifier, "Block", console+error+identifier);
-
-            return new PrintError(console, error, identifier);
-        }
-
-        if ( ctx.NUMBER_VAL() != null) {
-            identifier = ctx.NUMBER_VAL().getText();
-            s.addVariable(identifier, "Block", console+error+identifier);
-
-            return new PrintError(console, error, identifier);
-        }
-
-        return null;
+        return new VarArrowFunction(visitVariable_type(ctx.variable_type()) , (Parameters) visitParameters(ctx.parameters()) , returnType , (Body) visit(ctx.body()));
     }
 
     @Override
-    public PrintStat visitPrint_stat(MyParser.Print_statContext ctx) {
-        String console = ctx.CONSOLE().getText();
-        String log = ctx.LOG().getText();
-        String identifier;
-        if ( ctx.IDENTIFIER() != null) {
-             identifier = ctx.IDENTIFIER().getText();
-            s.addVariable(identifier, "Print", console+log+identifier);
+    public ArrowFunction visitEventHandlerArrowFunction(MyParser.EventHandlerArrowFunctionContext ctx) {
+        return super.visitEventHandlerArrowFunction(ctx);
+    }
 
-            return new PrintStat(console, log, identifier);
+    //    @Override
+//    public FunctionDeclaration visitNamedFunctionDecl(MyParser.NamedFunctionDeclContext ctx) {
+//        Parameters parameters = (Parameters) visit(ctx.parameters());
+//        Type type = (Type) visit(ctx.type());
+//        symbolTable2.getEventBindingTable().addFunctionName(ctx.IDENTIFIER().getText());
+//        ArrayList<Body> bodies = new ArrayList<>() ;
+//        for (var child : ctx.body()){
+//            bodies.add((Body) visit(child));
+//        }
+//
+//        return new NamedFunctionDecl(parameters,type,bodies);
+//    }
+
+//    @Override
+//    public FunctionDeclaration visitArrowFunction(MyParser.ArrowFunctionContext ctx) {
+//        VariableType variableType = visitVariable_type(ctx.variable_type());
+//        Parameters parameters = (Parameters) visit(ctx.parameters());
+//        Type type = (Type) visit(ctx.type());
+//        ArrowBody arrowBody = visitArrowBody(ctx.arrowBody());
+//        symbolTable2.getEventBindingTable().addFunctionName(ctx.IDENTIFIER().getText());
+//
+//        return new ArrowFunction(variableType,parameters,type,arrowBody);
+//    }
+
+//    @Override
+//    public FunctionDeclaration visitAssignedFunctionDecl(MyParser.AssignedFunctionDeclContext ctx) {
+//        Parameters parameters = (Parameters) visit(ctx.parameters());
+//        VariableType variableType = visitVariable_type(ctx.variable_type());
+//        Type type = (Type) visit(ctx.type());
+//        ArrayList<Body> bodies =new ArrayList<>() ;
+//        for (var child : ctx.body()){
+//            bodies.add((Body) visit(child));
+//        }
+//        symbolTable2.getEventBindingTable().addFunctionName(ctx.IDENTIFIER().getText());
+//        return new AssignedFunctionDecl(variableType,parameters,type,bodies);
+//    }
+
+    @Override
+    public Types visitEventBinding(MyParser.EventBindingContext ctx) {
+        if (!symbolTable2.getEventBindingTable().checkEvent(ctx.ID3(0).getText())) {
+            ErrorHandler.logError(new EventBindingException("Event Binding To NonFunction'" + ctx.ID3(0).getText() + "'. You have to define this function."),  ctx.ID3(0).getSymbol().getLine(),  ctx.ID3(0).getSymbol().getCharPositionInLine());
+            throw new RuntimeException("Event Binding To NonFunction'" + ctx.ID3(0).getText() + "'. You have to define this function.");
         }
-        if ( ctx.STRING() != null) {
-            identifier = ctx.STRING().getText();
-            s.addVariable(identifier, "Print", console+log+identifier);
-
-            return new PrintStat(console, log, identifier);
-        }
-
-        if ( ctx.NUMBER_VAL() != null) {
-            identifier = ctx.NUMBER_VAL().getText();
-            s.addVariable(identifier, "Print", console+log+identifier);
-
-            return new PrintStat(console, log, identifier);
-        }
-
-   return null;
+        return new EventBinding(ctx.CLICK().getText(), ctx.ID3(0).getText());
     }
 
     @Override
-    public ArrowFunction visitArrowFunction(MyParser.ArrowFunctionContext ctx) {
+    public Body visitPrint_error(MyParser.Print_errorContext ctx) {
+        return new PrintError(ctx.CONSOLE().getText() , ctx.ERROR().getText() , (Values) visitValues(ctx.values()));
+    }
 
-        VariableType variableType = visitVariable_type(ctx.variable_type());
-        Parameters parameters = visitParameters(ctx.parameters());
-        Type type = visitType(ctx.type());
-
-        return new ArrowFunction(variableType, parameters, type);
+    @Override
+    public Body visitPrint_stat(MyParser.Print_statContext ctx) {
+        return new PrintError(ctx.CONSOLE().getText() , ctx.LOG().getText() , (Values) visitValues(ctx.values()));
     }
 }

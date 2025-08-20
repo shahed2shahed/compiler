@@ -1,11 +1,11 @@
 package AST;
 
-public class PrintStat extends ClassPropertyNode {
-    private String console;
-    private String log;
-    private String identifier;
+public class PrintStat extends Body {
+     String console;
+     String log;
+     Values identifier;
 
-    public PrintStat(String console, String log, String identifier) {
+    public PrintStat(String console, String log, Values identifier) {
         this.console = console;
         this.log = log;
         this.identifier = identifier;
@@ -19,12 +19,12 @@ public class PrintStat extends ClassPropertyNode {
         return log;
     }
 
-    public String getIdentifier() {
+    public Values getIdentifier() {
         return identifier;
     }
 
     @Override
     public String toString() {
-        return "Print Statement : "+ console + "." + log + "(" + identifier + ")";
+        return console + "." + log + "(" + identifier + ")";
     }
 }

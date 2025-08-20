@@ -1,6 +1,6 @@
 package AST;
 
-public class SelectorElement extends ComponentPropertyNode {
+public class SelectorElement extends ComponentEle {
     private String value;
 
     public SelectorElement(String value) {

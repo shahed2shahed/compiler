@@ -7,13 +7,12 @@ public class NormalHtmlTagNode extends HtmlDeclare {
      List<Types> htmlBody;
      CloseTag closeTag;
 
+
      public NormalHtmlTagNode(OpenTag openTag, List<Types> htmlBody, CloseTag closeTag) {
         this.openTag = openTag;
         this.htmlBody = htmlBody;
         this.closeTag = closeTag;
-
     }
-
 
     public OpenTag getOpenTag() {
         return openTag;
@@ -45,17 +44,9 @@ public class NormalHtmlTagNode extends HtmlDeclare {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//        sb.append("Html Element:\n");
-        if (openTag != null && closeTag != null) {
-
-//            if (openTag != null) {
+//        if (openTag != null && closeTag != null) {
             sb.append("  Open Tag: ").append(openTag).append("\n");
 
-//            }
-//            else {
-//                sb.append("  No Open Tag\n");
-//
-//            }
             if (htmlBody != null) {
                 sb.append("  Html Body: {\n");
                 for (Types bodyElement : htmlBody) {
@@ -67,6 +58,6 @@ public class NormalHtmlTagNode extends HtmlDeclare {
             }
 
             sb.append("  Close Tag: ").append(closeTag).append("\n");
-        }
+//        }
         return sb.toString();}
 }

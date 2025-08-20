@@ -4,16 +4,13 @@ import java.util.ArrayList;
 
 public class Program extends AstNode {
 
-    //  constructor(
-    // public statements: StatementNode[] 
-  
-    ArrayList<Object> children;
+    ArrayList<StatementNode> children;
 
     public Program() {
         this.children = new ArrayList<>();
     }
 
-    public void addChild(Object node) {
+    public void addChild(StatementNode node) {
         this.children.add(node);
     }
 
@@ -22,7 +19,7 @@ public class Program extends AstNode {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Program { \n");
-        for (Object child : this.children) {
+        for (StatementNode child : this.children) {
             sb.append(child + "\n");
         }
         sb.append("}\n");

@@ -20,7 +20,4 @@ public class Any extends PrimitiveTypeNode {
         return "Any { value: " + value + " }";
     }
 
-
-    ////test
-    int x =0;
 }

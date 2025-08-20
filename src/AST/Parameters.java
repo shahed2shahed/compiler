@@ -1,26 +1,36 @@
 package AST;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Parameters extends Node {
-    private List<Parameter> parameters;
+public class Parameters extends AstNode{
 
-    public Parameters(List<Parameter> parameters) {
+    List<ParametersContent> parameters;
+
+
+    public Parameters(){
+        this.parameters = new ArrayList<ParametersContent>();
+    }
+    public List<ParametersContent> getParameters(){
+        return parameters;
+    }
+    public void setParameters(List<ParametersContent> parameters){
         this.parameters = parameters;
     }
 
-    public List<Parameter> getParameters() {
-        return parameters;
+    public void addChild(ParametersContent node) {
+        this.parameters.add(node);
     }
 
     @Override
     public String toString() {
+
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < parameters.size(); i++) {
-            sb.append(parameters.get(i).toString());
-            if (i < parameters.size() - 1) {
-                sb.append(", ");
-            }
+        sb.append("Parameters :");
+        sb.append("\n");
+        for(ParametersContent p : parameters){
+            sb.append(p.toString());
+            sb.append("\n");
         }
         return sb.toString();
     }

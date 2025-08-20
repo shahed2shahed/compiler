@@ -1,8 +1,4 @@
 package AST;
 
-
-
-public abstract class StatementNode extends AstNode {
-
-   
+public abstract class StatementNode extends Program {
 }

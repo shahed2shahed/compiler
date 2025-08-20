@@ -2,13 +2,24 @@ package AST;
 
 public class NgForDirective extends DirectiveStatementNode {
 
-private NgForDirective value;
+private NgForValue value;
 
-    public NgForDirective(NgForDirective value) {
+    public NgForDirective(NgForValue value) {
         this.value = value;
     }
 
-    public NgForDirective getValue() {
+    public NgForValue getValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Ng For Directive { \n");
+        sb.append(value + "\n");
+        sb.append("}\n");
+
+        return sb.toString();
     }
 }

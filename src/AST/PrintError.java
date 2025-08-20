@@ -1,11 +1,11 @@
 package AST;
 
-public class PrintError extends ClassPropertyNode {
-    private String console;
-    private String error;
-    private String identifier;
+public class PrintError extends Body {
+     String console;
+     String error;
+     Values identifier;
 
-    public PrintError(String console, String error, String identifier) {
+    public PrintError(String console, String error, Values identifier) {
         this.console = console;
         this.error = error;
         this.identifier = identifier;
@@ -19,12 +19,12 @@ public class PrintError extends ClassPropertyNode {
         return error;
     }
 
-    public String getIdentifier() {
+    public Values getIdentifier() {
         return identifier;
     }
 
     @Override
     public String toString() {
-        return "Print Error : " + console + "." + error + "(" + identifier + ")";
+        return console + "." + error + "(" + identifier + ")";
     }
 }

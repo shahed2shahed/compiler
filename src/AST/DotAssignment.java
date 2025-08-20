@@ -1,0 +1,58 @@
+package AST;
+
+public class DotAssignment extends  Assignment {
+    PropertyAccess property;
+    SubDotAssignment subDotAssignment;
+    Type type;
+    Operations operations;
+    Values values;
+
+    public DotAssignment(PropertyAccess property , SubDotAssignment subDotAssignment , Type type , Operations operations , Values values) {
+        this.property = property;
+        this.subDotAssignment = subDotAssignment;
+        this.type = type;
+        this.operations = operations;
+        this.values = values;
+    }
+
+    public DotAssignment(PropertyAccess property , SubDotAssignment subDotAssignment , Type type) {
+        this.property = property;
+        this.subDotAssignment = subDotAssignment;
+        this.type = type;
+    }
+
+    public DotAssignment(PropertyAccess property , SubDotAssignment subDotAssignment) {
+        this.property = property;
+        this.subDotAssignment = subDotAssignment;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Dot Assignment :\n");
+
+        sb.append("Property Access :");
+        sb.append(property.toString());
+        sb.append("\n");
+
+        sb.append(subDotAssignment.toString());
+        sb.append("\n");
+
+        if (type != null) {
+            sb.append("Type :");
+            sb.append(type.toString());
+            sb.append("\n");
+
+            if (operations != null && values!=null) {
+                sb.append("Operations :");
+                sb.append(operations.toString());
+                sb.append("\n");
+                sb.append("Values :");
+                sb.append(values.toString());
+                sb.append("\n");
+            }
+
+        }
+        return sb.toString();
+    }
+}

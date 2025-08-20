@@ -4,71 +4,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComponentDeclaration extends StatementNode{
+     Module module;
+     ComponentBody componentBodies ;
 
-    List<ComponentBody> componentBodies ;
-
-        public ComponentDeclaration() {
-        this.componentBodies = new ArrayList<>();
+    public ComponentDeclaration() {
+        this.module = module;
+        this.componentBodies = componentBodies;
     }
-
-    public List<ComponentBody> getComponentBodies() {
-        return componentBodies;
-    }
-
-    public void setComponentBodies(List<ComponentBody> componentBodies) {
+        public ComponentDeclaration(Module module , ComponentBody componentBodies) {
+        this.module = module;
         this.componentBodies = componentBodies;
     }
 
-    public void addComponentBody(ComponentBody node) {
-        this.componentBodies.add(node);
+    public ComponentBody getComponentBodies() {
+        return componentBodies;
+    }
+    public Module getModule() {
+        return module;
     }
 
-
+    public void setComponentBodies(ComponentBody componentBodies) {
+        this.componentBodies = componentBodies;
+    }
+    public void setModule(Module module) {
+            this.module = module;
+    }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Component Declaration : \n");
+        sb.append("Module : ").append(module).append("\n");
         sb.append("Component Bodies: { \n");
-        if(this.componentBodies !=null)
-        {
-            for (ComponentBody componentBody : this.componentBodies) {
-                sb.append(componentBody + "\n");
-            }
+                sb.append(componentBodies + "\n");
             sb.append("}\n");
 
             return sb.toString();
         }
 
-        else {
-            sb.append(" ");
-            sb.append("  }\n");
-            sb.append("}");
-           return sb.toString();
-              }
-        }
-
 }
-
-
-
-/*public class ComponentDeclarationNode extends StatementNode {
-    private List<ComponentPropertyNode> properties;
-
-    public ComponentDeclarationNode(List<ComponentPropertyNode> properties) {
-        this.properties = properties;
-    }
-
-    public List<ComponentPropertyNode> getProperties() {
-        return properties;
-    }
-
-    @Override
-    public String toString() {
-        return "ComponentDeclarationNode{" +
-                "properties=" + properties +
-                '}';
-    }
-}
-
- */

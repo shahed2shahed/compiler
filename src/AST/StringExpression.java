@@ -1,6 +1,6 @@
 package AST;
 
-public class StringExpression extends Expression {
+public class StringExpression extends PrimitiveTypeNode {
     private String value;
 
     public StringExpression(String value) {
