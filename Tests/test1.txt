@@ -1,65 +1,46 @@
-    import { bootstrapApplication } from '@angular/platform-browser';
-    import { Component } from '@angular/core';
-    import { CommonModule } from '@angular/common';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-    @Component({
-      selector: 'app-root',
-      standalone: true,
-      imports: [CommonModule],
-      template: `
-        <div class="container">
+@Component({
+  selector: 'app-root',
 
-          <div class="product-list">
+  standalone: true,
+  template: `
+    <div class="container">
+      <div class="product-list">
+        <div
+          *ngFor="let product of products let i = index" >
 
-            <div *ngFor = "let product of products  let i = index"  >
+          <button (click) = "selectProduct(i)" >tes</button>
 
-
-              <button (click)="selectProduct(i)">  </button>
-
-              <img [src]="product.image" alt="{{ product.name }}" />
-
-              <p  class="product-list"  class="prod"> {{ product.name }}</p>
-
-            </div>
-
-          </div>
-
-
-          <div class="product-details" *ngIf="selectedProduct !== null">
-
-            <h2>{{ products[selectedProduct].name }}</h2>
-
-            <img [src]="products[selectedProduct].image" alt="{{ products[selectedProduct].name }}" />
-
-            <p> {{ products[selectedProduct].details }}</p>
-
-          </div>
-
+          <img [src]="product.image" alt="{{ product.name }}" />
+          <p>{{ product.name }}</p>
         </div>
-      `,
-    })
+      </div>
 
+      <div class="product-details" *ngIf="selectedProduct !== null" >
+        <h2>{{ products[selectedProduct].name }}</h2>
+        <img [src]="products[selectedProduct].image" alt="{{ products[selectedProduct].name }}" />
+        <p>{{ products[selectedProduct].details }}</p>
+      </div>
+    </div>
+  `,
 
-    export class AppComponent {
-      products = [
-        { name: 'Product 1', image: 'images/butterfly.jpg', details: 'Butterfly' },
-        { name: 'Product 2', image: 'images/coffeemood.jpg', details: 'Coffeemood' },
-        { name: 'Product 3', image: 'images/lovelycats.jpg', details: 'Lovelycats' }
-      ];
+ })
+export class AppComponent {
+  products = [
+    { name: 'Product 1', image: 'images/butterfly.jpg', details: 'Butterfly' },
+    { name: 'Product 2', image: 'images/coffeemood.jpg', details: 'Coffeemood' },
+    { name: 'Product 3', image: 'images/lovelycats.jpg', details: 'Lovelycats' }
+  ];
 
+  selectedProduct: number | null = null;
 
+  selectProduct(index: number): void {
+    this.selectedProduct = index;
+  }
 
-      selectedProduct: number | null = null;
+}
 
-      selectProduct(index: number): void {
-        this.selectedProduct = index;
-      }
-
-console.log(5);
-
-let add = (a: number, b: number): number => a + b;
-    }
-
-    bootstrapApplication(AppComponent).catch((err: any) => console.error(err));
-
-
+bootstrapApplication(AppComponent).catch((err: any) => console.error(err));

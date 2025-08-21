@@ -5,10 +5,8 @@ import AST.Module;
 import AST.Void;
 import AST.Number;
 import java.util.*;
-
 import ErrorHandling.*;
 import SymbolTableStructure.*;
-
 import antlr.*;
 
 public class MyVisitor extends MyParserBaseVisitor<AstNode> {
@@ -854,45 +852,41 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public ArrowFunction visitEventHandlerArrowFunction(MyParser.EventHandlerArrowFunctionContext ctx) {
-        return super.visitEventHandlerArrowFunction(ctx);
+        Parameters parameter = null;
+        if (ctx.parameters() != null) {
+            parameter = (Parameters) visitParameters(ctx.parameters());
+        }
+
+        Type type = null;
+        if (ctx.type() != null) {
+            type = (Type) visit(ctx.type());
+        }
+
+        List<Body> bodyList = new ArrayList<>();
+        for (var b : ctx.body()) {
+            bodyList.add((Body) visit(b));
+        }
+
+        symbolTable2.getEventBindingTable().addFunctionName(ctx.propertyAccess().getText());
+
+        return new EventHandlerArrowFunction((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , parameter , type , bodyList);
     }
 
-    //    @Override
-//    public FunctionDeclaration visitNamedFunctionDecl(MyParser.NamedFunctionDeclContext ctx) {
-//        Parameters parameters = (Parameters) visit(ctx.parameters());
-//        Type type = (Type) visit(ctx.type());
-//        symbolTable2.getEventBindingTable().addFunctionName(ctx.IDENTIFIER().getText());
-//        ArrayList<Body> bodies = new ArrayList<>() ;
-//        for (var child : ctx.body()){
-//            bodies.add((Body) visit(child));
-//        }
-//
-//        return new NamedFunctionDecl(parameters,type,bodies);
-//    }
+    @Override
+    public Body visitStateManagement(MyParser.StateManagementContext ctx) {
+        return new StateManagement((VariableType) visitVariable_type(ctx.variable_type()) , (SimpleArray) visitSimpleArray(ctx.simpleArray()) , (Brackets) visitBrackets(ctx.brackets()) );
+    }
 
-//    @Override
-//    public FunctionDeclaration visitArrowFunction(MyParser.ArrowFunctionContext ctx) {
-//        VariableType variableType = visitVariable_type(ctx.variable_type());
-//        Parameters parameters = (Parameters) visit(ctx.parameters());
-//        Type type = (Type) visit(ctx.type());
-//        ArrowBody arrowBody = visitArrowBody(ctx.arrowBody());
-//        symbolTable2.getEventBindingTable().addFunctionName(ctx.IDENTIFIER().getText());
-//
-//        return new ArrowFunction(variableType,parameters,type,arrowBody);
-//    }
+    @Override
+    public StateManagement visitBrackets(MyParser.BracketsContext ctx) {
+        String mark = ctx.getText();
+        return new Brackets(mark);
+    }
 
-//    @Override
-//    public FunctionDeclaration visitAssignedFunctionDecl(MyParser.AssignedFunctionDeclContext ctx) {
-//        Parameters parameters = (Parameters) visit(ctx.parameters());
-//        VariableType variableType = visitVariable_type(ctx.variable_type());
-//        Type type = (Type) visit(ctx.type());
-//        ArrayList<Body> bodies =new ArrayList<>() ;
-//        for (var child : ctx.body()){
-//            bodies.add((Body) visit(child));
-//        }
-//        symbolTable2.getEventBindingTable().addFunctionName(ctx.IDENTIFIER().getText());
-//        return new AssignedFunctionDecl(variableType,parameters,type,bodies);
-//    }
+    @Override
+    public Body visitReturnStat(MyParser.ReturnStatContext ctx) {
+        return new ReturnStat((ReturnType) visit(ctx.returnType()));
+    }
 
     @Override
     public Types visitEventBinding(MyParser.EventBindingContext ctx) {

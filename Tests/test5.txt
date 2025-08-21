@@ -1,21 +1,24 @@
 
 import { Component } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-root',
+   imports: [CommonModule],
   template: `
     <div>
-      <button (click)="showExpensive = !showExpensive">
+      <button (click)="showItem(showExpensive)" >
         {{ showExpensive ? 'Show Cheap Products' : 'Show Expensive Products' }}
       </button>
 
       <ul>
-        <li *ngFor="let product of products" *ngIf="product.price > 50 === showExpensive">
+        <li *ngFor="let product of products" *ngIf="product.price > 50 === showExpensive" >
           {{ product.name }} - {{ product.price }}$
         </li>
       </ul>
 
-      <p *ngIf="!products.some(product => product.price > 50 === showExpensive)">
+      <p *ngIf="!products.some(product => product.price > 50 === showExpensive)" >
         No {{ showExpensive ? 'expensive' : 'cheap' }} products available.
       </p>
     </div>
@@ -29,4 +32,11 @@ export class AppComponent {
     { name: 'Pen', price: 5 },
   ];
   showExpensive = false;
+
+    showItem(showExpensiv:boolean): void {
+      this.showExpensive = !showExpensiv;
+    }
 }
+
+ bootstrapApplication(AppComponent)
+   .catch((err: any) => console.error(err));

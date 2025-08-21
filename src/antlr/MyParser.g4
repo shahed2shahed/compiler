@@ -24,7 +24,7 @@ module: //////
     ;
 
 componentDeclaration: //////////
-    module OPEN_BRACKET CURLY_OPEN_BRACKET componentBody CURLY_CLOSE_BRACKET CLOSE_BRACKET;
+    module OPEN_BRACKET CURLY_OPEN_BRACKET componentBody CURLY_CLOSE_BRACKET CLOSE_BRACKET COMMA?;
 
 componentBody: ///////////////
     componentEle (COMMA componentEle)* COMMA?
@@ -93,11 +93,11 @@ types: ///////////
     ;
 
 
-brackets:
+brackets: /////////
     OPEN_BRACKET SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET CLOSE_BRACKET
     ;
 
-stateManagement:
+stateManagement: /////////
     variable_type IDENTIFIER S_DOlOR EQUAL IDENTIFIER BEHAVIORSUBJECT LT simpleArray GT brackets SEMI_COLON
     ;
 
@@ -109,8 +109,8 @@ body:
     | print_stat ///
     | print_error ////
     | expression ////
-    | stateManagement
-    | returnStat
+    | stateManagement ////////
+    | returnStat //////
     ;
 
 print_error: ////
@@ -139,14 +139,14 @@ conditions: ///////////////
     | propertyAccess OPEN_BRACKET parameters ARROW propertyAccess parameters COMMA NUMBER_VAL CLOSE_BRACKET operations NUMBER_VAL #conditionValue ////////
 ;
 
-returnType:
-  argumentList //////
- |functionCall ////////
- |conditions /////////
- |values /////////
-;
+returnType: /////////
+      argumentList //////
+     |functionCall ////////
+     |conditions /////////
+     |values /////////
+     ;
 
-returnStat:
+returnStat: /////////
  RETURN returnType SEMI_COLON?
     ;
 
@@ -174,9 +174,9 @@ normalfunctionDecl: ////////
       (FUNCTION|variable_type)? IDENTIFIER functionDeclarationStat CURLY_OPEN_BRACKET body* CURLY_CLOSE_BRACKET
     ;
 
-functionDeclaration:
+functionDeclaration: ////////
       normalfunctionDecl //////////
-    | arrowFunction
+    | arrowFunction /////////
     ;
 
 parametersType: ///////////
@@ -228,7 +228,7 @@ eventBinding: ////////////
 
 htmlDeclare: //////////
       normalHtmlTag ////////////
-    | selfClosingTag
+    | selfClosingTag //////
     ;
 
 normalHtmlTag: //////////
@@ -423,7 +423,7 @@ variableDeclaration: ////////////
       variable_type? propertyAccess+ QUESTION_MARK? variableDeclarationStat SEMI_COLON?
     ;
 
-arrowFunction
+arrowFunction ///////////
     : variable_type IDENTIFIER EQUAL parameters (COLON type)? ARROW body SEMI_COLON   #varArrowFunction /////
-    | propertyAccess EQUAL parameters? (COLON type)? ARROW CURLY_OPEN_BRACKET body* CURLY_CLOSE_BRACKET SEMI_COLON #eventHandlerArrowFunction
+    | propertyAccess EQUAL parameters? (COLON type)? ARROW CURLY_OPEN_BRACKET body* CURLY_CLOSE_BRACKET SEMI_COLON #eventHandlerArrowFunction ////////////
     ;

@@ -5,8 +5,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
   selector: 'app-root',
   template: `
     <div>
-      <button (click)="counter = counter + 1">Increase</button>
-      <button (click)="counter = counter - 1">Decrease</button>
+      <button (click)="countingSum(counter)" >Increase</button>
+      <button (click)="countingDic(counter)" >Decrease</button>
 
       <p>
         {{ counter > 0
@@ -20,9 +20,16 @@ import { bootstrapApplication } from '@angular/platform-browser';
 })
 export class AppComponent {
   counter = 0 ;
+  countingSum(index: number): void {
+    this.counter = index + 1;
+  }
+
+  countingDic(index: number): void {
+    this.counter = index - 1;
+  }
 }
 
  bootstrapApplication(AppComponent)
-   .catch(err => console.error(err));
+   .catch((err: any) => console.error(err));
 
 

@@ -9,7 +9,7 @@ public class EventHandlerArrowFunction extends ArrowFunction{
     Type type;
     List<Body> body;
 
-    public EventHandlerArrowFunction(){
+    public EventHandlerArrowFunction(PropertyAccess property , Parameters parameters, Type type, List<Body> body) {
         this.property = property;
         this.parameters = parameters;
         this.type = type;

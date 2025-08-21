@@ -1,0 +1,23 @@
+import { Component } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-root',
+    selector: 'app-root',
+  standalone: true,
+  template: `
+    <h3>Welcome {{ name }}</h3>
+        <img *ngIf="showFruit" placeholder="Enter your name" />
+      <button (click)="showFood(showFruits)" >
+        {{ showFruits ? 'Hide Fruits' : 'Show Fruits' }}
+      </button>
+    <img [(ngModel)]="name" placeholder="Enter your name" />
+  `
+}),
+
+export class AppComponent {
+  name: string = 'Angular';
+
+}
+
+bootstrapApplication(AppComponent).catch((err: any) => console.error(err));
