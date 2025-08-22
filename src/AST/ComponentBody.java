@@ -22,6 +22,15 @@ public class ComponentBody extends ComponentDeclaration{
         this.componentEle.add(node);
     }
 
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        for (ComponentEle decl : componentEle) {
+            sb.append(decl.generate());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 
 
     @Override

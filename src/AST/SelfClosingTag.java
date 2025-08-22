@@ -24,6 +24,14 @@ public class SelfClosingTag extends HtmlDeclare{
         this.content.add(node);
     }
 
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        if (content != null && !content.isEmpty()) {
+            sb.append(content.toString());
+        }
+        return sb.toString();
+    }
 
 
     @Override

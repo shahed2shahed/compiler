@@ -1,6 +1,6 @@
 package AST;
 
-public abstract class Expression extends AstNode {
+public abstract class Expression extends Types {
 
     @Override
     public String toString() {

@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VariableDeclaration extends Expression {
+public class VariableDeclaration extends Body {
 
     VariableType type;
     List<PropertyAccess> access;

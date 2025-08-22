@@ -2,6 +2,11 @@ package AST;
 
 public class ReturnStat extends Body{
     ReturnType type;
+
+    public ReturnStat(){
+
+    }
+
     public ReturnStat(ReturnType type) {
         this.type = type;
     }

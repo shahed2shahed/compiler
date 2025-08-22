@@ -5,11 +5,13 @@ public class StateManagement extends Body{
     SimpleArray array;
     Brackets brackets;
 
+    public StateManagement(){}
     public StateManagement(VariableType variableType, SimpleArray array, Brackets brackets) {
         this.variableType = variableType;
         this.array = array;
         this.brackets = brackets;
     }
+
     public VariableType getVariableType() {
         return variableType;
     }

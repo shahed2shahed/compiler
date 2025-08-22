@@ -23,7 +23,7 @@ public class Marks extends Types {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Marks : \n");
+        sb.append("\n");
         if (mark != null) {
             sb.append(mark);
         }

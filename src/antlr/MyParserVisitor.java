@@ -1,4 +1,4 @@
-// Generated from C:/Users/ASUS/IdeaProjects/CompilerProjectFinal/src/antlr/MyParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/ASUS/Desktop/compiler/src/antlr/MyParser.g4 by ANTLR 4.13.2
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -672,11 +672,11 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewObjectFromClass(MyParser.NewObjectFromClassContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyParser#toString}.
+	 * Visit a parse tree produced by {@link MyParser#toStringNode}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitToString(MyParser.ToStringContext ctx);
+	T visitToStringNode(MyParser.ToStringNodeContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code typedVariableDecl}
 	 * labeled alternative in {@link MyParser#variableDeclarationStat}.

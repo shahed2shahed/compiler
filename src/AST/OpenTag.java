@@ -3,12 +3,11 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenTag extends AstNode  {
+public class OpenTag extends NormalHtmlTagNode  {
 
     List<Types> content ;
 
     public OpenTag() {
-
         this.content = new ArrayList<>();
     }
 
@@ -24,11 +23,9 @@ public class OpenTag extends AstNode  {
         this.content.add(node);
     }
 
-
-
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("< ");
+        StringBuilder sb = new StringBuilder("<");
         for (Types item : content) {
             sb.append(item).append(" ");
         }

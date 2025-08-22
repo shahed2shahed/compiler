@@ -103,9 +103,8 @@ stateManagement: /////////
 
 
 body:
-//      variableDeclaration
-//    |
-      functionDeclaration ////
+      variableDeclaration
+    | functionDeclaration ////
     | print_stat ///
     | print_error ////
     | expression ////
@@ -407,9 +406,9 @@ unionType: /////////////
     type (BIT_OR type)? ;
 
 newObjectFromClass: ////////////
-    IDENTIFIER* parameters (DOT toString)?;
+    IDENTIFIER* parameters (DOT toStringNode)?;
 
-toString : //////////
+toStringNode : //////////
     TOSTRING parameters
     ;
 

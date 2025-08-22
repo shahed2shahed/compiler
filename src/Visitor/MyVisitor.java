@@ -7,6 +7,7 @@ import AST.Number;
 import java.util.*;
 import ErrorHandling.*;
 import SymbolTableStructure.*;
+
 import antlr.*;
 
 public class MyVisitor extends MyParserBaseVisitor<AstNode> {
@@ -25,8 +26,8 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public Program visitProgram(MyParser.ProgramContext ctx) {
-            visitFunctionFirst(ctx);
-            Program program = new Program();
+        visitFunctionFirst(ctx);
+        Program program = new Program();
         for (var child : ctx.statement()){
             program.addChild( (StatementNode) visit(child));
         }
@@ -38,8 +39,9 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         String string;
         if (ctx.IMPORT().getText()!=null){
             string = ctx.IMPORT().getText() + ctx.IDENTIFIER().toString() + ctx.FROM().getText() + ctx.STRING().getText();
+            return new ImportStatment(string);
         }
-         string = ctx.BEHAVIORSUBJECT().getText() + ctx.IDENTIFIER().toString() + ctx.FROM().getText() + ctx.STRING().getText();
+        string = ctx.BEHAVIORSUBJECT().getText() + ctx.IDENTIFIER().toString() + ctx.FROM().getText() + ctx.STRING().getText();
         return new ImportStatment(string);
     }
 
@@ -85,28 +87,28 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public ComponentEle visitImportsProperty(MyParser.ImportsPropertyContext ctx) {
-    ImportsElement importsElement = new ImportsElement();
+        ImportsElement importsElement = new ImportsElement();
 
-    PropertyStat property = (PropertyStat) visit(ctx.propertyStat());
-    importsElement.setProperty(property);
+        PropertyStat property = (PropertyStat) visit(ctx.propertyStat());
+        importsElement.setProperty(property);
 
-    for (String id : property.getIdentifiers()) {
-        importsElement.addChild(id);
+        for (String id : property.getIdentifiers()) {
+            importsElement.addChild(id);
 
-        symbolTable2.getFormsModuleTracker().addImport(ctx.IMPORTS().getText(), id);
-        symbolTable2.getComponentTable().addImport(ctx.IMPORTS().getText(), id);
+            symbolTable2.getFormsModuleTracker().addImport(ctx.IMPORTS().getText(), id);
+            symbolTable2.getComponentTable().addImport(ctx.IMPORTS().getText(), id);
+        }
+
+        if (property.getFunc() != null) {
+            String funcName = property.getFunc().toString();
+            importsElement.addChild(funcName);
+
+            symbolTable2.getFormsModuleTracker().addImport(ctx.IMPORTS().getText(), funcName);
+            symbolTable2.getComponentTable().addImport(ctx.IMPORTS().getText(), funcName);
+        }
+
+        return importsElement;
     }
-
-    if (property.getFunc() != null) {
-        String funcName = property.getFunc().toString();
-        importsElement.addChild(funcName);
-
-        symbolTable2.getFormsModuleTracker().addImport(ctx.IMPORTS().getText(), funcName);
-        symbolTable2.getComponentTable().addImport(ctx.IMPORTS().getText(), funcName);
-    }
-
-    return importsElement;
-}
 
     @Override
     public ComponentEle visitExportsProperty(MyParser.ExportsPropertyContext ctx) {
@@ -170,7 +172,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public TemplateElement visitTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx) {
-         String string = ctx.IDENTIFIER().getText() + ctx.COLON() + ctx.STRING().getText();
+        String string = ctx.IDENTIFIER().getText() + ctx.COLON() + ctx.STRING().getText();
 
         return new TemplateHtmlUrl(string);
     }
@@ -178,11 +180,12 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     @Override
     public HtmlDeclare visitNormalHtmlTag(MyParser.NormalHtmlTagContext ctx) {
         OpenTag openTag = visitOpenTag(ctx.openTag());
+        CloseTag closeTag = visitCloseTag(ctx.closeTag());
+
         List <Types> typesHtml = new ArrayList<>();
         for (var child : ctx.types()){
             typesHtml.add((Types) visit(child));
         }
-        CloseTag closeTag = visitCloseTag(ctx.closeTag());
 
         return new NormalHtmlTagNode(openTag , typesHtml , closeTag);
     }
@@ -212,6 +215,11 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
             }
         }
         return openTag;
+    }
+
+    @Override
+    public CloseTag visitCloseTag(MyParser.CloseTagContext ctx) {
+        return new CloseTag(ctx.IDENTIFIER().getText());
     }
 
     /// visit types
@@ -254,7 +262,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     public PrimitiveTypeNode visitTemplateExPrimitiveType(MyParser.TemplateExPrimitiveTypeContext ctx) {
         TemplateExpression templateExpression = new TemplateExpression();
         for (var child : ctx.templateExpression().types()){
-            templateExpression.addTypes( (Types) visit(child));
+            templateExpression.addTypes((Types)visit(child));
         }
         return templateExpression;
     }
@@ -417,7 +425,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     /// 3.3 variable declaration expression
     @Override
-    public Expression visitVariableDeclaration(MyParser.VariableDeclarationContext ctx) {
+    public Body visitVariableDeclaration(MyParser.VariableDeclarationContext ctx) {
 
         List <PropertyAccess> propertyAccess = new ArrayList<>();
 
@@ -473,7 +481,13 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     ///parameters content
     @Override
     public ParametersContent visitParaHasAccessModifiers(MyParser.ParaHasAccessModifiersContext ctx) {
-        return new ParaHasAccessModifiers( (Type) visit(ctx.type()) , (ParametersType) visit(ctx.parametersType()));
+        Type type = null;
+        ParametersType paraType = null;
+        if(ctx.type() != null){
+            type = (Type) visit(ctx.type());
+            paraType = (ParametersType) visit(ctx.parametersType());
+        }
+        return new ParaHasAccessModifiers( type , paraType);
     }
 
     @Override
@@ -526,13 +540,13 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     @Override
     public VariableDeclarationStat visitNewObjectFromClass(MyParser.NewObjectFromClassContext ctx) {
         if (ctx.toString()!= null){
-            return new NewObjectFromClass((Parameters) visitParameters(ctx.parameters()) , (ToString) visitToString(ctx.toString()));
+            return new NewObjectFromClass((Parameters) visitParameters(ctx.parameters()) , (ToString) visitToStringNode(ctx.toStringNode()));
         }
         return new NewObjectFromClass((Parameters) visitParameters(ctx.parameters()));
     }
 
     @Override
-    public NewObjectFromClass visitToString(MyParser.ToStringContext ctx) {
+    public NewObjectFromClass visitToStringNode(MyParser.ToStringNodeContext ctx) {
         return new ToString(ctx.TOSTRING().getText() , (Parameters) visitParameters(ctx.parameters()));
     }
 
@@ -604,7 +618,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         if (ctx.type() != null){
             if (ctx.operations() != null && ctx.values() != null){
                 return new DotAssignment((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (SubDotAssignment) visitSubDotAssignment(ctx.subDotAssignment())
-                , (Type) visit(ctx.type()) , (Operations) visitOperations(ctx.operations()) , (Values) visitValues(ctx.values()));
+                        , (Type) visit(ctx.type()) , (Operations) visitOperations(ctx.operations()) , (Values) visitValues(ctx.values()));
             }
             return new DotAssignment((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (SubDotAssignment) visitSubDotAssignment(ctx.subDotAssignment())
                     , (Type) visit(ctx.type()));
@@ -623,9 +637,9 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public Assignment visitAssignmentStatement(MyParser.AssignmentStatementContext ctx) {
-       if(ctx.primitiveType() != null){
-           return new AssignmentStatement((Assignment) visit(ctx.assignment(0)) ,(Assignment) visit(ctx.assignment(1)) , (PrimitiveTypeNode) visit(ctx.primitiveType()));
-       }
+        if(ctx.primitiveType() != null){
+            return new AssignmentStatement((Assignment) visit(ctx.assignment(0)) ,(Assignment) visit(ctx.assignment(1)) , (PrimitiveTypeNode) visit(ctx.primitiveType()));
+        }
         return new AssignmentStatement((Assignment) visit(ctx.assignment(0)) ,(Assignment) visit(ctx.assignment(1)));
     }
 
@@ -716,11 +730,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         return withExpressionArgumentList;
     }
 
-    @Override
-    public CloseTag visitCloseTag(MyParser.CloseTagContext ctx) {
-        String string = ctx.IDENTIFIER().getText();
-        return new CloseTag(string);
-    }
+
 
     @Override
     public HtmlDeclare visitSelfClosingTag(MyParser.SelfClosingTagContext ctx) {

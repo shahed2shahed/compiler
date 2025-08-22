@@ -4,30 +4,30 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-
+  imports: [CommonModule],
   standalone: true,
   template: `
     <div class="container">
       <div class="product-list">
-        <div
-          *ngFor="let product of products let i = index" >
+
+        <div *ngFor="let product of products let i = index" >
 
           <button (click) = "selectProduct(i)" >tes</button>
 
           <img [src]="product.image" alt="{{ product.name }}" />
           <p>{{ product.name }}</p>
         </div>
+
       </div>
 
-      <div class="product-details" *ngIf="selectedProduct !== null" >
+    /*  <div class="product-details" *ngIf="selectedProduct !== null" >
         <h2>{{ products[selectedProduct].name }}</h2>
         <img [src]="products[selectedProduct].image" alt="{{ products[selectedProduct].name }}" />
         <p>{{ products[selectedProduct].details }}</p>
-      </div>
+      </div> */
     </div>
   `,
-
- })
+})
 export class AppComponent {
   products = [
     { name: 'Product 1', image: 'images/butterfly.jpg', details: 'Butterfly' },

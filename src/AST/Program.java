@@ -26,4 +26,21 @@ public class Program extends AstNode {
 
         return sb.toString();
     }
+
+    public String generateHTML() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!DOCTYPE html>\n<html>\n<head>\n");
+        sb.append("<title>Generated</title>\n");
+        sb.append("</head>\n<body>\n");
+        sb.append("<link rel=\"stylesheet\" href=\"style.css\" />\n");
+
+        for (StatementNode child : children) {
+            sb.append(child.generate());
+            sb.append("\n");
+        }
+
+        sb.append("<script src=\"script.js\"></script>\n\n");
+        sb.append("</body>\n</html>");
+        return sb.toString();
+    }
 }

@@ -15,6 +15,7 @@ public class ParaHasAccessModifiers extends ParametersContent{
         StringBuilder builder = new StringBuilder();
         builder.append("Parameter Content :");
         builder.append("\n");
+
         if(type != null && access != null) {
 
             builder.append("Type :");

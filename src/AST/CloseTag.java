@@ -1,6 +1,6 @@
 package AST;
 
-public class CloseTag extends AstNode {
+public class CloseTag extends NormalHtmlTagNode {
      String identifier;
 
     public CloseTag(String identifier) {

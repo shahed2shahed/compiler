@@ -1,4 +1,4 @@
-// Generated from C:/Users/ASUS/IdeaProjects/CompilerProjectFinal/src/antlr/MyParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/ASUS/Desktop/compiler/src/antlr/MyParser.g4 by ANTLR 4.13.2
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -1124,15 +1124,15 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitNewObjectFromClass(MyParser.NewObjectFromClassContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyParser#toString}.
+	 * Enter a parse tree produced by {@link MyParser#toStringNode}.
 	 * @param ctx the parse tree
 	 */
-	void enterToString(MyParser.ToStringContext ctx);
+	void enterToStringNode(MyParser.ToStringNodeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyParser#toString}.
+	 * Exit a parse tree produced by {@link MyParser#toStringNode}.
 	 * @param ctx the parse tree
 	 */
-	void exitToString(MyParser.ToStringContext ctx);
+	void exitToStringNode(MyParser.ToStringNodeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code typedVariableDecl}
 	 * labeled alternative in {@link MyParser#variableDeclarationStat}.

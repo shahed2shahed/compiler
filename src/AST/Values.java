@@ -1,6 +1,6 @@
 package AST;
 
-public class Values extends AstNode{
+public class Values extends Type {
     private String mark;
 
     public Values(String mark) {

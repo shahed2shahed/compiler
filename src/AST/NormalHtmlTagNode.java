@@ -8,6 +8,7 @@ public class NormalHtmlTagNode extends HtmlDeclare {
      CloseTag closeTag;
 
 
+     public NormalHtmlTagNode() {}
      public NormalHtmlTagNode(OpenTag openTag, List<Types> htmlBody, CloseTag closeTag) {
         this.openTag = openTag;
         this.htmlBody = htmlBody;
@@ -42,22 +43,42 @@ public class NormalHtmlTagNode extends HtmlDeclare {
 
 
     @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        if (openTag != null) {
+            sb.append(openTag.toString());
+        }
+        if (htmlBody != null && !htmlBody.isEmpty()) {
+            sb.append(htmlBody.toString());
+        }
+        if (closeTag != null) {
+            sb.append(closeTag.toString());
+        }
+
+        return sb.toString();
+    }
+
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//        if (openTag != null && closeTag != null) {
-            sb.append("  Open Tag: ").append(openTag).append("\n");
+//            sb.append("  Open Tag: ").append(openTag).append("\n");
 
+        sb.append(openTag.toString());
             if (htmlBody != null) {
-                sb.append("  Html Body: {\n");
+//                sb.append("  Html Body: {\n");
                 for (Types bodyElement : htmlBody) {
-                    sb.append("    - ").append(bodyElement).append("\n");
+//                    sb.append("    - ")
+                   sb.append(bodyElement);
+                    sb.append("\n");
                 }
-                sb.append(" }\n");
-            } else {
-                sb.append("  No Html Body\n");
+                //sb.append(" }\n");
             }
+//            else {
+//                sb.append("  No Html Body\n");
+//            }
 
-            sb.append("  Close Tag: ").append(closeTag).append("\n");
-//        }
+           // sb.append("  Close Tag: ").
+                    sb.append(closeTag).append("\n");
         return sb.toString();}
 }

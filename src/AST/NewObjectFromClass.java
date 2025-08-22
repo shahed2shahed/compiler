@@ -4,6 +4,7 @@ public class NewObjectFromClass extends VariableDeclarationStat{
     Parameters parameters;
     ToString toString;
 
+    public NewObjectFromClass(){}
     public NewObjectFromClass(Parameters parameters, ToString toString){
         this.parameters = parameters;
         this.toString = toString;

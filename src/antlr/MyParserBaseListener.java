@@ -1,4 +1,4 @@
-// Generated from C:/Users/ASUS/IdeaProjects/CompilerProjectFinal/src/antlr/MyParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/ASUS/Desktop/compiler/src/antlr/MyParser.g4 by ANTLR 4.13.2
 package antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -1253,13 +1253,13 @@ public class MyParserBaseListener implements MyParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterToString(MyParser.ToStringContext ctx) { }
+	@Override public void enterToStringNode(MyParser.ToStringNodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitToString(MyParser.ToStringContext ctx) { }
+	@Override public void exitToStringNode(MyParser.ToStringNodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

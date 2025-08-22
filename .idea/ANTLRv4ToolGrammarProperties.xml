@@ -6,7 +6,17 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/src/antlr/MyParser.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\ASUS\IdeaProjects\CompilerProject\src" />
+          <option name="outputDir" value="C:\Users\ASUS\Desktop\compiler\src\antlr" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/antlr/MyLexer.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="C:\Users\ASUS\Desktop\compiler\src\antlr" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="" />

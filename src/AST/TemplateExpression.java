@@ -21,11 +21,12 @@ public class TemplateExpression extends PrimitiveTypeNode {
         public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Template Expression : {{ ");
+     //   sb.append("Template Expression : {{ ");
+        sb.append(" {{ ");
         for (Types child : this.content) {
             sb.append(child);
         }
-        sb.append("}}\n");
+        sb.append("}\n");
 
         return sb.toString();
         }
