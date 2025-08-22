@@ -23,6 +23,41 @@ public class OpenTag extends NormalHtmlTagNode  {
         this.content.add(node);
     }
 
+//   HTML
+//    @Override
+//    public String generate() {
+//        StringBuilder sb = new StringBuilder();
+//        if (content != null && !content.isEmpty()) {
+//            sb.append("<");
+//            for (Types child : content) {
+//
+//                if (!(child instanceof NgForDirective)){
+//                    sb.append(child.generate());
+//                    sb.append("\n");
+//                }
+//            }
+//        }
+//        sb.append(">");
+//        return sb.toString();
+//    }
+
+    @Override
+    public String generateJS() {
+        StringBuilder sb = new StringBuilder();
+        if (content != null && !content.isEmpty()) {
+//            sb.append("<");
+            for (Types child : content) {
+
+                if (child instanceof NgForDirective){
+                    sb.append(child.generateJS());
+                }
+            }
+        }
+//        sb.append(">");
+        return sb.toString();
+    }
+
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("<");

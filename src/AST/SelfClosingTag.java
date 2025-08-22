@@ -28,8 +28,13 @@ public class SelfClosingTag extends HtmlDeclare{
     public String generate() {
         StringBuilder sb = new StringBuilder();
         if (content != null && !content.isEmpty()) {
-            sb.append(content.toString());
+            sb.append("<");
+            for (Types child : content) {
+                sb.append(child.generate());
+                sb.append("\n");
+            }
         }
+        sb.append("/>");
         return sb.toString();
     }
 

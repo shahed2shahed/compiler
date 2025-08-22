@@ -373,14 +373,27 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public NgForExpression visitNgForExpression(MyParser.NgForExpressionContext ctx) {
-        String value;
-        if(ctx.OF1()!=null){
-            value = ctx.LET1() + " " + ctx.ID1(0) + " " + ctx.OF1() + " " + ctx.ID1(1);
-        }
-        else {
-            value = ctx.LET1() + " " + ctx.ID1(0) + " " + ctx.EQUAL1() + " " + ctx.ID1(1);
-        }
-        return new NgForExpression(value);
+//        String value;
+//        if(ctx.OF1()!=null){
+//            value = ctx.LET1() + " " + ctx.ID1(0) + " " + ctx.OF1() + " " + ctx.ID1(1);
+//        }
+//        else {
+//            value = ctx.LET1() + " " + ctx.ID1(0) + " " + ctx.EQUAL1() + " " + ctx.ID1(1);
+//        }
+//        return new NgForExpression(value);
+        NgForExpression node = new NgForExpression();
+
+        if (ctx.OF1() != null) {
+                // "let product of products"
+                node.setItemVar(ctx.ID1(0).getText());   // product
+                node.setIterable(ctx.ID1(1).getText());  // products
+            }
+        if (ctx.EQUAL1() != null) {
+                // "let i = index"
+                node.setIndexVar(ctx.ID1(2).getText());  // i
+                node.setIndexExpr(ctx.ID1(3).getText()); // index
+            }
+        return node;
     }
 
     @Override

@@ -109,6 +109,7 @@ WS1: [ \t\r\n]+ -> skip;
 EQUAL1:'=';
 DQUOT1:'"' ;
 LET1:'let';
+SEMI_COLON5:';';
 OF1 :'of';
 ID1: IDENTIFIER;
 DQUOT2:DQUOT1' '*->popMode;

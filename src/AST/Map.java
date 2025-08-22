@@ -15,13 +15,23 @@ public class Map extends Type{
     }
 
     @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        for (Values child : right) {
+            sb.append(child.generate());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Map :");
+//        sb.append("Map :");
         sb.append("\n");
 
         if (!right.isEmpty()) {
-            sb.append("Values : ");
+//            sb.append("Values : ");
             for (Values child : this.right) {
                 sb.append(child + "\n");
             }

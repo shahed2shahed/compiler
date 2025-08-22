@@ -28,13 +28,13 @@ public class Main {
             MyVisitor astVisitor = new MyVisitor();
             Program program = (astVisitor.visitProgram(tree));
             String htmlCode = program.generateHTML();
-            String jsCode = program.generateHTML();
-            String cssCode = program.generateHTML();
+            String jsCode = program.generateJS();
+        //    String cssCode = program.generateCSS();
 
 
             CodeGenerator.writeFile("index.html",  htmlCode);
             CodeGenerator.writeFile("script.js",  jsCode);
-            CodeGenerator.writeFile("style.css",  cssCode);
+        //    CodeGenerator.writeFile("style.css",  cssCode);
 
             System.out.println(program);
             System.out.println(astVisitor.symbolTable2.toString());

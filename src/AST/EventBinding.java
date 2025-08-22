@@ -11,10 +11,20 @@ public class EventBinding extends Types {
     }
 
     @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(click);
+        sb.append(functionName);
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("click").append(click);
-        sb.append("function name").append(functionName);
+//        sb.append("click").append(click);
+sb.append(click);
+//        sb.append("function name").append(functionName);
+sb.append(functionName);
         return   sb.toString();
     }
 }

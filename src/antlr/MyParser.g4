@@ -84,12 +84,12 @@ classStatment: //////////
       ;
 
 
-types: ///////////
-      type /////////
-    | marks ///////
+types:
+      type
+    | marks
     | expression ////
-    | eventBinding //////
-    | htmlDeclare /////////
+    | eventBinding
+    | htmlDeclare
     ;
 
 
@@ -217,28 +217,28 @@ assignment: /////////////
     | propertyAccess EQUAL objectLiteral SEMI_COLON #assignmentStatementIniti //////
     ;
 
-templateExpression: /////////////
+templateExpression:
     CURLY_OPEN_BRACKET+ (types)* (BIT_OR types+)? CURLY_CLOSE_BRACKET+
     ;
 
-eventBinding: ////////////
+eventBinding:
      OPEN_BRACKET CLICK CLOSE_BRACKET2 EQUAL3 DQUOT5 ID3 OPEN_BRACKET2 (ID3 (DOT3 ID3)*)? CLOSE_BRACKET2 DQUOT6
      ;
 
-htmlDeclare: //////////
-      normalHtmlTag ////////////
-    | selfClosingTag //////
+htmlDeclare:
+      normalHtmlTag
+    | selfClosingTag
     ;
 
-normalHtmlTag: //////////
+normalHtmlTag:
     openTag (types)* closeTag
     ;
 
-selfClosingTag: /////////
+selfClosingTag:
     LT (types)* SLASH GT
     ;
 
-openTag: //////////
+openTag:
     LT (types)* GT
     ;
 
@@ -246,45 +246,45 @@ closeTag: /////////////
     LT SLASH IDENTIFIER GT
     ;
 
-simpleArray: //////////////
+simpleArray:
     IDENTIFIER SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET
     ;
 
-map: /////////
+map:
     IDENTIFIER LT values (COMMA values)* GT
     ;
 
-type //////////
-    : primitiveType ////////
-    | arrayStringType ///////
-    | simpleArray ////////
-    | map ////////
-    | arrayNumberType /////////
-    | tupleType ////////
+type
+    : primitiveType
+    | arrayStringType
+    | simpleArray
+    | map
+    | arrayNumberType
+    | tupleType
     ;
 
-primitiveType //////////
-    : IDENTIFIER #idPrimitiveType ////////
-    | NUMBER #numberPrimitiveType /////////
-    | VOID #voidPrimitiveType ////////
-    | NULL #nullPrimitiveType //////
-    | ANY #anyPrimitiveType /////////
-    | STRING_EX #stringEXPrimitiveType //////
-    | CLASS #classPrimitiveType //////
-    | templateExpression #templateExPrimitiveType ///////////
+primitiveType
+    : IDENTIFIER #idPrimitiveType
+    | NUMBER #numberPrimitiveType
+    | VOID #voidPrimitiveType
+    | NULL #nullPrimitiveType
+    | ANY #anyPrimitiveType
+    | STRING_EX #stringEXPrimitiveType
+    | CLASS #classPrimitiveType
+    | templateExpression #templateExPrimitiveType
     ;
 
-arrayStringType ////////
+arrayStringType
     :
     ARRAY LT STRING_EX GT
     ;
 
-arrayNumberType ///////
+arrayNumberType
     :
     NUMBER SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET
     ;
 
-tupleType ///////////
+tupleType
     : SQUARE_OPEN_BRACKET type (COMMA type)+ SQUARE_CLOSE_BRACKET
     ;
 
@@ -359,8 +359,7 @@ ngForValue: //////////
     ;
 
 ngForExpression: ////////////
-      LET1 ID1 OF1 ID1
-    | LET1 ID1 EQUAL1 ID1
+      LET1 ID1 OF1 ID1 (SEMI_COLON5? LET1 ID1 EQUAL1 ID1)?
     ;
 
 ngIfValue: ////////////

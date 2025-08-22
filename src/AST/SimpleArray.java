@@ -16,6 +16,13 @@ public class SimpleArray extends AstNode{
     }
 
     @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(mark);
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         return   mark;
     }

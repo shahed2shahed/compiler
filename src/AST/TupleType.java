@@ -19,15 +19,26 @@ public class TupleType extends Type {
         this.elementTypes.add(node);
     }
 
+
+    @Override
+    public String generateJS() {
+        StringBuilder sb = new StringBuilder();
+        for (Type child : elementTypes) {
+            sb.append(child.generate());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Tuple Type { \n");
+//        sb.append("Tuple Type { \n");
         for (Type child : this.elementTypes) {
             sb.append(child + "\n");
         }
-        sb.append("}\n");
+//        sb.append("}\n");
 
         return sb.toString();
     }

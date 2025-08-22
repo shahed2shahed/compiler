@@ -21,6 +21,19 @@ public class Marks extends Types {
     }
 
     @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        if (mark != null) {
+            sb.append(mark);
+        }
+        else {
+            sb.append(operations.generate());
+        }
+
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n");

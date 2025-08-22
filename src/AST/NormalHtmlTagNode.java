@@ -41,23 +41,46 @@ public class NormalHtmlTagNode extends HtmlDeclare {
         this.closeTag = closeTag;
     }
 
+// HTML
+//    @Override
+//    public String generate(){
+//        StringBuilder sb = new StringBuilder();
+//
+//        if (openTag != null) {
+//            sb.append(openTag.generate());
+//        }
+//
+//        if (htmlBody != null && !htmlBody.isEmpty()) {
+//            for (Types child : htmlBody) {
+//                sb.append(child.generate());
+//                sb.append("\n");
+//            }
+//        }
+//
+//        if (closeTag != null) {
+//            sb.append(closeTag);
+//        }
+//
+//        return sb.toString();
+//    }
 
     @Override
     public String generate() {
         StringBuilder sb = new StringBuilder();
+
         if (openTag != null) {
-            sb.append(openTag.toString());
+            sb.append(openTag.generateJS());
         }
+
         if (htmlBody != null && !htmlBody.isEmpty()) {
-            sb.append(htmlBody.toString());
-        }
-        if (closeTag != null) {
-            sb.append(closeTag.toString());
+            for (Types child : htmlBody) {
+                sb.append(child.generate());
+                sb.append("\n");
+            }
         }
 
         return sb.toString();
     }
-
 
     @Override
     public String toString() {
@@ -68,7 +91,7 @@ public class NormalHtmlTagNode extends HtmlDeclare {
             if (htmlBody != null) {
 //                sb.append("  Html Body: {\n");
                 for (Types bodyElement : htmlBody) {
-//                    sb.append("    - ")
+//                    sb.append("    - ");
                    sb.append(bodyElement);
                     sb.append("\n");
                 }

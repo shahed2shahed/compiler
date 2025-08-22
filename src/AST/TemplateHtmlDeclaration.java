@@ -32,6 +32,17 @@ public class TemplateHtmlDeclaration extends TemplateElement{
         return sb.toString();
     }
 
+// HTML
+//    @Override
+//    public String generate() {
+//        StringBuilder sb = new StringBuilder();
+//        for (HtmlDeclare decl : templateBody) {
+//            sb.append(decl.generate());
+//            sb.append("\n");
+//        }
+//        return sb.toString();
+//    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

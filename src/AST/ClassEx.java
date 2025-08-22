@@ -16,9 +16,13 @@ public class ClassEx extends PrimitiveTypeNode {
     }
 
     @Override
-//    public String toString() {
-//        return  "Class Value\n" + value;
-//    }
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(value);
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         return value;
     }

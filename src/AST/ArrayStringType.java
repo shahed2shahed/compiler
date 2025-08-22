@@ -10,13 +10,22 @@ public class ArrayStringType extends Type {
 
     }
 
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(identifiers1);
+        sb.append(identifiers2);
+        return sb.toString();
+    }
+
+
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Array String Type {\n");
+//        sb.append("Array String Type {\n");
         sb.append(this.identifiers1).append("<").append(this.identifiers2).append(">\n");
-        sb.append("} \n");
+//        sb.append("} \n");
         return sb.toString();
     }
 }

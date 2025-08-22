@@ -16,6 +16,16 @@ public class TemplateExpression extends PrimitiveTypeNode {
         this.content.add(node);
     }
 
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" {{ ");
+        for (Types decl : content) {
+            sb.append(decl.generate());
+        }
+        sb.append("}\n");
+        return sb.toString();
+    }
 
     @Override
         public String toString() {
@@ -24,7 +34,7 @@ public class TemplateExpression extends PrimitiveTypeNode {
      //   sb.append("Template Expression : {{ ");
         sb.append(" {{ ");
         for (Types child : this.content) {
-            sb.append(child);
+            sb.append(child.generate());
         }
         sb.append("}\n");
 

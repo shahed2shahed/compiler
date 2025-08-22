@@ -16,6 +16,13 @@ public class Any extends PrimitiveTypeNode {
     }
 
     @Override
+    public String generateHTML() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(value);
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         return "Any { value: " + value + " }";
     }
