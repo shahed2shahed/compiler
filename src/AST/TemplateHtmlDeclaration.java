@@ -26,6 +26,7 @@ public class TemplateHtmlDeclaration extends TemplateElement{
     public String generate() {
         StringBuilder sb = new StringBuilder();
         for (HtmlDeclare decl : templateBody) {
+            System.out.println("[DEBUG] TemplateHtmlDeclaration child: " + decl.getClass().getSimpleName());
             sb.append(decl.generate());
             sb.append("\n");
         }
@@ -48,11 +49,14 @@ public class TemplateHtmlDeclaration extends TemplateElement{
         StringBuilder sb = new StringBuilder();
         sb.append("Template Declaration:\n");
         sb.append("  Template Body:\n");
-        for (int i = 0; i < templateBody.size(); i++) {
-            HtmlDeclare content = templateBody.get(i);
-            String prefix = (i == templateBody.size() - 1) ? "    └── " : "    ├── ";
-            sb.append(prefix).append(content.toString().replace("\n", "\n    ")).append("\n");
+        if (templateBody != null) {
+            for (int i = 0; i < templateBody.size(); i++) {
+                HtmlDeclare content = templateBody.get(i);
+                String prefix = (i == templateBody.size() - 1) ? "    └── " : "    ├── ";
+                sb.append(prefix).append(content.toString().replace("\n", "\n    ")).append("\n");
+            }
         }
+
         return sb.toString();
     }
 }

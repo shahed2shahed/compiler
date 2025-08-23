@@ -64,23 +64,117 @@ public class NormalHtmlTagNode extends HtmlDeclare {
 //        return sb.toString();
 //    }
 
+
+    //Old
+//    @Override
+//    public String generate() {
+//        StringBuilder sb = new StringBuilder();
+//
+//        if (openTag != null) {
+//            sb.append(openTag.generateJS());
+//        }
+//
+//        if (htmlBody != null && !htmlBody.isEmpty()) {
+//            for (Types child : htmlBody) {
+//                sb.append(child.generate());
+//                sb.append("\n");
+//            }
+//        }
+//
+//        return sb.toString();
+//    }
+
+
     @Override
     public String generate() {
         StringBuilder sb = new StringBuilder();
 
+        // [DEBUG] تتبع OpenTag
         if (openTag != null) {
-            sb.append(openTag.generateJS());
-        }
+            boolean hasNgFor = false;
 
-        if (htmlBody != null && !htmlBody.isEmpty()) {
-            for (Types child : htmlBody) {
-                sb.append(child.generate());
-                sb.append("\n");
+            for (Types child : openTag.getContent()) {
+                if (child instanceof NgForDirective) {
+                    hasNgFor = true;
+                    sb.append(child.generateWithBody(htmlBody));
+                    System.out.println(child.getClass().getSimpleName() + "OOOOOO irj");
+                }
+            }
+
+            if (!hasNgFor) {
+                sb.append(openTag.generate());
+                if (htmlBody != null) {
+                    for (Types child : htmlBody) {
+                        System.out.println(child.getClass().getSimpleName() + "FFFsekw irj");
+                        sb.append(child.generate());
+                    }
+                }
             }
         }
 
+
         return sb.toString();
     }
+
+//    @Override
+//    public String generateJS() {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append(openTag.generateJS());
+//        if (htmlBody != null) {
+//            for (Types child : htmlBody) {
+//                 System.out.println(child.getClass().getSimpleName() + "FFFsekw irj");
+//                    sb.append(child.generate());
+//            }
+//        }
+//    return sb.toString();
+//    }
+@Override
+public String generateJS() {
+    StringBuilder sb = new StringBuilder();
+
+    if (openTag != null) {
+
+        boolean isNgFor = false;
+        for (Types child : openTag.getContent()) {
+            if (child instanceof NgForDirective) {
+                isNgFor = true;
+                // تمرير htmlBody + اسم المتغير الحالي للـ loop
+                sb.append(((NgForDirective) child).generateWithBody(htmlBody));
+            }
+        }
+
+        if (!isNgFor) {
+            String tagVar = openTag.getTagName();
+            sb.append("const ").append(tagVar)
+                    .append(" = document.createElement('").append(tagVar).append("');\n");
+
+            for (Types child : openTag.getContent()) {
+                if (child instanceof EventBinding) {
+                    EventBinding eb = (EventBinding) child;
+                    // بدون index لأنه مش ضمن NgFor
+                    sb.append(tagVar)
+                            .append(".addEventListener('").append(eb.click)
+                            .append("', () => ").append(eb.functionName).append("());\n");
+                }
+            }
+
+            if (htmlBody != null && !htmlBody.isEmpty()) {
+                for (Types child : htmlBody) {
+                    sb.append(tagVar).append(".textContent = '")
+                            .append(child.toString()).append("';\n");
+                }
+            }
+
+            sb.append("container.appendChild(").append(tagVar).append(");\n");
+        }
+    }
+
+    return sb.toString();
+}
+
+
+
+
 
     @Override
     public String toString() {

@@ -51,6 +51,7 @@ public class Program extends AstNode {
     public String generateJS() {
         StringBuilder sb = new StringBuilder();
         for (StatementNode child : children) {
+            System.out.println("[DEBUG] Program child: " + child);
             sb.append(child.generate());
             sb.append("\n");
         }

@@ -51,7 +51,7 @@ public class Main {
 //public class Main {
 //    public static void main(String[] args) {
 //        // نبني AST يدويًا للتجربة
-//        Program program = new Program();
+//        Program program = new Program()*+;-
 //
 //        // HTML (مبسّط جدًا)
 //        String html = """

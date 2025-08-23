@@ -192,7 +192,8 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public OpenTag visitOpenTag(MyParser.OpenTagContext ctx) {
-        OpenTag openTag = new OpenTag();
+        String tag = ctx.types(0).getText();
+        OpenTag openTag = new OpenTag(tag);
         Boolean isExisted = false;
         for (var child : ctx.types()){
             openTag.addTypes( (Types) visit(child));

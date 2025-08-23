@@ -5,14 +5,11 @@
 
 
 products.forEach((product, i) => {
-   const el = document.createElement('div');
-   el.textContent = product;
-   container.appendChild(el);
+const button = document.createElement('button');
+button.addEventListener('click', () => selectProduct(i));
+button.textContent = 'tes';
+container.appendChild(button);
 });
-tes
-
-
-
 
 
 
