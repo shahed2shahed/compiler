@@ -26,23 +26,20 @@ public class TemplateHtmlDeclaration extends TemplateElement{
     public String generate() {
         StringBuilder sb = new StringBuilder();
         for (HtmlDeclare decl : templateBody) {
-            System.out.println("[DEBUG] TemplateHtmlDeclaration child: " + decl.getClass().getSimpleName());
             sb.append(decl.generate());
-            sb.append("\n");
         }
         return sb.toString();
     }
 
-// HTML
-//    @Override
-//    public String generate() {
-//        StringBuilder sb = new StringBuilder();
-//        for (HtmlDeclare decl : templateBody) {
-//            sb.append(decl.generate());
-//            sb.append("\n");
-//        }
-//        return sb.toString();
-//    }
+    @Override
+    public String generateJS() {
+        StringBuilder sb = new StringBuilder();
+        for (HtmlDeclare decl : templateBody) {
+            sb.append(decl.generateJS());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 
     @Override
     public String toString() {

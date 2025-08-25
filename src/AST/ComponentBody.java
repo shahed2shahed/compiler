@@ -32,6 +32,16 @@ public class ComponentBody extends ComponentDeclaration{
         return sb.toString();
     }
 
+    @Override
+    public String generateJS() {
+        StringBuilder sb = new StringBuilder();
+        for (ComponentEle decl : componentEle) {
+            sb.append(decl.generateJS());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
 
     @Override
     public String toString() {

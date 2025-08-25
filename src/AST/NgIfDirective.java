@@ -1,5 +1,7 @@
 package AST;
 
+import java.util.List;
+
 public class NgIfDirective extends DirectiveStatementNode {
      private NgIfValue value;
 
@@ -9,6 +11,19 @@ public class NgIfDirective extends DirectiveStatementNode {
 
     public NgIfValue getValue() {
         return value;
+    }
+
+    @Override
+    public String generateWithBody(List<Types> bodyChildren , StringBuilder classN) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("if (").append(value.getConditionExpression().generateJS()).append(") {\n");
+        if (bodyChildren != null) {
+            sb.append(value.generateJS(bodyChildren , classN));
+        }
+        sb.append("}\n");
+
+        return sb.toString();
     }
 
     @Override

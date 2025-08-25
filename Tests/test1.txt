@@ -1,4 +1,4 @@
-/*import { bootstrapApplication } from '@angular/platform-browser';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,9 +11,7 @@ import { CommonModule } from '@angular/common';
       <div class="product-list">
 
         <div *ngFor="let product of products let i = index" >
-
           <button (click) = "selectProduct(i)" >tes</button>
-
           <img [src]="product.image" alt="{{ product.name }}" />
           <p>{{ product.name }}</p>
             </div>
@@ -40,44 +38,9 @@ export class AppComponent {
   selectProduct(index: number): void {
     this.selectedProduct = index;
   }
-
 }
 
 bootstrapApplication(AppComponent).catch((err: any) => console.error(err));
-*/
 
-import { bootstrapApplication } from '@angular/platform-browser';
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-@Component({
-  selector: 'app-root',
-  imports: [CommonModule],
-  standalone: true,
-  template: `
-    <div class="container">
-          <div class="product-list">
-                    <div *ngFor="let product of products ; let i = index" >
-                        <button (click) = "selectProduct(i)" >tes</button>
-                     </div>
-            </div>
-        </div>
 
-  `,
-})
-export class AppComponent {
-  products = [
-    { name: 'Product 1', image: 'images/butterfly.jpg', details: 'Butterfly' },
-    { name: 'Product 2', image: 'images/coffeemood.jpg', details: 'Coffeemood' },
-    { name: 'Product 3', image: 'images/lovelycats.jpg', details: 'Lovelycats' }
-  ];
-
-  selectedProduct: number | null = null;
-
-  selectProduct(index: number): void {
-    this.selectedProduct = index;
-  }
-
-}
-
-bootstrapApplication(AppComponent).catch((err: any) => console.error(err));

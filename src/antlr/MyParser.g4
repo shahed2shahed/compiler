@@ -38,8 +38,10 @@ standaloneProperty: //////////////
     STANDALONE COLON BOOLEAN
     ;
 
+propertyFun:;
+
 propertyStat: ///////////
-    COLON SQUARE_OPEN_BRACKET (IDENTIFIER|functionCall) (COMMA IDENTIFIER)* SQUARE_CLOSE_BRACKET
+    COLON SQUARE_OPEN_BRACKET (IDENTIFIER|propertyFun) (COMMA IDENTIFIER)* SQUARE_CLOSE_BRACKET
     ;
 
 importsProperty: /////////////
@@ -101,13 +103,16 @@ stateManagement: /////////
     variable_type IDENTIFIER S_DOlOR EQUAL IDENTIFIER BEHAVIORSUBJECT LT simpleArray GT brackets SEMI_COLON
     ;
 
+expressionInBody:
+expression
+;
 
 body:
-      variableDeclaration
-    | functionDeclaration ////
+
+      functionDeclaration ////
     | print_stat ///
     | print_error ////
-    | expression ////
+    | expressionInBody ////
     | stateManagement ////////
     | returnStat //////
     ;
@@ -138,9 +143,10 @@ conditions: ///////////////
     | propertyAccess OPEN_BRACKET parameters ARROW propertyAccess parameters COMMA NUMBER_VAL CLOSE_BRACKET operations NUMBER_VAL #conditionValue ////////
 ;
 
+//returenFun:;
 returnType: /////////
       argumentList //////
-     |functionCall ////////
+//     |returenFun ////////
      |conditions /////////
      |values /////////
      ;
@@ -218,7 +224,7 @@ assignment: /////////////
     ;
 
 templateExpression:
-    CURLY_OPEN_BRACKET+ (types)* (BIT_OR types+)? CURLY_CLOSE_BRACKET+
+    (CURLY_OPEN_BRACKET|DOUBLE_CURLY_OPEN_BRACKET) (types)* (BIT_OR types+)? (CURLY_CLOSE_BRACKET|DOUBLE_CURLY_CLOSE_BRACKET)
     ;
 
 eventBinding:
@@ -260,7 +266,7 @@ type
     | simpleArray
     | map
     | arrayNumberType
-    | tupleType
+   // | tupleType
     ;
 
 primitiveType
@@ -284,9 +290,9 @@ arrayNumberType
     NUMBER SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET
     ;
 
-tupleType
-    : SQUARE_OPEN_BRACKET type (COMMA type)+ SQUARE_CLOSE_BRACKET
-    ;
+//tupleType
+//    : SQUARE_OPEN_BRACKET type (COMMA type)+ SQUARE_CLOSE_BRACKET
+//    ;
 
 marks: //////////////
     SEMI_COLON
@@ -296,8 +302,8 @@ marks: //////////////
     |QUESTION_MARK
     |HASH_TAG
     |EQUAL
-    |LT
-    |GT
+//    |LT
+//    |GT
     |operations
     |S_DOlOR
     |SQUARE_OPEN_BRACKET
@@ -333,17 +339,21 @@ questionCondition: ///////////
     propertyAccess QUESTION_MARK+ values
     ;
 
+navigate: IDENTIFIER DOT ROUTER DOT NAVIGATE OPEN_BRACKET SQUARE_OPEN_BRACKET values (COMMA values)* SQUARE_CLOSE_BRACKET CLOSE_BRACKET SEMI_COLON;
+functionExp : propertyAccess* OPEN_BRACKET values* CLOSE_BRACKET SEMI_COLON;
+
 expression: ///////////
       values //////////
+    | navigate
     | arrayDeclaration //////////
     | variableDeclaration /////
     | ifElseStat //////
     | tryStat //////////
     | catchStat /////////
     | objectLiteral /////////
+    | functionExp //////////
     | directivesStatment ///////////
     | propertyAccess ////////
-    | functionCall //////////
     | assignment //////////
     | questionCondition /////////
     | operationExpr ///////////

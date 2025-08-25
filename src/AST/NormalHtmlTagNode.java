@@ -6,7 +6,7 @@ public class NormalHtmlTagNode extends HtmlDeclare {
      OpenTag openTag;
      List<Types> htmlBody;
      CloseTag closeTag;
-
+     private boolean autoIdAdded = false;
 
      public NormalHtmlTagNode() {}
      public NormalHtmlTagNode(OpenTag openTag, List<Types> htmlBody, CloseTag closeTag) {
@@ -65,137 +65,131 @@ public class NormalHtmlTagNode extends HtmlDeclare {
 //    }
 
 
-    //Old
-//    @Override
-//    public String generate() {
-//        StringBuilder sb = new StringBuilder();
-//
-//        if (openTag != null) {
-//            sb.append(openTag.generateJS());
-//        }
-//
-//        if (htmlBody != null && !htmlBody.isEmpty()) {
-//            for (Types child : htmlBody) {
-//                sb.append(child.generate());
-//                sb.append("\n");
-//            }
-//        }
-//
-//        return sb.toString();
-//    }
-
-
     @Override
     public String generate() {
         StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-        // [DEBUG] تتبع OpenTag
+
+
         if (openTag != null) {
-            boolean hasNgFor = false;
+            boolean isNgDirective = false;
+            String classValue = "";
 
             for (Types child : openTag.getContent()) {
                 if (child instanceof NgForDirective) {
-                    hasNgFor = true;
-                    sb.append(child.generateWithBody(htmlBody));
-                    System.out.println(child.getClass().getSimpleName() + "OOOOOO irj");
+                    isNgDirective = true;
+                   // sb.append(htmlBody.get(t-1).getOpenTag());
                 }
-            }
 
-            if (!hasNgFor) {
-                sb.append(openTag.generate());
-                if (htmlBody != null) {
-                    for (Types child : htmlBody) {
-                        System.out.println(child.getClass().getSimpleName() + "FFFsekw irj");
-                        sb.append(child.generate());
+//                if (child instanceof NgIfDirective) {
+//                    isNgDirective = true;
+//
+//                    for (Types attr : openTag.getContent()) {
+//                        if (attr instanceof ClassEx) {
+//                            for (Types v : openTag.getContent()) {
+//                                if (v instanceof Values) {
+//                                    classValue += ((Values)v).getMark();
+//                                    classValue = classValue.replaceAll("^\"|\"$", "");
+//                                }
+//                            }
+//                            builder.append(".className = \"").append(classValue).append("\";\n");
+//                        }
+//                    }
+//
+//                 //   sb.append(((NgIfDirective) child).generateWithBody(htmlBody , builder));
+//
+//                }
+            }
+            boolean childHasNgFor = false;
+
+            if (htmlBody != null) {
+                for (Types child : htmlBody) {
+                    if (child instanceof NormalHtmlTagNode) {
+                        NormalHtmlTagNode elem = (NormalHtmlTagNode) child;
+                        if (elem.getOpenTag() != null) {
+                            for (Types c : elem.getOpenTag().getContent()) {
+                                if (c instanceof NgForDirective) {
+                                    childHasNgFor = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
+
+            if (!isNgDirective) {
+                sb.append("\n");
+                if(!childHasNgFor) {
+                    sb.append(openTag.generate());
+                }
+                if(childHasNgFor && !autoIdAdded) {
+                    sb.append(openTag.generateID());
+                    autoIdAdded = true;
+                }
+
+                 if(htmlBody != null) {
+                    for (Types child : htmlBody) {
+                            sb.append(child.generate());
+                            sb.append(" ");
+                    }
+                }
+                sb.append(closeTag.generate());
+            }
         }
-
-
         return sb.toString();
     }
 
-//    @Override
-//    public String generateJS() {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append(openTag.generateJS());
-//        if (htmlBody != null) {
-//            for (Types child : htmlBody) {
-//                 System.out.println(child.getClass().getSimpleName() + "FFFsekw irj");
-//                    sb.append(child.generate());
-//            }
-//        }
-//    return sb.toString();
-//    }
+
 @Override
 public String generateJS() {
     StringBuilder sb = new StringBuilder();
+    boolean isNgDirective = false;
 
-    if (openTag != null) {
-
-        boolean isNgFor = false;
         for (Types child : openTag.getContent()) {
-            if (child instanceof NgForDirective) {
-                isNgFor = true;
-                // تمرير htmlBody + اسم المتغير الحالي للـ loop
-                sb.append(((NgForDirective) child).generateWithBody(htmlBody));
+                if (child instanceof NgForDirective) {
+                    isNgDirective = true;
+                }
+
+            if (child instanceof EventBinding | child instanceof NgIfDirective) {
+                sb.append(" const " + openTag.getTagName()).
+                        append(" = document.getElementById('").
+                        append(openTag.generateJS()).append("');");
+                sb.append("\n");
             }
         }
-
-        if (!isNgFor) {
-            String tagVar = openTag.getTagName();
-            sb.append("const ").append(tagVar)
-                    .append(" = document.createElement('").append(tagVar).append("');\n");
-
-            for (Types child : openTag.getContent()) {
-                if (child instanceof EventBinding) {
-                    EventBinding eb = (EventBinding) child;
-                    // بدون index لأنه مش ضمن NgFor
-                    sb.append(tagVar)
-                            .append(".addEventListener('").append(eb.click)
-                            .append("', () => ").append(eb.functionName).append("());\n");
+            if (!isNgDirective) {
+                if(htmlBody != null) {
+                    for (Types child : htmlBody) {
+                        sb.append(child.generateJS());
+                        sb.append(" ");
+                    }
+                  }
                 }
-            }
-
-            if (htmlBody != null && !htmlBody.isEmpty()) {
-                for (Types child : htmlBody) {
-                    sb.append(tagVar).append(".textContent = '")
-                            .append(child.toString()).append("';\n");
-                }
-            }
-
-            sb.append("container.appendChild(").append(tagVar).append(");\n");
-        }
+        return sb.toString();
     }
-
-    return sb.toString();
-}
-
-
-
-
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//            sb.append("  Open Tag: ").append(openTag).append("\n");
+           sb.append("  Open Tag: ").append(openTag).append("\n");
 
         sb.append(openTag.toString());
             if (htmlBody != null) {
-//                sb.append("  Html Body: {\n");
+            sb.append("  Html Body: {\n");
                 for (Types bodyElement : htmlBody) {
-//                    sb.append("    - ");
+                    sb.append("    - ");
                    sb.append(bodyElement);
                     sb.append("\n");
                 }
-                //sb.append(" }\n");
+                sb.append(" }\n");
             }
 //            else {
 //                sb.append("  No Html Body\n");
 //            }
 
-           // sb.append("  Close Tag: ").
+            sb.append("  Close Tag: ");
                     sb.append(closeTag).append("\n");
         return sb.toString();}
 }

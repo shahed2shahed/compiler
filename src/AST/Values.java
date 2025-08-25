@@ -1,6 +1,6 @@
 package AST;
 
-public class Values extends Type {
+public class Values extends Expression {
     private String mark;
 
     public Values(String mark) {

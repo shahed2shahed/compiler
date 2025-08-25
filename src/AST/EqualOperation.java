@@ -10,7 +10,7 @@ public class EqualOperation extends AstNode {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(equalT).append("\n");
+        sb.append(equalT);
         return sb.toString();
     }
 }

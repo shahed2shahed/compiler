@@ -1,10 +1,18 @@
 package AST;
 
 public class EqualNull extends ConditionExpression{
+    String identifier;
     EqualOperation equalOperation;
 
-    public EqualNull(EqualOperation equalOperation) {
+    public EqualNull(EqualOperation equalOperation, String identifier) {
         this.equalOperation = equalOperation;
+        this.identifier = identifier;
+    }
+
+    @Override
+    public String generateJS() {
+        // نولد جافاسكربت حسب العملية
+        return identifier + " " + equalOperation + " null";
     }
 
     @Override

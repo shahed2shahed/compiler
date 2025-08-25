@@ -18,7 +18,9 @@ public class CloseTag extends NormalHtmlTagNode {
     @Override
     public String generate() {
         StringBuilder sb = new StringBuilder();
+        sb.append("</");
         sb.append(identifier);
+        sb.append(">");
         return sb.toString();
     }
 

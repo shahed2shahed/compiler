@@ -38,6 +38,13 @@ public class ComponentDeclaration extends StatementNode{
     }
 
     @Override
+    public String generateJS() {
+        StringBuilder sb = new StringBuilder();
+            sb.append(componentBodies.generateJS());
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Component Declaration : \n");

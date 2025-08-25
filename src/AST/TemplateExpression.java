@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TemplateExpression extends PrimitiveTypeNode {
+    private List<Types> content;
 
-
-        private List<Types> content;
-
-        public TemplateExpression() {
+    public TemplateExpression() {
             this.content = new ArrayList<Types>();
         }
 
@@ -19,14 +17,12 @@ public class TemplateExpression extends PrimitiveTypeNode {
     @Override
     public String generate() {
         StringBuilder sb = new StringBuilder();
-        sb.append(" {{ ");
         for (Types decl : content) {
             sb.append(decl.generate());
         }
-        sb.append("}\n");
         return sb.toString();
     }
-
+    
     @Override
         public String toString() {
 

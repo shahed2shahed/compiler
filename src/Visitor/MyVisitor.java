@@ -5,6 +5,8 @@ import AST.Module;
 import AST.Void;
 import AST.Number;
 import java.util.*;
+import java.util.function.Function;
+
 import ErrorHandling.*;
 import SymbolTableStructure.*;
 
@@ -151,14 +153,42 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     @Override
     public AstNode visitPropertyStat(MyParser.PropertyStatContext ctx) {
         PropertyStat property = new PropertyStat();
-        if (ctx.functionCall() != null) {
-            property.setFunc((FunctionCall) visit(ctx.functionCall()));
-        }
+//        if (ctx.propertyFun() != null) {
+//            property.setFunc((FunctionCall) visit(ctx.propertyFun()));
+//        }
         for (var id : ctx.IDENTIFIER()) {
             property.addIdentifier(id.getText());
         }
 
         return property;
+    }
+
+    @Override
+    public Body visitNavigate(MyParser.NavigateContext ctx) {
+        Navigate nav = new Navigate();
+        for (var child  : ctx.values()) {
+            nav.addChild((Values) visitValues(child));
+        }
+        return nav;
+    }
+
+    @Override
+    public Expression visitFunctionExp(MyParser.FunctionExpContext ctx) {
+        FunctionExp nav = new FunctionExp();
+
+        if (ctx.values() != null) {
+            for (var child  : ctx.values()) {
+                nav.addChild((Values) visitValues(child));
+            }
+        }
+
+        if(ctx.propertyAccess() != null) {
+            for (var child  : ctx.propertyAccess()) {
+                nav.addChild((PropertyAccess) visitPropertyAccess(child));
+            }
+        }
+
+        return nav;
     }
 
     @Override
@@ -280,16 +310,16 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         String string = ctx.NUMBER().getText();
         return new ArrayNumberType(string);
     }
-    ///1.4 visit tuple type
-    @Override
-    public Type visitTupleType(MyParser.TupleTypeContext ctx) {
-        TupleType tupleType = new TupleType();
-        for (var child : ctx.type()){
-            Type node = (Type) visit(child);
-            tupleType.addChild(node);
-        }
-        return tupleType;
-    }
+//    ///1.4 visit tuple type
+//    @Override
+//    public Type visitTupleType(MyParser.TupleTypeContext ctx) {
+//        TupleType tupleType = new TupleType();
+//        for (var child : ctx.type()){
+//            Type node = (Type) visit(child);
+//            tupleType.addChild(node);
+//        }
+//        return tupleType;
+//    }
 
     /// 1.5 visit simple array
     @Override
@@ -404,7 +434,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public ConditionExpression visitEqualNull(MyParser.EqualNullContext ctx) {
-        return new EqualNull(visitEqualOperation(ctx.equalOperation()));
+        return new EqualNull(visitEqualOperation(ctx.equalOperation()) , ctx.ID2().getText());
     }
 
     @Override
@@ -439,7 +469,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     /// 3.3 variable declaration expression
     @Override
-    public Body visitVariableDeclaration(MyParser.VariableDeclarationContext ctx) {
+    public Expression visitVariableDeclaration(MyParser.VariableDeclarationContext ctx) {
 
         List <PropertyAccess> propertyAccess = new ArrayList<>();
 
@@ -459,7 +489,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     /// 1.1 Typed Variable Decl
     @Override
     public VariableDeclarationStat visitTypedVariableDecl(MyParser.TypedVariableDeclContext ctx) {
-        return new TypedVariableDecl(visitUnionType(ctx.unionType()));
+        return new TypedVariableDecl(visitUnionType(ctx.unionType()) , (Types) visit(ctx.types()));
     }
 
     /// 1.2 Inferred Variable Decl
@@ -468,7 +498,9 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         if (ctx.types() != null){
             return new InferredVariableDecl((Types) visit(ctx.types()));
         }
-        return new InferredVariableDecl((Conditions) visit(ctx.conditions()));
+        else {
+            return new InferredVariableDecl((Conditions) visit(ctx.conditions()));
+        }
     }
 
     /// conditions
@@ -714,7 +746,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     }
 
     @Override
-    public FunctionCall visitMethodCallWithValue(MyParser.MethodCallWithValueContext ctx) {
+    public AstNode visitMethodCallWithValue(MyParser.MethodCallWithValueContext ctx) {
         if(ctx.simpleArray()!= null){
             return new MethodCallWithValue((PropertyAccess) visitPropertyAccess(ctx.propertyAccess()) , (Parameters) visitParameters(ctx.parameters()) , (SimpleArray) visitSimpleArray(ctx.simpleArray()));
         }
@@ -815,11 +847,13 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public UnionTypeNode visitUnionType(MyParser.UnionTypeContext ctx) {
-        if (ctx.type(1) !=null){
+        if (ctx.type(1) != null){
             return new UnionTypeNode((Type) visit(ctx.type(0)) , (Type) visit (ctx.type(1)));
         }
         return new UnionTypeNode((Type) visit(ctx.type(0)) , null);
     }
+
+
 
     /// visit body
     /// 1.1  function declaration
@@ -849,10 +883,16 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         }
         // Parameters
         Parameters para = null;
-        para = (Parameters) visitParameters(ctx.parameters());
+        if(ctx.parameters()!= null){
+            para = (Parameters) visitParameters(ctx.parameters());
 
+        }
         UnionTypeNode union = null;
-        union = visitUnionType(ctx.unionType());
+        if(ctx.unionType()!= null){
+            union = visitUnionType(ctx.unionType());
+
+        }
+
 
         return new SimpleDecStat(returnType, para, union);
     }
@@ -918,7 +958,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
             ErrorHandler.logError(new EventBindingException("Event Binding To NonFunction'" + ctx.ID3(0).getText() + "'. You have to define this function."),  ctx.ID3(0).getSymbol().getLine(),  ctx.ID3(0).getSymbol().getCharPositionInLine());
             throw new RuntimeException("Event Binding To NonFunction'" + ctx.ID3(0).getText() + "'. You have to define this function.");
         }
-        return new EventBinding(ctx.CLICK().getText(), ctx.ID3(0).getText());
+        return new EventBinding(ctx.CLICK().getText(), ctx.ID3(0).getText() ,null);
     }
 
     @Override

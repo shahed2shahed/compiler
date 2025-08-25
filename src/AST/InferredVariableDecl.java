@@ -12,6 +12,22 @@ public class InferredVariableDecl extends VariableDeclarationStat{
         this.condition = condition;
     }
 
+//    @Override
+//    public String generateJS(){
+//        StringBuilder sb = new StringBuilder();
+////        if(condition != null){
+////            sb.append(condition.generate());
+////        }
+////        if(types != null){
+////            sb.append(" = ");
+////            sb.append("\n");
+////            sb.append(types.generate());
+////        }
+//
+//        sb.append("herrrrre");
+//        return sb.toString();
+//    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

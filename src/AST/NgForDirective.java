@@ -27,14 +27,9 @@ public class NgForDirective extends DirectiveStatementNode {
     @Override
     public String generateWithBody(List<Types> bodyChildren) {
         StringBuilder sb = new StringBuilder();
-      //  sb.append("for(...) {\n");
         if (bodyChildren != null) {
-          //  for (Types child : bodyChildren) {
                 sb.append(value.generateJS(bodyChildren));
-              //  sb.append(child.generate()).append("\n"); // إضافة newline
-            //}
         }
-    //    sb.append("}\n");
         return sb.toString();
     }
 
@@ -42,7 +37,7 @@ public class NgForDirective extends DirectiveStatementNode {
     @Override
     public String generateJS() {
         // بدون bodyChildren
-        return value.generateJS(null);
+        return value.generateJS();
     }
 
 
@@ -50,9 +45,9 @@ public class NgForDirective extends DirectiveStatementNode {
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-       // sb.append("Ng For Directive { \n");
+       sb.append("Ng For Directive { \n");
         sb.append(value + "\n");
-      //  sb.append("}\n");
+        sb.append("}\n");
 
         return sb.toString();
     }

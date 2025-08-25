@@ -16,7 +16,7 @@ public class Any extends PrimitiveTypeNode {
     }
 
     @Override
-    public String generateHTML() {
+    public String generate() {
         StringBuilder sb = new StringBuilder();
         sb.append(value);
         return sb.toString();

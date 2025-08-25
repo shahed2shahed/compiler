@@ -59,6 +59,12 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStandaloneProperty(MyParser.StandalonePropertyContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MyParser#propertyFun}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPropertyFun(MyParser.PropertyFunContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MyParser#propertyStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -146,6 +152,12 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStateManagement(MyParser.StateManagementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#expressionInBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressionInBody(MyParser.ExpressionInBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#body}.
 	 * @param ctx the parse tree
@@ -508,12 +520,6 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArrayNumberType(MyParser.ArrayNumberTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyParser#tupleType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTupleType(MyParser.TupleTypeContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MyParser#marks}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -555,6 +561,18 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitQuestionCondition(MyParser.QuestionConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#navigate}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNavigate(MyParser.NavigateContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#functionExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionExp(MyParser.FunctionExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#expression}.
 	 * @param ctx the parse tree

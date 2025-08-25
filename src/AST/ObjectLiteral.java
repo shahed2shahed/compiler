@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectLiteral extends AstNode {
+public class ObjectLiteral extends Expression {
     List<ObjectProperty> right;
 
     public ObjectLiteral() {
@@ -23,6 +23,19 @@ public class ObjectLiteral extends AstNode {
         this.right.add(node);
     }
 
+
+    @Override
+    public String generate(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        for (ObjectProperty body : right) {
+            sb.append(body.generate());
+            sb.append(" , ");
+        }
+        sb.append("}");
+        sb.append("\n");
+        return sb.toString();
+    }
 
     @Override
     public String toString() {

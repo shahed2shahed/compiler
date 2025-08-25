@@ -21,6 +21,15 @@ public class IdentifierObjectProperty extends ObjectProperty {
     }
 
     @Override
+    public String generate(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(identifier);
+        sb.append(" : ");
+        sb.append(expression.generate());
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Object Property :");

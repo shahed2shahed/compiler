@@ -1,0 +1,106 @@
+.products-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+    direction: ltr;
+    font-family: 'Segoe UI', sans-serif;
+}
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+.add-btn {
+    display: block;
+    margin: 0 auto 20px auto;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.add-btn:hover {
+    background: #0056b3;
+}
+.empty-message {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+    margin-top: 30px;
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+.product-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: 0.3s;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.img-box {
+    height: 180px;
+    overflow: hidden;
+    background: #f9f9f9;
+}
+.img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.card-body {
+    padding: 15px;
+    flex-grow: 1;
+}
+h3 {
+    margin: 0 0 5px;
+    color: #333;
+    font-size: 18px;
+}
+.desc {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+    max-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-top: 1px solid #eee;
+}
+.details-btn, .delete-btn {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.3s;
+}
+.details-btn {
+    background: #17a2b8;
+    color: white;
+}
+.details-btn:hover {
+    background: #117a8b;
+}
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+.delete-btn:hover {
+    background: #c82333;
+}

@@ -1,10 +1,13 @@
 package AST;
 
-public abstract class Types extends AstNode {
+public abstract class Types extends Body {
+    private Types parent;
 
-    protected String topLevelVarName;
+    public Types getParent() {
+        return parent;
+    }
 
-    public String getTopLevelVarName() {
-        return topLevelVarName;
+    public void setParent(Types parent) {
+        this.parent = parent;
     }
 }

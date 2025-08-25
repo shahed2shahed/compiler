@@ -6,6 +6,13 @@ import java.util.List;
 public class OpenTag extends NormalHtmlTagNode  {
     String tagName;
     List<Types> content ;
+    private String lastGeneratedId;
+
+    private boolean autoIdAdded = false;
+
+    public OpenTag() {
+        this.content = new ArrayList<>();
+    }
 
     public OpenTag(String tagName) {
         this.tagName = tagName;
@@ -25,75 +32,66 @@ public class OpenTag extends NormalHtmlTagNode  {
     }
 
     public void addTypes(Types node) {
-        System.out.println("[DEBUG] Adding to OpenTag content: " + node.getClass().getSimpleName());
+        node.setParent(this);
         this.content.add(node);
     }
 
-//   HTML
-//    @Override
-//    public String generate() {
-//        StringBuilder sb = new StringBuilder();
-//        if (content != null && !content.isEmpty()) {
-//            sb.append("<");
-//            for (Types child : content) {
-//
-//                if (!(child instanceof NgForDirective)){
-//                    sb.append(child.generate());
-//                    sb.append("\n");
-//                }
-//            }
-//        }
-//        sb.append(">");
-//        return sb.toString();
-//    }
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
 
+        if (content != null && !content.isEmpty()) {
 
-    /// old
-//    @Override
-//    public String generateJS() {
-//        StringBuilder sb = new StringBuilder();
-//        if (content != null && !content.isEmpty()) {
-////            sb.append("<");
-//            for (Types child : content) {
-//
-//                if (child instanceof NgForDirective){
-//                    sb.append(child.generateJS());
-//                }
-//            }
-//        }
-////        sb.append(">");
-//        return sb.toString();
-//    }
+            sb.append("<");
+            for (Types child : content) {
+                sb.append(child.generate());
+                sb.append(" ");
 
-        // التعديل الأساسي لتوليد JS مع تمرير الأبناء
-        public String generateJS() {
-            StringBuilder sb = new StringBuilder();
-//System.out.println("Inside generateJS");
-//            if (content != null && !content.isEmpty()) {
-//                System.out.println("Inside generateJS1");
-               for (Types child : content) {
-//                    System.out.println(child.getClass().getSimpleName() + "IN");
-//                //    if (child instanceof NgForDirective) {
-//                        System.out.println("[DEBUG] OpenTag: Generating NgForDirective for child with bodyChildren size: " +
-//                                (bodyChildren == null ? 0 : bodyChildren.size()));
-//
-//                        sb.append(child.generateWithBody(bodyChildren));
-                  //  }
-//                    else {
+                    if(tagName.equals("button") && !autoIdAdded){
+                        sb.append("id = ");
+                        lastGeneratedId = "addBtn" + (i++);
+                        sb.append("\"").append(lastGeneratedId).append("\" ");
+                        autoIdAdded = true;
+                    }
 
-                        System.out.println("[DEBUG] OpenTag: Generating normal child: " + child.getClass().getSimpleName());
-                        sb.append(child.generate());
-//                    }
-
+                    if(child.getClass().getSimpleName().equals("NgIfDirective") && !autoIdAdded){
+                        sb.append("id = \"");
+                        lastGeneratedId = child.getClass().getSimpleName() + (i++);
+                        sb.append(lastGeneratedId).append("\" ");
+                        autoIdAdded = true;
+                    }
             }
+        }
+        sb.append(">");
+        return sb.toString();
+    }
 
-            return sb.toString();
+    @Override
+    public String generateID() {
+        StringBuilder sb = new StringBuilder();
+        if (content != null && !content.isEmpty()) {
+            sb.append("<");
+            for (Types child : content) {
+                sb.append(child.generate());
+                sb.append(" ");
+            }
+            sb.append("id = \"");
+            lastGeneratedId = content.getFirst().getClass().getSimpleName() + (i++);
+            sb.append(lastGeneratedId).append("\" ");
+        }
+        sb.append(">");
+        return sb.toString();
+    }
+
+    public String getLastGeneratedId() {
+        return lastGeneratedId;
+    }
+
+    @Override
+        public String generateJS() {
+            return getLastGeneratedId();
         }
 
-        @Override
-        public String generate() {
-            return generateHTML(); // بدون bodyChildren
-        }
 
     @Override
     public String toString() {
@@ -107,3 +105,5 @@ public class OpenTag extends NormalHtmlTagNode  {
 
 
 }
+
+

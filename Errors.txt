@@ -1,1 +1,15 @@
 Line 13, Column 10: Missing Module Import , Directive *ngFor requires CommonModule to be imported
+Line 60, Column 31: Event Binding To NonFunction'selectProduct'. You have to define this function.
+Line 107, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
+Line 124, Column 49: Event Binding To NonFunction'editProduct'. You have to define this function.
+Line 124, Column 49: Event Binding To NonFunction'editProduct'. You have to define this function.
+Line 9, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
+Line 9, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
+Line 9, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
+Line 9, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
+Line 9, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
+Line 27, Column 49: Event Binding To NonFunction'viewDetails'. You have to define this function.
+Line 29, Column 48: Event Binding To NonFunction'deleteProduct'. You have to define this function.
+Line 29, Column 48: Event Binding To NonFunction'deleteProduct'. You have to define this function.
+Line 29, Column 48: Event Binding To NonFunction'deleteProduct'. You have to define this function.
+Line 29, Column 48: Event Binding To NonFunction'deleteProduct'. You have to define this function.

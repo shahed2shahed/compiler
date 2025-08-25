@@ -17,7 +17,8 @@ ELSE : 'else';
 RETURN : 'return';
 AS : 'as';
 AT : '@';
-
+ROUTER :'router';
+NAVIGATE :'navigate';
 COMPONENT   : '@Component';
 SELECTOR    : 'selector';
 STANDALONE  : 'standalone';
@@ -63,6 +64,8 @@ OPEN_BRACKET        : '(' ;
 CLOSE_BRACKET       : ')';
 CURLY_OPEN_BRACKET  : '{';
 CURLY_CLOSE_BRACKET : '}';
+DOUBLE_CURLY_OPEN_BRACKET : '{{';
+DOUBLE_CURLY_CLOSE_BRACKET : '}}';
 ARROW               : '=>';
 LT                  : '<';
 GT                  : '>';

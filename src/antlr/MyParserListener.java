@@ -88,6 +88,16 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitStandaloneProperty(MyParser.StandalonePropertyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyParser#propertyFun}.
+	 * @param ctx the parse tree
+	 */
+	void enterPropertyFun(MyParser.PropertyFunContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#propertyFun}.
+	 * @param ctx the parse tree
+	 */
+	void exitPropertyFun(MyParser.PropertyFunContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MyParser#propertyStat}.
 	 * @param ctx the parse tree
 	 */
@@ -235,6 +245,16 @@ public interface MyParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStateManagement(MyParser.StateManagementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#expressionInBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpressionInBody(MyParser.ExpressionInBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#expressionInBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpressionInBody(MyParser.ExpressionInBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#body}.
 	 * @param ctx the parse tree
@@ -848,16 +868,6 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitArrayNumberType(MyParser.ArrayNumberTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyParser#tupleType}.
-	 * @param ctx the parse tree
-	 */
-	void enterTupleType(MyParser.TupleTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MyParser#tupleType}.
-	 * @param ctx the parse tree
-	 */
-	void exitTupleType(MyParser.TupleTypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MyParser#marks}.
 	 * @param ctx the parse tree
 	 */
@@ -927,6 +937,26 @@ public interface MyParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitQuestionCondition(MyParser.QuestionConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#navigate}.
+	 * @param ctx the parse tree
+	 */
+	void enterNavigate(MyParser.NavigateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#navigate}.
+	 * @param ctx the parse tree
+	 */
+	void exitNavigate(MyParser.NavigateContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#functionExp}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionExp(MyParser.FunctionExpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#functionExp}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionExp(MyParser.FunctionExpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#expression}.
 	 * @param ctx the parse tree

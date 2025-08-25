@@ -15,6 +15,12 @@ public class PropertyAccess extends AstNode{
         this.mark = mark;
     }
 
+    public String generate(){
+        StringBuilder sb = new StringBuilder();
+            sb.append(mark);
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         return   mark;

@@ -22,6 +22,14 @@ public class ClassStatement extends StatementNode{
         this.classRelation = classRelation;
     }
 
+    @Override
+    public String generateJS(){
+        StringBuilder sb = new StringBuilder();
+        for (Body body : classBody) {
+            sb.append(body.generateJS());
+        }
+        return sb.toString();
+    }
 
     @Override
     public String toString() {

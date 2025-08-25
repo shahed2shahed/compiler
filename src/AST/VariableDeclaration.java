@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VariableDeclaration extends Body {
+public class VariableDeclaration extends Expression {
 
     VariableType type;
     List<PropertyAccess> access;
@@ -22,6 +22,31 @@ public class VariableDeclaration extends Body {
     public VariableDeclaration(List<PropertyAccess> access , VariableDeclarationStat stat) {
         this.access = access;
         this.stat = stat;
+    }
+
+    @Override
+    public String generateJS(){
+        StringBuilder sb = new StringBuilder();
+//        if (access != null) {
+//            sb.append("const ");
+//            for (PropertyAccess pa : access) {
+//                sb.append(pa.generate());
+//            }
+//        }
+//
+        System.out.println("Variable Declaration" + stat.getClass().getSimpleName());
+        if (stat.getClass().getSimpleName().equals("TypedVariableDecl")) {
+            sb.append(stat.generate());
+        }
+        for (PropertyAccess pa : access) {
+            sb.append(pa.generate());
+        }
+
+        if (stat != null) {
+            sb.append(stat.generateJS());
+        }
+
+        return sb.toString();
     }
 
     @Override

@@ -25,6 +25,18 @@ public class ArrayDeclaration extends Expression {
     }
 
     @Override
+    public String generate() {
+        StringBuilder str = new StringBuilder();
+        str.append("[");
+        for (Expression e : expressions) {
+            str.append(e.generate());
+            str.append(",");
+        }
+        str.append("]");
+        return str.toString();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (this.expressions != null && !this.expressions.isEmpty()) {
