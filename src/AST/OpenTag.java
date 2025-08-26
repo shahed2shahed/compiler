@@ -67,6 +67,58 @@ public class OpenTag extends NormalHtmlTagNode  {
     }
 
     @Override
+    public String generateJSS() {
+        StringBuilder sb = new StringBuilder();
+
+        if (tagName.equals("button")) {
+            sb.append("<");
+
+            if (content != null) {
+                for (Types attr : content) {
+                    if (attr instanceof EventBinding) {
+                        EventBinding eb = (EventBinding) attr;
+                        String expr = eb.functionName.replaceAll("\\{\\{\\s*(.*?)\\s*\\}\\}", "\\$\\{$1\\}");
+                        sb.append(" onclick=\"").append(expr + "(${"+eb.index+"})").append("\"");
+                    }
+                    else if (!(attr instanceof TemplateExpression)) { // الباقي attributes
+                       sb.append(attr.generate().trim()).append(" ");
+                    }
+                }
+            }
+
+            sb.append(">");
+        }
+
+        return sb.toString();
+    }
+
+//    @Override
+//    public String generateJSS() {
+//        StringBuilder sb = new StringBuilder();
+//        if(tagName.equals("button")) {
+//            System.out.println("yessssssssssssssssssssssssssssssss");
+//            sb.append("<button");
+//            for (Types attr : content) {
+//                System.out.println(attr.getClass().getSimpleName() + "Herrrrreyessssssssssssssssssssssssssssssss");
+//
+//                if (attr instanceof EventBinding) {
+//                    EventBinding eb = (EventBinding) attr;
+//                    String expr = eb.functionName.replaceAll("\\{\\{\\s*(.*?)\\s*\\}\\}", "\\$\\{$1\\}");
+//                    sb.append(" onclick=\"").append(expr).append("\"");
+//                }
+//            }
+//            sb.append(">");
+//            if (content != null) {
+//                for (Types attr : content) {
+//                    sb.append(attr.generate());
+//                }
+//            }
+//            sb.append("</button>");
+//        }
+//        return sb.toString();
+//    }
+
+    @Override
     public String generateID() {
         StringBuilder sb = new StringBuilder();
         if (content != null && !content.isEmpty()) {
@@ -89,8 +141,10 @@ public class OpenTag extends NormalHtmlTagNode  {
 
     @Override
         public String generateJS() {
+
             return getLastGeneratedId();
         }
+
 
 
     @Override

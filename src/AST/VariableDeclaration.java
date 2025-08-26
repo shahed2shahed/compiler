@@ -34,16 +34,16 @@ public class VariableDeclaration extends Expression {
 //            }
 //        }
 //
-        System.out.println("Variable Declaration" + stat.getClass().getSimpleName());
         if (stat.getClass().getSimpleName().equals("TypedVariableDecl")) {
             sb.append(stat.generate());
         }
+
         for (PropertyAccess pa : access) {
             sb.append(pa.generate());
         }
 
         if (stat != null) {
-            sb.append(stat.generateJS());
+            sb.append(stat.generate());
         }
 
         return sb.toString();

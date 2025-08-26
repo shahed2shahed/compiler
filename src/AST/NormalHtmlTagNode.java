@@ -41,35 +41,11 @@ public class NormalHtmlTagNode extends HtmlDeclare {
         this.closeTag = closeTag;
     }
 
-// HTML
-//    @Override
-//    public String generate(){
-//        StringBuilder sb = new StringBuilder();
-//
-//        if (openTag != null) {
-//            sb.append(openTag.generate());
-//        }
-//
-//        if (htmlBody != null && !htmlBody.isEmpty()) {
-//            for (Types child : htmlBody) {
-//                sb.append(child.generate());
-//                sb.append("\n");
-//            }
-//        }
-//
-//        if (closeTag != null) {
-//            sb.append(closeTag);
-//        }
-//
-//        return sb.toString();
-//    }
-
-
     @Override
     public String generate() {
         StringBuilder sb = new StringBuilder();
-        StringBuilder builder = new StringBuilder();
-
+        boolean childHasNgFor = false;
+        boolean childH = false;
 
 
         if (openTag != null) {
@@ -77,31 +53,11 @@ public class NormalHtmlTagNode extends HtmlDeclare {
             String classValue = "";
 
             for (Types child : openTag.getContent()) {
-                if (child instanceof NgForDirective) {
+                if (child instanceof NgForDirective || child.toString().equals("h5")) {
                     isNgDirective = true;
-                   // sb.append(htmlBody.get(t-1).getOpenTag());
                 }
 
-//                if (child instanceof NgIfDirective) {
-//                    isNgDirective = true;
-//
-//                    for (Types attr : openTag.getContent()) {
-//                        if (attr instanceof ClassEx) {
-//                            for (Types v : openTag.getContent()) {
-//                                if (v instanceof Values) {
-//                                    classValue += ((Values)v).getMark();
-//                                    classValue = classValue.replaceAll("^\"|\"$", "");
-//                                }
-//                            }
-//                            builder.append(".className = \"").append(classValue).append("\";\n");
-//                        }
-//                    }
-//
-//                 //   sb.append(((NgIfDirective) child).generateWithBody(htmlBody , builder));
-//
-//                }
             }
-            boolean childHasNgFor = false;
 
             if (htmlBody != null) {
                 for (Types child : htmlBody) {
@@ -109,7 +65,8 @@ public class NormalHtmlTagNode extends HtmlDeclare {
                         NormalHtmlTagNode elem = (NormalHtmlTagNode) child;
                         if (elem.getOpenTag() != null) {
                             for (Types c : elem.getOpenTag().getContent()) {
-                                if (c instanceof NgForDirective) {
+
+                                if (c instanceof NgForDirective || c.toString().equals("h5")) {
                                     childHasNgFor = true;
                                     break;
                                 }
@@ -141,17 +98,87 @@ public class NormalHtmlTagNode extends HtmlDeclare {
         return sb.toString();
     }
 
+    @Override
+    public String generateJSS() {
+            StringBuilder sb = new StringBuilder();
+
+            if (openTag != null) {
+                boolean isNgDirective = false;
+                String classValue = "";
+
+                for (Types child : openTag.getContent()) {
+                    if (child instanceof NgForDirective) {
+                        isNgDirective = true;
+                    }
+                }
+
+                if (!isNgDirective) {
+                    sb.append("\n");
+                    if (openTag.getTagName().equals("button")) {
+                        sb.append(openTag.generateJSS());
+                    }
+                    else{
+                        sb.append(openTag.generate());
+                    }
+
+                    // ✅ توليد htmlBody مع تحويل {{ ... }} إلى ${ ... }
+                    if (htmlBody != null) {
+                        for (Types child : htmlBody) {
+                            if (child instanceof TemplateExpression) {
+                                String expr = ((TemplateExpression) child).generate();
+                                sb.append("${").append(expr).append("}");
+                            }
+                            else {
+                                sb.append(child.generateJSS());
+                            }
+                        }
+                    }
+
+                    sb.append(closeTag.generate());
+                }
+            }
+            return sb.toString();
+    }
+
 
 @Override
 public String generateJS() {
     StringBuilder sb = new StringBuilder();
     boolean isNgDirective = false;
+    String classValue = "";
+    StringBuilder s = new StringBuilder();
 
         for (Types child : openTag.getContent()) {
+
+
+            if(child.toString().equals("h5")) {
+                isNgDirective = true;
+                sb.append(child.generateJSWithBody(htmlBody )).append(" ");
+            }
+
                 if (child instanceof NgForDirective) {
                     isNgDirective = true;
+
+                  //  sb.append(((NgForDirective) child).generateJS());
+                    for (Types attr : openTag.getContent()) {
+                        System.out.println("opeeen" + attr.getClass().getSimpleName());
+                        if (attr instanceof ClassEx) {
+                            for (Types v : openTag.getContent()) {
+                                if (v instanceof Values) {
+                                    classValue += ((Values) v).getMark();
+                                    classValue = classValue.replaceAll("^\"|\"$", "");
+                                }
+                            }
+                             s.append(".className = \"").append(classValue).append("\";\n");
+                        }
+                    }
+
+                    System.out.println("sOHH" + s);
+                    sb.append(child.generateJSWithBody(htmlBody , s)).append(" ");
+                  //  sb.append(child.generateJS(openTag.getTagName())).append("\n");
                 }
 
+            if (!isNgDirective) {
             if (child instanceof EventBinding | child instanceof NgIfDirective) {
                 sb.append(" const " + openTag.getTagName()).
                         append(" = document.getElementById('").
@@ -159,6 +186,32 @@ public String generateJS() {
                 sb.append("\n");
             }
         }
+            }
+
+    boolean childHasNgFor = false;
+    if (htmlBody != null) {
+        for (Types child : htmlBody) {
+            if (child instanceof NormalHtmlTagNode) {
+                NormalHtmlTagNode elem = (NormalHtmlTagNode) child;
+                if (elem.getOpenTag() != null) {
+                    for (Types c : elem.getOpenTag().getContent()) {
+                        if (c instanceof NgForDirective || c.toString().equals("h5")) {
+                            childHasNgFor = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(childHasNgFor) {
+        sb.append(" const " + openTag.getTagName()+i++).
+                append(" = document.getElementById('").
+                append(openTag.generateJS()).append("');");
+        sb.append("\n");
+    }
+
             if (!isNgDirective) {
                 if(htmlBody != null) {
                     for (Types child : htmlBody) {
@@ -170,6 +223,31 @@ public String generateJS() {
         return sb.toString();
     }
 
+
+
+
+//    @Override
+//    public String generateJS(String varAdd){
+//         StringBuilder builder = new StringBuilder();
+//        if (openTag != null) {
+//            boolean isNgDirective = false;
+//            String classValue = "";
+//
+//            for (Types attr : openTag.getContent()) {
+//                System.out.println("opeeen" + attr.getClass().getSimpleName());
+//                if (attr instanceof ClassEx) {
+//                    for (Types v : openTag.getContent()) {
+//                        if (v instanceof Values) {
+//                            classValue += ((Values) v).getMark();
+//                            classValue = classValue.replaceAll("^\"|\"$", "");
+//                        }
+//                    }
+//                    builder.append(".className = \"").append(classValue).append("\";\n");
+//                }
+//            }
+//        }
+//        return builder.toString();
+//}
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

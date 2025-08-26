@@ -29,32 +29,60 @@ public class Program extends AstNode {
 
 
     @Override
-    public String generateHTML() {
+    public String generateHTML(String css , String js) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>\n<html>\n<head>\n");
         sb.append("<title>Generated</title>\n");
+
+        // استدعاء ملف CSS
+        if (css != null && !css.isEmpty()) {
+            sb.append("<link rel=\"stylesheet\" href=\"")
+                    .append(css)
+                    .append("\" />\n");
+        }
+
         sb.append("</head>\n<body>\n");
-        sb.append("<link rel=\"stylesheet\" href=\"style.css\" />\n");
 
         for (StatementNode child : children) {
             sb.append(child.generate());
             sb.append("\n");
         }
 
-        sb.append("<script src=\"script.js\"></script>\n\n");
+        if (js != null && !js.isEmpty()) {
+            sb.append("<script src=\"")
+                    .append(js)
+                    .append("\"></script>\n");
+        }
+
         sb.append("</body>\n</html>");
         return sb.toString();
     }
 
 
+    public String arrayDeclaration() {
+        StringBuilder sb = new StringBuilder();
+
+        for (StatementNode child : children) {
+            if (!(child instanceof ClassStatement)) {
+                continue;
+            }
+            sb.append(child.generateJS());
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
     @Override
     public String generateJS() {
         StringBuilder sb = new StringBuilder();
-        for (StatementNode child : children) {
-            System.out.println("child.generateJS(),,,,,,,," + child.generateJS());
-            sb.append(child.generateJS());
-            System.out.println("child.generateJS()JJU,,,,,," + child.getClass().getSimpleName());
+        sb.append(arrayDeclaration());
 
+        for (StatementNode child : children) {
+            if (child instanceof ClassStatement) {
+                continue;
+            }
+            sb.append(child.generateJS());
             sb.append("\n");
         }
         return sb.toString();

@@ -1,14 +1,32 @@
 package AST;
 
 public class ParaHasAccessModifiers extends ParametersContent{
+    String name;
     Type type;
     ParametersType access;
 
-    public ParaHasAccessModifiers(Type type, ParametersType access) {
+    public ParaHasAccessModifiers(String name , Type type, ParametersType access) {
         this.type = type;
         this.access = access;
+        this.name = name;
     }
 
+    @Override
+    public String generateJS(){
+        StringBuilder str = new StringBuilder();
+            str.append(name);
+        return str.toString();
+    }
+
+    @Override
+    public String generateRoutJS(){
+        StringBuilder str = new StringBuilder();
+        if(type.generate().equals("ActivatedRoute")){
+            str.append("const id = getProductIdFromUrl();\n");
+            str.append("const product = products.find(p => p.id === id);\n");
+        }
+        return str.toString();
+    }
     @Override
     public String toString() {
 

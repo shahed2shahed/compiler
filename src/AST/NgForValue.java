@@ -16,7 +16,7 @@ public class NgForValue extends AstNode{
 
 
 @Override
-public String generateJS(List<Types> bodyChildren) {
+public String generateJS(List<Types> bodyChildren ,StringBuilder s) {
     StringBuilder js = new StringBuilder();
     String tagVar = "ele" + i++;
     for (NgForExpression node : this.ngForExpression) {
@@ -24,18 +24,32 @@ public String generateJS(List<Types> bodyChildren) {
         String itemVar = node.getItemVar();
         String indexVar = node.getIndexVar();
 
-        js.append(iterable).append(".forEach((").append(itemVar);
+        js.append("\n");
+        js.append("function renderProducts() {");
+        js.append('\n');
+        js.append("div").append(getI() -1).append(".innerHTML = '';\n");
+
+        js.append("\n");
+
+            js.append(iterable).append(".forEach((").append(itemVar);
         if (indexVar != null) {
             js.append(", ").append(indexVar);
         }
         js.append(") => {\n");
         js.append("const "+tagVar+" = document.createElement('div');\n");
 
+        js.append(tagVar + s);
+        js.append(tagVar + ".innerHTML = `");
         if (bodyChildren != null && !bodyChildren.isEmpty()) {
             for (Types child : bodyChildren) {
-                    js.append(child.generateJS(tagVar)).append("\n");
+                System.out.println("OOOOOOOOOOOOOO9" + child.getClass().getSimpleName());
+
+                js.append(child.generateJSS()).append("\n");
             }
-            js.append("container.appendChild("+tagVar+");\n");
+            js.append("`;");
+            js.append("\n");
+
+            js.append("div").append(getI() -1).append(".appendChild("+tagVar+");\n");
 
         } else {
             js.append("   const el = document.createElement('div');\n");
@@ -44,6 +58,11 @@ public String generateJS(List<Types> bodyChildren) {
         }
 
         js.append("});\n");
+        js.append('}');
+        js.append("\n");
+        js.append("button.addEventListener('click', addProduct);");
+        js.append("\n");
+        js.append("renderProducts();\n");
     }
 
     return js.toString();
@@ -54,6 +73,9 @@ public String generateJS(List<Types> bodyChildren) {
         return generateJS();
     }
 
+//    public String Pirnt(String itemVar) {
+//        return itemVar;
+//    }
 
     @Override
     public String toString() {

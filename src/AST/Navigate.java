@@ -2,7 +2,7 @@ package AST;
 
 import java.util.ArrayList;
 
-public class Navigate extends Body {
+public class Navigate extends Expression {
     ArrayList<Values> children;
 
     public Navigate() {

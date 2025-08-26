@@ -22,7 +22,6 @@ public class TemplateExpression extends PrimitiveTypeNode {
         }
         return sb.toString();
     }
-    
     @Override
         public String toString() {
 

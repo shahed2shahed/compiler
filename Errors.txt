@@ -13,3 +13,7 @@ Line 29, Column 48: Event Binding To NonFunction'deleteProduct'. You have to def
 Line 29, Column 48: Event Binding To NonFunction'deleteProduct'. You have to define this function.
 Line 29, Column 48: Event Binding To NonFunction'deleteProduct'. You have to define this function.
 Line 29, Column 48: Event Binding To NonFunction'deleteProduct'. You have to define this function.
+Line 13, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
+Line 13, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
+Line 12, Column 40: Event Binding To NonFunction'goBack'. You have to define this function.
+Line 12, Column 40: Event Binding To NonFunction'goBack'. You have to define this function.

@@ -32,7 +32,8 @@ public class ArrayDeclaration extends Expression {
             str.append(e.generate());
             str.append(",");
         }
-        str.append("]");
+        str.deleteCharAt(str.length() - 1);
+        str.append("];");
         return str.toString();
     }
 
@@ -45,6 +46,7 @@ public class ArrayDeclaration extends Expression {
             for (Expression item : expressions) {
 
                 sb.append(item).append("\n");
+
             }
         }
         sb.append("\n");

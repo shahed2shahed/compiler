@@ -14,6 +14,7 @@ public class ParaHasPropertyAccess extends ParametersContent{
         this.right.add(node);
     }
 
+
     @Override
     public String toString() {
 

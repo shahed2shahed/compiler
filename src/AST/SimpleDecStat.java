@@ -12,6 +12,20 @@ public class SimpleDecStat extends FunctionDeclarationStat{
     }
 
     @Override
+    public String generateJS(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(parameters.generateJS());
+        return sb.toString();
+    }
+
+    @Override
+    public String generateRoutJS(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(parameters.generateRoutJS());
+        return sb.toString();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Function Declaration Statement : \n");

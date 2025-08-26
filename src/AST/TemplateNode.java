@@ -7,8 +7,8 @@ public class TemplateNode extends StatementNode {
         this.html = html;
     }
 
-    @Override
-    public String generateHTML() {
-        return html;
-    }
+//    @Override
+//    public String generateHTML() {
+//        return html;
+//    }
 }

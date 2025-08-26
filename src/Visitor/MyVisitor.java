@@ -164,7 +164,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     }
 
     @Override
-    public Body visitNavigate(MyParser.NavigateContext ctx) {
+    public Expression visitNavigate(MyParser.NavigateContext ctx) {
         Navigate nav = new Navigate();
         for (var child  : ctx.values()) {
             nav.addChild((Values) visitValues(child));
@@ -434,12 +434,18 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public ConditionExpression visitEqualNull(MyParser.EqualNullContext ctx) {
-        return new EqualNull(visitEqualOperation(ctx.equalOperation()) , ctx.ID2().getText());
+        if(ctx.equalOperation()!=null){
+            return new EqualNull(visitEqualOperation(ctx.equalOperation()) , ctx.ID2().getText());
+        }
+        return new EqualNull(null , ctx.ID2().getText());
     }
 
     @Override
     public EqualOperation visitEqualOperation(MyParser.EqualOperationContext ctx) {
-        return new EqualOperation(ctx.getText());
+        if (ctx.getText()!=null){
+            return new EqualOperation(ctx.getText());
+        }
+        return new EqualOperation(null);
     }
 
     @Override
@@ -533,7 +539,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
             type = (Type) visit(ctx.type());
             paraType = (ParametersType) visit(ctx.parametersType());
         }
-        return new ParaHasAccessModifiers( type , paraType);
+        return new ParaHasAccessModifiers(ctx.IDENTIFIER().getText() , type , paraType);
     }
 
     @Override
@@ -871,7 +877,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         for (var b : ctx.body()) {
             bodyList.add((Body) visit(b));
         }
-        return new NormalfunctionDecl(returnType, stat, bodyList);
+        return new NormalfunctionDecl(ctx.IDENTIFIER().getText() , returnType, stat, bodyList);
     }
 
     /// function Declaration Stat
@@ -958,6 +964,19 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
             ErrorHandler.logError(new EventBindingException("Event Binding To NonFunction'" + ctx.ID3(0).getText() + "'. You have to define this function."),  ctx.ID3(0).getSymbol().getLine(),  ctx.ID3(0).getSymbol().getCharPositionInLine());
             throw new RuntimeException("Event Binding To NonFunction'" + ctx.ID3(0).getText() + "'. You have to define this function.");
         }
+        String mark = "";
+        if (ctx.DOT3() != null && !ctx.DOT3().isEmpty()) {
+            System.out.println("DOT3 is present: " + ctx.DOT3(0).getText());
+
+                mark = ctx.ID3().get(1).getText() + ctx.DOT3(0).getText() + ctx.ID3().get(2).getText();
+                System.out.println("Generated mark: " + mark);
+            return new EventBinding(ctx.CLICK().getText(), ctx.ID3(0).getText() ,mark);
+
+        }
+        else {
+            System.out.println("DOT3 is null");
+        }
+
         return new EventBinding(ctx.CLICK().getText(), ctx.ID3(0).getText() ,null);
     }
 

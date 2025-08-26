@@ -32,6 +32,7 @@ public class ObjectLiteral extends Expression {
             sb.append(body.generate());
             sb.append(" , ");
         }
+        sb.deleteCharAt(sb.length() - 2);
         sb.append("}");
         sb.append("\n");
         return sb.toString();

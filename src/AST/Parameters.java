@@ -23,6 +23,24 @@ public class Parameters extends AstNode{
     }
 
     @Override
+    public String generateJS(){
+        StringBuilder str = new StringBuilder();
+        for(ParametersContent node : parameters){
+            str.append(node.generateJS());
+        }
+        return str.toString();
+    }
+
+    @Override
+    public String generateRoutJS(){
+        StringBuilder str = new StringBuilder();
+        for(ParametersContent node : parameters){
+            str.append(node.generateRoutJS());
+        }
+        return str.toString();
+    }
+
+    @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();

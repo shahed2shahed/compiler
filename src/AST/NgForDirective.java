@@ -14,25 +14,26 @@ public class NgForDirective extends DirectiveStatementNode {
         return value;
     }
 
- //   oldd
-//
-//    @Override
-//    public String generateJS() {
-//        StringBuilder s = new StringBuilder();
-//        s.append(value.generateJS());
-//        return s.toString();
-//    }
-
 
     @Override
-    public String generateWithBody(List<Types> bodyChildren) {
+    public String generateJSWithBody(List<Types> bodyChildren) {
         StringBuilder sb = new StringBuilder();
         if (bodyChildren != null) {
                 sb.append(value.generateJS(bodyChildren));
+
         }
         return sb.toString();
     }
 
+    @Override
+    public String generateJSWithBody(List<Types> bodyChildren , StringBuilder s) {
+        StringBuilder sb = new StringBuilder();
+        if (bodyChildren != null) {
+            sb.append(value.generateJS(bodyChildren , s));
+
+        }
+        return sb.toString();
+    }
 
     @Override
     public String generateJS() {

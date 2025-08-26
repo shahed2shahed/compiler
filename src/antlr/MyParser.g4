@@ -310,8 +310,8 @@ marks: //////////////
     |SQUARE_CLOSE_BRACKET
     |OPEN_BRACKET
     |CLOSE_BRACKET
-    |CURLY_OPEN_BRACKET
-    |CURLY_CLOSE_BRACKET
+  //  |CURLY_OPEN_BRACKET
+   // |CURLY_CLOSE_BRACKET
     |NOT
     ;
 
@@ -340,7 +340,7 @@ questionCondition: ///////////
     ;
 
 navigate: IDENTIFIER DOT ROUTER DOT NAVIGATE OPEN_BRACKET SQUARE_OPEN_BRACKET values (COMMA values)* SQUARE_CLOSE_BRACKET CLOSE_BRACKET SEMI_COLON;
-functionExp : propertyAccess* OPEN_BRACKET values* CLOSE_BRACKET SEMI_COLON;
+functionExp : NUMBER? OPEN_BRACKET? propertyAccess* OPEN_BRACKET values* CLOSE_BRACKET* SEMI_COLON;
 
 expression: ///////////
       values //////////
