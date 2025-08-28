@@ -1,0 +1,69 @@
+.details-container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+    direction: ltr;
+    font-family: 'Segoe UI', sans-serif;
+}
+.back-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+.back-btn:hover {
+    background: #0056b3;
+}
+.details-card {
+    display: flex;
+    gap: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 20px;
+    flex-wrap: wrap;
+}
+.image-box {
+    flex: 1 1 350px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.info-box {
+    flex: 1 1 300px;
+}
+.info-box h2 {
+    margin: 0 0 10px;
+    color: #333;
+}
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 15px;
+}
+.description {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+.date {
+    font-size: 14px;
+    color: #777;
+}
+.not-found {
+    text-align: center;
+    font-size: 18px;
+    color: red;
+    margin-top: 50px;
+}

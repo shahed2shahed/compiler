@@ -52,39 +52,67 @@ public class OpenTag extends NormalHtmlTagNode  {
             return sb.toString();
         }
 
+        boolean buttonHasDisabled = false;
+
         if (content != null && !content.isEmpty()) {
 
             sb.append("<");
+
+            if (tagName.equals("button")) {
+                buttonHasDisabled = content.stream()
+                        .anyMatch(child -> child.toString().contains("disabled"));
+            }
+
+            boolean skipAngularAttr = false;
+
             for (Types child : content) {
+                String childStr = child.toString().trim();
+
+                if (childStr.equals("[")) {
+                    skipAngularAttr = true;
+                    continue;
+                }
+
+                if (skipAngularAttr) {
+                    if (childStr.endsWith("\"")) {
+                        skipAngularAttr = false;
+                    }
+                    continue;
+                }
+
                 sb.append(child.generate());
                 sb.append(" ");
 
-                    if(tagName.equals("button") && !autoIdAdded){
-                        sb.append("id = ");
-                        lastGeneratedId = "addBtn" + (i++);
-                        sb.append("\"").append(lastGeneratedId).append("\" ");
-                        autoIdAdded = true;
-                    }
+                if (tagName.equals("button") && !autoIdAdded && !buttonHasDisabled) {
+                    sb.append("id = ");
+                    lastGeneratedId = "addBtn" + (i++);
+                    sb.append("\"").append(lastGeneratedId).append("\" ");
+                    autoIdAdded = true;
+                }
 
-                    if(child.getClass().getSimpleName().equals("NgIfDirective") && !autoIdAdded){
-                        sb.append("id = \"");
-                        lastGeneratedId = child.getClass().getSimpleName() + (i++);
-                        sb.append(lastGeneratedId).append("\" ");
-                        autoIdAdded = true;
-                    }
+                if (child.getClass().getSimpleName().equals("NgIfDirective") && !autoIdAdded) {
+                    sb.append("id = \"");
+                    lastGeneratedId = child.getClass().getSimpleName() + (i++);
+                    sb.append(lastGeneratedId).append("\" ");
+                    autoIdAdded = true;
+                }
             }
         }
+
         sb.append(">");
         return sb.toString();
     }
+
+
+
 
     @Override
     public String generateHTML() {
         StringBuilder sb = new StringBuilder();
 
         if (content != null && !content.isEmpty()) {
-            // أول عنصر هو اسم التاغ
-            String tagName = content.get(0).generate().trim();
+
+            String tagName = content.getFirst().generate().trim();
             sb.append("<").append(tagName);
 
             Set<String> booleanAttributes = Set.of("required", "disabled", "checked", "readonly", "autofocus");
@@ -97,27 +125,24 @@ public class OpenTag extends NormalHtmlTagNode  {
                 String part = content.get(i).generate().trim();
                 if (part.isEmpty()) continue;
 
-                // تجاهل binding كامل: [(ngModel)]
                 if ("[".equals(part) && i + 4 < content.size() &&
                         "(".equals(content.get(i + 1).generate().trim()) &&
                         "ngModel".equalsIgnoreCase(content.get(i + 2).generate().trim()) &&
                         ")".equals(content.get(i + 3).generate().trim()) &&
                         "]".equals(content.get(i + 4).generate().trim())) {
 
-                    i += 4; // تخطي التوكنات الخاصة بـ [(ngModel)]
+                    i += 4;
                     if (i + 2 < content.size() && "=".equals(content.get(i + 1).generate().trim())) {
                         i += 2;
                     }
                     continue;
                 }
 
-                // علامة =
                 if ("=".equals(part)) {
                     haveEquals = true;
                     continue;
                 }
 
-                // إذا لم نحدد اسم الـ attribute بعد
                 if (currentName == null && !haveEquals) {
                     currentName = part;
 
@@ -126,21 +151,18 @@ public class OpenTag extends NormalHtmlTagNode  {
                         currentName = "id";
                     }
 
-                    // Boolean attribute بدون قيمة
                     if (booleanAttributes.contains(currentName.toLowerCase())) {
                         sb.append(" ").append(currentName);
-                        currentName = null; // لا ننتظر قيمة
+                        currentName = null;
                     }
 
                     continue;
                 }
 
-                // إذا وصلنا للقيمة
                 if (haveEquals && (part.startsWith("\"") || part.startsWith("'"))) {
                     currentValue = stripOuterQuotes(part);
                     sb.append(" ").append(currentName).append("=\"").append(currentValue).append("\"");
 
-                    // reset
                     currentName = null;
                     haveEquals = false;
                     currentValue = null;
@@ -167,7 +189,7 @@ public class OpenTag extends NormalHtmlTagNode  {
                         String expr = eb.functionName.replaceAll("\\{\\{\\s*(.*?)\\s*\\}\\}", "\\$\\{$1\\}");
                         sb.append(" onclick=\"").append(expr + "(${"+eb.index+"})").append("\"");
                     }
-                    else if (!(attr instanceof TemplateExpression)) { // الباقي attributes
+                    else if (!(attr instanceof TemplateExpression)) {
                        sb.append(attr.generate().trim()).append(" ");
                     }
                 }
@@ -185,7 +207,6 @@ public class OpenTag extends NormalHtmlTagNode  {
         StringBuilder sb = new StringBuilder();
         if (content != null && !content.isEmpty()) {
             sb.append("<");
-//            sb.append(" ");
             sb.append(tagName);
             sb.append(" ");
             sb.append("id = \"");

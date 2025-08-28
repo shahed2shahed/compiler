@@ -1,0 +1,165 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductService, Product } from './product.service';
+
+@Component({
+  selector: 'app-edit-product',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
+    <div class="form-container">
+      <h2>Edit Product</h2>
+      <form (ngSubmit)="saveProduct()" #f="ngForm" novalidate>
+
+        <div class="form-group">
+          <label>Product Name<span>*</span></label>
+          <input name="name" required [(ngModel)]="product.name" placeholder="Enter product name" />
+        </div>
+
+        <div class="form-group">
+          <label>Price</label>
+          <input name="price" type="number" [(ngModel)]="product.price" placeholder="Example: 50" />
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="description" [(ngModel)]="product.description" placeholder="Enter product description"></textarea>
+        </div>
+
+        <div class="form-group file-input">
+          <label>Product Image</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+        </div>
+
+        <div class="buttons">
+          <button type="submit" [disabled]="!f.valid">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  `,
+  // styles: [`
+  //   .form-container {
+  //     max-width: 500px;
+  //     margin: auto;
+  //     background: #fff;
+  //     padding: 20px;
+  //     border-radius: 10px;
+  //     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  //     direction: ltr;
+  //     font-family: 'Segoe UI', sans-serif;
+  //   }
+  //   h2 {
+  //     text-align: center;
+  //     margin-bottom: 20px;
+  //     color: #333;
+  //   }
+  //   .form-group {
+  //     margin-bottom: 15px;
+  //     display: flex;
+  //     flex-direction: column;
+  //   }
+  //   label {
+  //     font-weight: bold;
+  //     margin-bottom: 5px;
+  //     color: #444;
+  //   }
+  //   label span {
+  //     color: red;
+  //   }
+  //   input, textarea {
+  //     padding: 10px;
+  //     border: 1px solid #ddd;
+  //     border-radius: 6px;
+  //     font-size: 14px;
+  //     transition: 0.3s;
+  //   }
+  //   input:focus, textarea:focus {
+  //     border-color: #007bff;
+  //     outline: none;
+  //     box-shadow: 0 0 4px rgba(0,123,255,0.3);
+  //   }
+  //   textarea {
+  //     min-height: 80px;
+  //     resize: vertical;
+  //   }
+  //   .file-input input[type="file"] {
+  //     border: none;
+  //     padding: 5px;
+  //     background: #f8f8f8;
+  //   }
+  //   .buttons {
+  //     display: flex;
+  //     gap: 10px;
+  //     justify-content: center;
+  //     margin-top: 20px;
+  //   }
+  //   button {
+  //     padding: 10px 20px;
+  //     border: none;
+  //     border-radius: 6px;
+  //     font-size: 14px;
+  //     cursor: pointer;
+  //     transition: 0.3s;
+  //   }
+  //   button[type="submit"] {
+  //     background: #28a745;
+  //     color: white;
+  //   }
+  //   button[type="submit"]:hover {
+  //     background: #218838;
+  //   }
+  //   .cancel {
+  //     background: #dc3545;
+  //     color: white;
+  //   }
+  //   .cancel:hover {
+  //     background: #c82333;
+  //   }
+  //   button:disabled {
+  //     background: #ccc;
+  //     cursor: not-allowed;
+  //   }
+  // `]
+})
+export class EditProductComponent implements OnInit {
+  product: Product = { id: 0, name: '', price: 0, description: '', image: '', date: '' };
+  private fileDataUrl: string | null = null;
+
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute,
+    private route: Router
+  ) {}
+
+  ngOnInit() {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const prod = this.productService.getProductById(id);
+    if (prod) {
+      // Copy product to edit without modifying the original directly
+      this.product = { ...prod };
+    } else {
+      // If product not found, navigate back to the list
+      this.router.navigate(['/']);
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file: File | undefined = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fileDataUrl = reader.result as string;
+      this.product.image = this.fileDataUrl;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  saveProduct() {
+    this.productService.updateProduct(this.product);
+    this.router.navigate(['/product-details', this.product.id]);
+  }
+
+}

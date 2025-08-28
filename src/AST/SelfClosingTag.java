@@ -99,6 +99,7 @@ public String generate() {
             String part = content.get(i).generate().trim();
             if (part.isEmpty()) continue;
 
+            // تجاهل [(ngModel)]
             if ("[".equals(part) && i + 4 < content.size() &&
                     "(".equals(content.get(i + 1).generate().trim()) &&
                     "ngModel".equalsIgnoreCase(content.get(i + 2).generate().trim()) &&
@@ -130,11 +131,13 @@ public String generate() {
                 continue;
             }
 
+            // علامة =
             if ("=".equals(part)) {
                 haveEquals = true;
                 continue;
             }
 
+            // attribute name
             if (currentName == null && !haveEquals) {
                 currentName = part;
                 if ("name".equals(currentName)) currentName = "id";
@@ -143,21 +146,17 @@ public String generate() {
                     sb.append(" ").append(currentName);
                     currentName = null;
                 }
+
                 continue;
             }
 
-            if (haveEquals) {
+            // attribute value
+            if (haveEquals && (part.startsWith("\"") || part.startsWith("'"))) {
                 currentValue = stripOuterQuotes(part);
 
-                while (i + 1 < content.size()) {
-                    String next = content.get(i + 1).generate().trim();
-                    if (next.isEmpty() || "=".equals(next) || ">".equals(next) || "/>".equals(next) || "(".equals(next) || "[".equals(next)) break;
-                    i++;
-                    currentValue += stripOuterQuotes(next);
-                }
-
-                if (currentName != null && currentValue != null) {
+                if(currentName != null) {
                     sb.append(" ").append(currentName).append("=\"").append(currentValue).append("\"");
+
                     if ("type".equalsIgnoreCase(currentName) && "file".equalsIgnoreCase(currentValue)) {
                         addedFileId = true;
                     }
@@ -182,13 +181,6 @@ public String generate() {
         sb.append(" />");
         return sb.toString();
     }
-
-
-
-
-
-
-
 
 
 
