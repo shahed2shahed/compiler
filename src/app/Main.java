@@ -21,9 +21,9 @@ public class Main {
             String testsDir = "GenerateTest"; // المجلد اللي فيه كل التيستات
             File folder = new File(testsDir);
 
-            String[] html = {"index.html", "details.html"};
-            String[] js = {"script.js", "details-script.js"};
-            String[] css = {"style.css", "js-style.css"};
+            String[] html = {"index.html", "details.html" , "add.html" , "edit.html"};
+            String[] js = {"script.js", "details-script.js" , "add-script.js" , "edit.js"};
+            String[] css = {"style.css", "js-style.css" , "add-style.css" , "edit.style.css"};
 
 
             int testIndex = 0;

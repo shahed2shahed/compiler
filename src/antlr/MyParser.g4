@@ -340,7 +340,11 @@ questionCondition: ///////////
     ;
 
 navigate: IDENTIFIER DOT ROUTER DOT NAVIGATE OPEN_BRACKET SQUARE_OPEN_BRACKET values (COMMA values)* SQUARE_CLOSE_BRACKET CLOSE_BRACKET SEMI_COLON;
-functionExp : NUMBER? OPEN_BRACKET? propertyAccess* OPEN_BRACKET values* CLOSE_BRACKET* SEMI_COLON;
+functionExp : NUMBER? OPEN_BRACKET? propertyAccess* OPEN_BRACKET CURLY_OPEN_BRACKET* content* CURLY_CLOSE_BRACKET* CLOSE_BRACKET* SEMI_COLON;
+
+content:
+             values
+           | variableDeclaration;
 
 expression: ///////////
       values //////////
@@ -423,7 +427,7 @@ toStringNode : //////////
 
 variableDeclarationStat: ////////////
       COLON unionType (SQUARE_OPEN_BRACKET SQUARE_CLOSE_BRACKET)* EQUAL types #typedVariableDecl //////////
-    | (EQUAL|COLON) (types|conditions) #inferredVariableDecl //////////
+    | (EQUAL|COLON) (types|conditions) COMMA* #inferredVariableDecl //////////
     | EQUAL newObjectFromClass  #objectFromClass //////////////
 ;
 

@@ -574,6 +574,12 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionExp(MyParser.FunctionExpContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MyParser#content}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitContent(MyParser.ContentContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MyParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

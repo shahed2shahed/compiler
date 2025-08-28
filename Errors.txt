@@ -17,3 +17,4 @@ Line 13, Column 39: Event Binding To NonFunction'addProduct'. You have to define
 Line 13, Column 39: Event Binding To NonFunction'addProduct'. You have to define this function.
 Line 12, Column 40: Event Binding To NonFunction'goBack'. You have to define this function.
 Line 12, Column 40: Event Binding To NonFunction'goBack'. You have to define this function.
+Line 38, Column 56: Event Binding To NonFunction'cancel'. You have to define this function.

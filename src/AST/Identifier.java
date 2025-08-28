@@ -2,6 +2,8 @@ package AST;
 
 import java.util.List;
 
+import static AST.SelfClosingTag.stripOuterQuotes;
+
 public class Identifier extends PrimitiveTypeNode {
 
     private String value;
@@ -61,8 +63,6 @@ public class Identifier extends PrimitiveTypeNode {
 
             return js.toString();
     }
-
-
 
     @Override
     public String toString() {

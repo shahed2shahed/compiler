@@ -958,6 +958,16 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitFunctionExp(MyParser.FunctionExpContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyParser#content}.
+	 * @param ctx the parse tree
+	 */
+	void enterContent(MyParser.ContentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#content}.
+	 * @param ctx the parse tree
+	 */
+	void exitContent(MyParser.ContentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MyParser#expression}.
 	 * @param ctx the parse tree
 	 */

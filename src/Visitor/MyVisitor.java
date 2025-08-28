@@ -5,7 +5,6 @@ import AST.Module;
 import AST.Void;
 import AST.Number;
 import java.util.*;
-import java.util.function.Function;
 
 import ErrorHandling.*;
 import SymbolTableStructure.*;
@@ -176,11 +175,12 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     public Expression visitFunctionExp(MyParser.FunctionExpContext ctx) {
         FunctionExp nav = new FunctionExp();
 
-        if (ctx.values() != null) {
-            for (var child  : ctx.values()) {
-                nav.addChild((Values) visitValues(child));
+        if (ctx.content() != null) {
+            for (var child  : ctx.content()) {
+                nav.addChild((Content) visitContent(child));
             }
         }
+
 
         if(ctx.propertyAccess() != null) {
             for (var child  : ctx.propertyAccess()) {
@@ -189,6 +189,19 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         }
 
         return nav;
+    }
+
+    @Override
+    public Content visitContent(MyParser.ContentContext ctx) {
+        Values value = null;
+        if(ctx.values()!=null){
+            value = (Values) visitValues(ctx.values());
+        }
+        VariableDeclaration var = null;
+        if(ctx.variableDeclaration()!=null){
+            var = (VariableDeclaration) visitVariableDeclaration(ctx.variableDeclaration());
+        }
+        return new Content(value , var);
     }
 
     @Override

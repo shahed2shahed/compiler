@@ -2,6 +2,9 @@ package AST;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import static AST.SelfClosingTag.stripOuterQuotes;
 
 public class OpenTag extends NormalHtmlTagNode  {
     String tagName;
@@ -40,6 +43,15 @@ public class OpenTag extends NormalHtmlTagNode  {
     public String generate() {
         StringBuilder sb = new StringBuilder();
 
+        boolean hasNgModel = content.stream()
+                .anyMatch(child -> "ngModel".equalsIgnoreCase(child.toString()));
+
+        if (hasNgModel) {
+            System.out.println("[DEBUG] ngModel detected -> delegating to generateHTML()");
+            sb.append(generateHTML());
+            return sb.toString();
+        }
+
         if (content != null && !content.isEmpty()) {
 
             sb.append("<");
@@ -63,6 +75,81 @@ public class OpenTag extends NormalHtmlTagNode  {
             }
         }
         sb.append(">");
+        return sb.toString();
+    }
+
+    @Override
+    public String generateHTML() {
+        StringBuilder sb = new StringBuilder();
+
+        if (content != null && !content.isEmpty()) {
+            // أول عنصر هو اسم التاغ
+            String tagName = content.get(0).generate().trim();
+            sb.append("<").append(tagName);
+
+            Set<String> booleanAttributes = Set.of("required", "disabled", "checked", "readonly", "autofocus");
+
+            String currentName = null;
+            boolean haveEquals = false;
+            String currentValue = null;
+
+            for (int i = 1; i < content.size(); i++) {
+                String part = content.get(i).generate().trim();
+                if (part.isEmpty()) continue;
+
+                // تجاهل binding كامل: [(ngModel)]
+                if ("[".equals(part) && i + 4 < content.size() &&
+                        "(".equals(content.get(i + 1).generate().trim()) &&
+                        "ngModel".equalsIgnoreCase(content.get(i + 2).generate().trim()) &&
+                        ")".equals(content.get(i + 3).generate().trim()) &&
+                        "]".equals(content.get(i + 4).generate().trim())) {
+
+                    i += 4; // تخطي التوكنات الخاصة بـ [(ngModel)]
+                    if (i + 2 < content.size() && "=".equals(content.get(i + 1).generate().trim())) {
+                        i += 2;
+                    }
+                    continue;
+                }
+
+                // علامة =
+                if ("=".equals(part)) {
+                    haveEquals = true;
+                    continue;
+                }
+
+                // إذا لم نحدد اسم الـ attribute بعد
+                if (currentName == null && !haveEquals) {
+                    currentName = part;
+
+                    // name -> id
+                    if ("name".equals(currentName)) {
+                        currentName = "id";
+                    }
+
+                    // Boolean attribute بدون قيمة
+                    if (booleanAttributes.contains(currentName.toLowerCase())) {
+                        sb.append(" ").append(currentName);
+                        currentName = null; // لا ننتظر قيمة
+                    }
+
+                    continue;
+                }
+
+                // إذا وصلنا للقيمة
+                if (haveEquals && (part.startsWith("\"") || part.startsWith("'"))) {
+                    currentValue = stripOuterQuotes(part);
+                    sb.append(" ").append(currentName).append("=\"").append(currentValue).append("\"");
+
+                    // reset
+                    currentName = null;
+                    haveEquals = false;
+                    currentValue = null;
+                }
+            }
+                sb.append(">");
+
+        }
+
         return sb.toString();
     }
 
@@ -92,31 +179,23 @@ public class OpenTag extends NormalHtmlTagNode  {
         return sb.toString();
     }
 
-//    @Override
-//    public String generateJSS() {
-//        StringBuilder sb = new StringBuilder();
-//        if(tagName.equals("button")) {
-//            System.out.println("yessssssssssssssssssssssssssssssss");
-//            sb.append("<button");
-//            for (Types attr : content) {
-//                System.out.println(attr.getClass().getSimpleName() + "Herrrrreyessssssssssssssssssssssssssssssss");
-//
-//                if (attr instanceof EventBinding) {
-//                    EventBinding eb = (EventBinding) attr;
-//                    String expr = eb.functionName.replaceAll("\\{\\{\\s*(.*?)\\s*\\}\\}", "\\$\\{$1\\}");
-//                    sb.append(" onclick=\"").append(expr).append("\"");
-//                }
-//            }
-//            sb.append(">");
-//            if (content != null) {
-//                for (Types attr : content) {
-//                    sb.append(attr.generate());
-//                }
-//            }
-//            sb.append("</button>");
-//        }
-//        return sb.toString();
-//    }
+
+    @Override
+    public String generateNgSubmit() {
+        StringBuilder sb = new StringBuilder();
+        if (content != null && !content.isEmpty()) {
+            sb.append("<");
+//            sb.append(" ");
+            sb.append(tagName);
+            sb.append(" ");
+            sb.append("id = \"");
+            lastGeneratedId = tagName+"Product"+ (i++);
+            sb.append(lastGeneratedId).append("\" ");
+        }
+        sb.append(">");
+        return sb.toString();
+    }
+
 
     @Override
     public String generateID() {
@@ -134,6 +213,7 @@ public class OpenTag extends NormalHtmlTagNode  {
         sb.append(">");
         return sb.toString();
     }
+
 
     public String getLastGeneratedId() {
         return lastGeneratedId;

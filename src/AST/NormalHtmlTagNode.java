@@ -45,7 +45,7 @@ public class NormalHtmlTagNode extends HtmlDeclare {
     public String generate() {
         StringBuilder sb = new StringBuilder();
         boolean childHasNgFor = false;
-        boolean childH = false;
+        boolean isNgSubmit = false;
 
 
         if (openTag != null) {
@@ -55,6 +55,10 @@ public class NormalHtmlTagNode extends HtmlDeclare {
             for (Types child : openTag.getContent()) {
                 if (child instanceof NgForDirective || child.toString().equals("h5")) {
                     isNgDirective = true;
+                }
+
+                if(child.toString().equals("ngSubmit")){
+                    isNgSubmit = true;
                 }
 
             }
@@ -78,11 +82,17 @@ public class NormalHtmlTagNode extends HtmlDeclare {
 
             if (!isNgDirective) {
                 sb.append("\n");
-                if(!childHasNgFor) {
+                if(!childHasNgFor && !isNgSubmit) {
                     sb.append(openTag.generate());
                 }
+
                 if(childHasNgFor && !autoIdAdded) {
                     sb.append(openTag.generateID());
+                    autoIdAdded = true;
+                }
+
+                if(isNgSubmit && !autoIdAdded) {
+                    sb.append(openTag.generateNgSubmit());
                     autoIdAdded = true;
                 }
 
@@ -121,7 +131,6 @@ public class NormalHtmlTagNode extends HtmlDeclare {
                         sb.append(openTag.generate());
                     }
 
-                    // ✅ توليد htmlBody مع تحويل {{ ... }} إلى ${ ... }
                     if (htmlBody != null) {
                         for (Types child : htmlBody) {
                             if (child instanceof TemplateExpression) {

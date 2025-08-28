@@ -2,6 +2,7 @@ package AST;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -26,19 +27,173 @@ public class SelfClosingTag extends HtmlDeclare{
         this.content.add(node);
     }
 
+//    @Override
+//    public String generate() {
+//        StringBuilder sb = new StringBuilder();
+//        if (content != null && !content.isEmpty()) {
+//            sb.append("<");
+//            for (Types child : content) {
+//                System.out.println("xxxxxx"+child.toString());
+//
+//                if (child.toString().equals("ngModel")) {
+//                    sb.append(child.generateHTML(content));
+//                }
+//                else {
+//                    sb.append(child.generate());
+//                }
+//                sb.append(" ");
+//            }
+//        }
+//        sb.append("/>");
+//        return sb.toString();
+//    }
+@Override
+public String generate() {
+    StringBuilder sb = new StringBuilder();
+
+    if (content == null || content.isEmpty()) {
+        return "";
+    }
+
+    // 🔎 أول شي نفحص إذا التاغ فيه ngModel
+    boolean hasNgModel = content.stream()
+            .anyMatch(child -> "ngModel".equalsIgnoreCase(child.toString()));
+
+    boolean hasChangeModel = content.stream()
+            .anyMatch(child -> "change".equalsIgnoreCase(child.toString()));
+
+    if (hasNgModel || hasChangeModel) {
+        System.out.println("[DEBUG] ngModel detected -> delegating to generateHTML()");
+        sb.append(generateHTML());
+        return sb.toString();   // 👈 نستخدم generateHTML الخاص بمعالجة ngModel
+    }
+
+    // 👇 الحالة العادية: توليد عادي
+    sb.append("<");
+    for (Types child : content) {
+        System.out.println("[DEBUG] Normal token -> " + child.toString());
+        sb.append(child.generate()).append(" ");
+    }
+    sb.append("/>");
+    return sb.toString();
+}
+
     @Override
-    public String generate() {
+    public String generateHTML() {
         StringBuilder sb = new StringBuilder();
-        if (content != null && !content.isEmpty()) {
-            sb.append("<");
-            for (Types child : content) {
-                sb.append(child.generate());
-                sb.append("\n");
+
+        if (content == null || content.isEmpty()) return "";
+
+        String tagName = content.get(0).generate().trim();
+        sb.append("<").append(tagName);
+
+        Set<String> booleanAttributes = Set.of("required", "disabled", "checked", "readonly", "autofocus");
+
+        String currentName = null;
+        boolean haveEquals = false;
+        String currentValue = null;
+        boolean addedFileId = false;
+        boolean addedAccept = false;
+
+        for (int i = 1; i < content.size(); i++) {
+            String part = content.get(i).generate().trim();
+            if (part.isEmpty()) continue;
+
+            if ("[".equals(part) && i + 4 < content.size() &&
+                    "(".equals(content.get(i + 1).generate().trim()) &&
+                    "ngModel".equalsIgnoreCase(content.get(i + 2).generate().trim()) &&
+                    ")".equals(content.get(i + 3).generate().trim()) &&
+                    "]".equals(content.get(i + 4).generate().trim())) {
+
+                i += 4;
+                if (i + 2 < content.size() && "=".equals(content.get(i + 1).generate().trim())) {
+                    i += 2;
+                }
+                currentName = null;
+                haveEquals = false;
+                currentValue = null;
+                continue;
+            }
+
+            if (part.startsWith("(")) {
+                while (i < content.size()) {
+                    String t = content.get(i).generate().trim();
+                    if (t.endsWith("\"") || t.endsWith("'")) {
+                        i++;
+                        break;
+                    }
+                    i++;
+                }
+                currentName = null;
+                haveEquals = false;
+                currentValue = null;
+                continue;
+            }
+
+            if ("=".equals(part)) {
+                haveEquals = true;
+                continue;
+            }
+
+            if (currentName == null && !haveEquals) {
+                currentName = part;
+                if ("name".equals(currentName)) currentName = "id";
+
+                if (booleanAttributes.contains(currentName.toLowerCase())) {
+                    sb.append(" ").append(currentName);
+                    currentName = null;
+                }
+                continue;
+            }
+
+            if (haveEquals) {
+                currentValue = stripOuterQuotes(part);
+
+                while (i + 1 < content.size()) {
+                    String next = content.get(i + 1).generate().trim();
+                    if (next.isEmpty() || "=".equals(next) || ">".equals(next) || "/>".equals(next) || "(".equals(next) || "[".equals(next)) break;
+                    i++;
+                    currentValue += stripOuterQuotes(next);
+                }
+
+                if (currentName != null && currentValue != null) {
+                    sb.append(" ").append(currentName).append("=\"").append(currentValue).append("\"");
+                    if ("type".equalsIgnoreCase(currentName) && "file".equalsIgnoreCase(currentValue)) {
+                        addedFileId = true;
+                    }
+                    if ("accept".equalsIgnoreCase(currentName)) {
+                        addedAccept = true;
+                    }
+                }
+
+                currentName = null;
+                haveEquals = false;
+                currentValue = null;
             }
         }
-        sb.append("/>");
+
+        if ("input".equalsIgnoreCase(tagName) && addedFileId) {
+            sb.append(" id=\"imageInput\"");
+            if (!addedAccept) {
+                sb.append(" accept=\"image/*\"");
+            }
+        }
+
+        sb.append(" />");
         return sb.toString();
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public String generateJSS() {
@@ -111,7 +266,7 @@ public class SelfClosingTag extends HtmlDeclare{
     }
 
     // Helpers
-    private static String stripOuterQuotes(String s) {
+    public static String stripOuterQuotes(String s) {
         if (s.length() >= 2) {
             char a = s.charAt(0), b = s.charAt(s.length() - 1);
             if ((a == '"' && b == '"') || (a == '\'' && b == '\'')) {
@@ -195,9 +350,6 @@ public class SelfClosingTag extends HtmlDeclare{
 //        System.out.println("[DEBUG] Finished element generation: " + varName);
 //        return sb.toString();
 //    }
-
-
-
 
     @Override
     public String toString() {

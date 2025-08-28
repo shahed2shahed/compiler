@@ -13,7 +13,8 @@ public abstract class AstNode {
     public String generateCSS()  { return ""; }
     public String generateJS()   { return ""; }
     public String generateJSS()   { return ""; }
-
+    public String generateNgSubmit()   { return ""; }
+    public String generateHTML()   { return ""; }
     public OpenTag getOpenTag() { return new OpenTag(); }
     public String generateID()  { return ""; }
     public String generateRoutJS()  { return ""; }

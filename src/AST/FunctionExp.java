@@ -3,7 +3,7 @@ package AST;
 import java.util.ArrayList;
 
 public class FunctionExp extends Expression{
-    ArrayList<Values> children;
+    ArrayList<Content> children;
     ArrayList<PropertyAccess> propertyAccesses;
 
 
@@ -12,7 +12,7 @@ public class FunctionExp extends Expression{
         this.propertyAccesses = new ArrayList<>();
     }
 
-    public void addChild(Values node) {
+    public void addChild(Content node) {
         this.children.add(node);
     }
     public void addChild(PropertyAccess node) {
@@ -26,7 +26,7 @@ public class FunctionExp extends Expression{
         StringBuilder sb = new StringBuilder();
         sb.append("Function Ex { \n");
         if (this.children.size() > 0) {
-            for (Values child : this.children) {
+            for (Content child : this.children) {
                 sb.append(child + "\n");
             }
         }

@@ -1,6 +1,6 @@
 package AST;
 
-public class PropertyAccess extends AstNode{
+public class PropertyAccess extends Types{
     private String mark;
 
     public PropertyAccess(String mark) {
