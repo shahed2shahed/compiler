@@ -10,6 +10,7 @@ public class OpenTag extends NormalHtmlTagNode  {
     String tagName;
     List<Types> content ;
     private String lastGeneratedId;
+    static String lastGenerated;
 
     private boolean autoIdAdded = false;
 
@@ -47,7 +48,6 @@ public class OpenTag extends NormalHtmlTagNode  {
                 .anyMatch(child -> "ngModel".equalsIgnoreCase(child.toString()));
 
         if (hasNgModel) {
-            System.out.println("[DEBUG] ngModel detected -> delegating to generateHTML()");
             sb.append(generateHTML());
             return sb.toString();
         }
@@ -210,7 +210,7 @@ public class OpenTag extends NormalHtmlTagNode  {
             sb.append(tagName);
             sb.append(" ");
             sb.append("id = \"");
-            lastGeneratedId = tagName+"Product"+ (i++);
+            lastGeneratedId =  tagName+"Product"+i++;
             sb.append(lastGeneratedId).append("\" ");
         }
         sb.append(">");
@@ -240,13 +240,27 @@ public class OpenTag extends NormalHtmlTagNode  {
         return lastGeneratedId;
     }
 
-    @Override
+        @Override
         public String generateJS() {
 
             return getLastGeneratedId();
         }
 
 
+
+    @Override
+    public String generateJSWithBody(List<Types> htmlBody){
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (content != null && !content.isEmpty()) {
+
+            for (Types type : content) {
+                stringBuilder.append(type.generateJS(htmlBody));
+            }
+        }
+
+        return  stringBuilder.toString();
+    }
 
     @Override
     public String toString() {

@@ -1,4 +1,4 @@
-// Generated from C:/Users/ASUS/IdeaProjects/CompilerProjectFinal/src/antlr/antlr/MyParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/ASUS/Desktop/compiler/src/antlr/antlr/MyParser.g4 by ANTLR 4.13.2
 package antlr.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -38,6 +38,16 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitImportStatment(MyParser.ImportStatmentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyParser#module}.
+	 * @param ctx the parse tree
+	 */
+	void enterModule(MyParser.ModuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#module}.
+	 * @param ctx the parse tree
+	 */
+	void exitModule(MyParser.ModuleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MyParser#componentDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -57,6 +67,50 @@ public interface MyParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitComponentBody(MyParser.ComponentBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#componentEle}.
+	 * @param ctx the parse tree
+	 */
+	void enterComponentEle(MyParser.ComponentEleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#componentEle}.
+	 * @param ctx the parse tree
+	 */
+	void exitComponentEle(MyParser.ComponentEleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#style}.
+	 * @param ctx the parse tree
+	 */
+	void enterStyle(MyParser.StyleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#style}.
+	 * @param ctx the parse tree
+	 */
+	void exitStyle(MyParser.StyleContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code templateHtmlDeclaration}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 */
+	void enterTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code templateHtmlDeclaration}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 */
+	void exitTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code templateHtmlUrl}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 */
+	void enterTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code templateHtmlUrl}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 */
+	void exitTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#selectorProperty}.
 	 * @param ctx the parse tree
@@ -78,6 +132,26 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitStandaloneProperty(MyParser.StandalonePropertyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyParser#propertyFun}.
+	 * @param ctx the parse tree
+	 */
+	void enterPropertyFun(MyParser.PropertyFunContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#propertyFun}.
+	 * @param ctx the parse tree
+	 */
+	void exitPropertyFun(MyParser.PropertyFunContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#propertyStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterPropertyStat(MyParser.PropertyStatContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#propertyStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitPropertyStat(MyParser.PropertyStatContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MyParser#importsProperty}.
 	 * @param ctx the parse tree
 	 */
@@ -88,25 +162,59 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitImportsProperty(MyParser.ImportsPropertyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyParser#templateProperty}.
+	 * Enter a parse tree produced by {@link MyParser#exportsProperty}.
 	 * @param ctx the parse tree
 	 */
-	void enterTemplateProperty(MyParser.TemplatePropertyContext ctx);
+	void enterExportsProperty(MyParser.ExportsPropertyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyParser#templateProperty}.
+	 * Exit a parse tree produced by {@link MyParser#exportsProperty}.
 	 * @param ctx the parse tree
 	 */
-	void exitTemplateProperty(MyParser.TemplatePropertyContext ctx);
+	void exitExportsProperty(MyParser.ExportsPropertyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyParser#componentEle}.
+	 * Enter a parse tree produced by {@link MyParser#bootstrapProperty}.
 	 * @param ctx the parse tree
 	 */
-	void enterComponentEle(MyParser.ComponentEleContext ctx);
+	void enterBootstrapProperty(MyParser.BootstrapPropertyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyParser#componentEle}.
+	 * Exit a parse tree produced by {@link MyParser#bootstrapProperty}.
 	 * @param ctx the parse tree
 	 */
-	void exitComponentEle(MyParser.ComponentEleContext ctx);
+	void exitBootstrapProperty(MyParser.BootstrapPropertyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#classType}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassType(MyParser.ClassTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#classType}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassType(MyParser.ClassTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code commonRelation}
+	 * labeled alternative in {@link MyParser#classRelation}.
+	 * @param ctx the parse tree
+	 */
+	void enterCommonRelation(MyParser.CommonRelationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code commonRelation}
+	 * labeled alternative in {@link MyParser#classRelation}.
+	 * @param ctx the parse tree
+	 */
+	void exitCommonRelation(MyParser.CommonRelationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code otherRelation}
+	 * labeled alternative in {@link MyParser#classRelation}.
+	 * @param ctx the parse tree
+	 */
+	void enterOtherRelation(MyParser.OtherRelationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code otherRelation}
+	 * labeled alternative in {@link MyParser#classRelation}.
+	 * @param ctx the parse tree
+	 */
+	void exitOtherRelation(MyParser.OtherRelationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#classStatment}.
 	 * @param ctx the parse tree
@@ -127,6 +235,36 @@ public interface MyParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTypes(MyParser.TypesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#brackets}.
+	 * @param ctx the parse tree
+	 */
+	void enterBrackets(MyParser.BracketsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#brackets}.
+	 * @param ctx the parse tree
+	 */
+	void exitBrackets(MyParser.BracketsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#stateManagement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStateManagement(MyParser.StateManagementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#stateManagement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStateManagement(MyParser.StateManagementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#expressionInBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpressionInBody(MyParser.ExpressionInBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#expressionInBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpressionInBody(MyParser.ExpressionInBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#body}.
 	 * @param ctx the parse tree
@@ -158,101 +296,323 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitPrint_stat(MyParser.Print_statContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code callWithPara}
+	 * Enter a parse tree produced by the {@code callFunctionPara}
 	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterCallWithPara(MyParser.CallWithParaContext ctx);
+	void enterCallFunctionPara(MyParser.CallFunctionParaContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code callWithPara}
+	 * Exit a parse tree produced by the {@code callFunctionPara}
 	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitCallWithPara(MyParser.CallWithParaContext ctx);
+	void exitCallFunctionPara(MyParser.CallFunctionParaContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code callWithoutPara}
+	 * Enter a parse tree produced by the {@code methodCallWithValue}
 	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterCallWithoutPara(MyParser.CallWithoutParaContext ctx);
+	void enterMethodCallWithValue(MyParser.MethodCallWithValueContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code callWithoutPara}
+	 * Exit a parse tree produced by the {@code methodCallWithValue}
 	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitCallWithoutPara(MyParser.CallWithoutParaContext ctx);
+	void exitMethodCallWithValue(MyParser.MethodCallWithValueContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code namedFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Enter a parse tree produced by the {@code methodCallWithListValue}
+	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterNamedFunctionDecl(MyParser.NamedFunctionDeclContext ctx);
+	void enterMethodCallWithListValue(MyParser.MethodCallWithListValueContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code namedFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Exit a parse tree produced by the {@code methodCallWithListValue}
+	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitNamedFunctionDecl(MyParser.NamedFunctionDeclContext ctx);
+	void exitMethodCallWithListValue(MyParser.MethodCallWithListValueContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code arrowFunctionAsFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Enter a parse tree produced by the {@code objectLiteralArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
 	 * @param ctx the parse tree
 	 */
-	void enterArrowFunctionAsFunctionDecl(MyParser.ArrowFunctionAsFunctionDeclContext ctx);
+	void enterObjectLiteralArgumentList(MyParser.ObjectLiteralArgumentListContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code arrowFunctionAsFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Exit a parse tree produced by the {@code objectLiteralArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
 	 * @param ctx the parse tree
 	 */
-	void exitArrowFunctionAsFunctionDecl(MyParser.ArrowFunctionAsFunctionDeclContext ctx);
+	void exitObjectLiteralArgumentList(MyParser.ObjectLiteralArgumentListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code assignedFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Enter a parse tree produced by the {@code withObjectPropertyArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssignedFunctionDecl(MyParser.AssignedFunctionDeclContext ctx);
+	void enterWithObjectPropertyArgumentList(MyParser.WithObjectPropertyArgumentListContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code assignedFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Exit a parse tree produced by the {@code withObjectPropertyArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssignedFunctionDecl(MyParser.AssignedFunctionDeclContext ctx);
+	void exitWithObjectPropertyArgumentList(MyParser.WithObjectPropertyArgumentListContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code withExpressionArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
+	 * @param ctx the parse tree
+	 */
+	void enterWithExpressionArgumentList(MyParser.WithExpressionArgumentListContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code withExpressionArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
+	 * @param ctx the parse tree
+	 */
+	void exitWithExpressionArgumentList(MyParser.WithExpressionArgumentListContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code conditionEqualty}
+	 * labeled alternative in {@link MyParser#conditions}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionEqualty(MyParser.ConditionEqualtyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code conditionEqualty}
+	 * labeled alternative in {@link MyParser#conditions}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionEqualty(MyParser.ConditionEqualtyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code conditionValue}
+	 * labeled alternative in {@link MyParser#conditions}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionValue(MyParser.ConditionValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code conditionValue}
+	 * labeled alternative in {@link MyParser#conditions}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionValue(MyParser.ConditionValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#returnType}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnType(MyParser.ReturnTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#returnType}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnType(MyParser.ReturnTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#returnStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnStat(MyParser.ReturnStatContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#returnStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnStat(MyParser.ReturnStatContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#objectLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjectLiteral(MyParser.ObjectLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#objectLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjectLiteral(MyParser.ObjectLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code identifierObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifierObjectProperty(MyParser.IdentifierObjectPropertyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code identifierObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifierObjectProperty(MyParser.IdentifierObjectPropertyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code importsObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 */
+	void enterImportsObjectProperty(MyParser.ImportsObjectPropertyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code importsObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 */
+	void exitImportsObjectProperty(MyParser.ImportsObjectPropertyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exportsObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 */
+	void enterExportsObjectProperty(MyParser.ExportsObjectPropertyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exportsObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 */
+	void exitExportsObjectProperty(MyParser.ExportsObjectPropertyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code dotPropertyAccessObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 */
+	void enterDotPropertyAccessObjectProperty(MyParser.DotPropertyAccessObjectPropertyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code dotPropertyAccessObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 */
+	void exitDotPropertyAccessObjectProperty(MyParser.DotPropertyAccessObjectPropertyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#propertyAccess}.
+	 * @param ctx the parse tree
+	 */
+	void enterPropertyAccess(MyParser.PropertyAccessContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#propertyAccess}.
+	 * @param ctx the parse tree
+	 */
+	void exitPropertyAccess(MyParser.PropertyAccessContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code simpleDecStat}
+	 * labeled alternative in {@link MyParser#functionDeclarationStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimpleDecStat(MyParser.SimpleDecStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code simpleDecStat}
+	 * labeled alternative in {@link MyParser#functionDeclarationStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimpleDecStat(MyParser.SimpleDecStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code simpleArrayDecStat}
+	 * labeled alternative in {@link MyParser#functionDeclarationStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimpleArrayDecStat(MyParser.SimpleArrayDecStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code simpleArrayDecStat}
+	 * labeled alternative in {@link MyParser#functionDeclarationStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimpleArrayDecStat(MyParser.SimpleArrayDecStatContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#normalfunctionDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterNormalfunctionDecl(MyParser.NormalfunctionDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#normalfunctionDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitNormalfunctionDecl(MyParser.NormalfunctionDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#functionDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionDeclaration(MyParser.FunctionDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#functionDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionDeclaration(MyParser.FunctionDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code paraWithType}
-	 * labeled alternative in {@link MyParser#parameters}.
+	 * labeled alternative in {@link MyParser#parametersType}.
 	 * @param ctx the parse tree
 	 */
 	void enterParaWithType(MyParser.ParaWithTypeContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code paraWithType}
-	 * labeled alternative in {@link MyParser#parameters}.
+	 * labeled alternative in {@link MyParser#parametersType}.
 	 * @param ctx the parse tree
 	 */
 	void exitParaWithType(MyParser.ParaWithTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code paraWithoutType}
-	 * labeled alternative in {@link MyParser#parameters}.
+	 * Enter a parse tree produced by the {@code paraValue}
+	 * labeled alternative in {@link MyParser#parametersType}.
 	 * @param ctx the parse tree
 	 */
-	void enterParaWithoutType(MyParser.ParaWithoutTypeContext ctx);
+	void enterParaValue(MyParser.ParaValueContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code paraWithoutType}
-	 * labeled alternative in {@link MyParser#parameters}.
+	 * Exit a parse tree produced by the {@code paraValue}
+	 * labeled alternative in {@link MyParser#parametersType}.
 	 * @param ctx the parse tree
 	 */
-	void exitParaWithoutType(MyParser.ParaWithoutTypeContext ctx);
+	void exitParaValue(MyParser.ParaValueContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code simpleAssignment}
-	 * labeled alternative in {@link MyParser#assignment}.
+	 * Enter a parse tree produced by the {@code paraHasAccessModifiers}
+	 * labeled alternative in {@link MyParser#parametersContent}.
 	 * @param ctx the parse tree
 	 */
-	void enterSimpleAssignment(MyParser.SimpleAssignmentContext ctx);
+	void enterParaHasAccessModifiers(MyParser.ParaHasAccessModifiersContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code simpleAssignment}
-	 * labeled alternative in {@link MyParser#assignment}.
+	 * Exit a parse tree produced by the {@code paraHasAccessModifiers}
+	 * labeled alternative in {@link MyParser#parametersContent}.
 	 * @param ctx the parse tree
 	 */
-	void exitSimpleAssignment(MyParser.SimpleAssignmentContext ctx);
+	void exitParaHasAccessModifiers(MyParser.ParaHasAccessModifiersContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code paraHasPropertyAccess}
+	 * labeled alternative in {@link MyParser#parametersContent}.
+	 * @param ctx the parse tree
+	 */
+	void enterParaHasPropertyAccess(MyParser.ParaHasPropertyAccessContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code paraHasPropertyAccess}
+	 * labeled alternative in {@link MyParser#parametersContent}.
+	 * @param ctx the parse tree
+	 */
+	void exitParaHasPropertyAccess(MyParser.ParaHasPropertyAccessContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#parameters}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameters(MyParser.ParametersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#parameters}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameters(MyParser.ParametersContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code values}
+	 * labeled alternative in {@link MyParser#templatePropertytemplatePropertyclassRelationclassRelationfunctionCallfunctionCallfunctionCallargumentListargumentListargumentListconditionsconditionsobjectPropertyobjectPropertyobjectPropertyobjectPropertyfunctionDeclarationStatfunctionDeclarationStatparametersTypeparametersTypeparametersContentparametersContentassignmentassignmentassignmentassignmentprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypedirectivesStatmentdirectivesStatmentconditionExpressionconditionExpressionconditionExpressionifElseStatifElseStatifElseStatvariableDeclarationStatvariableDeclarationStatvariableDeclarationStatarrowFunctionarrowFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterValues(MyParser.ValuesContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code values}
+	 * labeled alternative in {@link MyParser#templatePropertytemplatePropertyclassRelationclassRelationfunctionCallfunctionCallfunctionCallargumentListargumentListargumentListconditionsconditionsobjectPropertyobjectPropertyobjectPropertyobjectPropertyfunctionDeclarationStatfunctionDeclarationStatparametersTypeparametersTypeparametersContentparametersContentassignmentassignmentassignmentassignmentprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypedirectivesStatmentdirectivesStatmentconditionExpressionconditionExpressionconditionExpressionifElseStatifElseStatifElseStatvariableDeclarationStatvariableDeclarationStatvariableDeclarationStatarrowFunctionarrowFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitValues(MyParser.ValuesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#operations}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperations(MyParser.OperationsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#operations}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperations(MyParser.OperationsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#subDotAssignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterSubDotAssignment(MyParser.SubDotAssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#subDotAssignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitSubDotAssignment(MyParser.SubDotAssignmentContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code dotAssignment}
 	 * labeled alternative in {@link MyParser#assignment}.
@@ -265,6 +625,42 @@ public interface MyParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDotAssignment(MyParser.DotAssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code assignmentStatement}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentStatement(MyParser.AssignmentStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code assignmentStatement}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentStatement(MyParser.AssignmentStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code assignmentStatementIniti}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentStatementIniti(MyParser.AssignmentStatementInitiContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code assignmentStatementIniti}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentStatementIniti(MyParser.AssignmentStatementInitiContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code simpleAssignment}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimpleAssignment(MyParser.SimpleAssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code simpleAssignment}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimpleAssignment(MyParser.SimpleAssignmentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#templateExpression}.
 	 * @param ctx the parse tree
@@ -335,6 +731,26 @@ public interface MyParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCloseTag(MyParser.CloseTagContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#simpleArray}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimpleArray(MyParser.SimpleArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#simpleArray}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimpleArray(MyParser.SimpleArrayContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#map}.
+	 * @param ctx the parse tree
+	 */
+	void enterMap(MyParser.MapContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#map}.
+	 * @param ctx the parse tree
+	 */
+	void exitMap(MyParser.MapContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#type}.
 	 * @param ctx the parse tree
@@ -462,16 +878,6 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitArrayNumberType(MyParser.ArrayNumberTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyParser#tupleType}.
-	 * @param ctx the parse tree
-	 */
-	void enterTupleType(MyParser.TupleTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MyParser#tupleType}.
-	 * @param ctx the parse tree
-	 */
-	void exitTupleType(MyParser.TupleTypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MyParser#marks}.
 	 * @param ctx the parse tree
 	 */
@@ -492,89 +898,95 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitArrayDeclaration(MyParser.ArrayDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code stringExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Enter a parse tree produced by {@link MyParser#conditionStat}.
 	 * @param ctx the parse tree
 	 */
-	void enterStringExpr(MyParser.StringExprContext ctx);
+	void enterConditionStat(MyParser.ConditionStatContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code stringExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Exit a parse tree produced by {@link MyParser#conditionStat}.
 	 * @param ctx the parse tree
 	 */
-	void exitStringExpr(MyParser.StringExprContext ctx);
+	void exitConditionStat(MyParser.ConditionStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code numberExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Enter a parse tree produced by {@link MyParser#tryStat}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumberExpr(MyParser.NumberExprContext ctx);
+	void enterTryStat(MyParser.TryStatContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code numberExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Exit a parse tree produced by {@link MyParser#tryStat}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumberExpr(MyParser.NumberExprContext ctx);
+	void exitTryStat(MyParser.TryStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code arrayExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Enter a parse tree produced by {@link MyParser#catchStat}.
 	 * @param ctx the parse tree
 	 */
-	void enterArrayExpr(MyParser.ArrayExprContext ctx);
+	void enterCatchStat(MyParser.CatchStatContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code arrayExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Exit a parse tree produced by {@link MyParser#catchStat}.
 	 * @param ctx the parse tree
 	 */
-	void exitArrayExpr(MyParser.ArrayExprContext ctx);
+	void exitCatchStat(MyParser.CatchStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ifElseExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Enter a parse tree produced by {@link MyParser#operationExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterIfElseExpr(MyParser.IfElseExprContext ctx);
+	void enterOperationExpr(MyParser.OperationExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ifElseExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Exit a parse tree produced by {@link MyParser#operationExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitIfElseExpr(MyParser.IfElseExprContext ctx);
+	void exitOperationExpr(MyParser.OperationExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code objectExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Enter a parse tree produced by {@link MyParser#questionCondition}.
 	 * @param ctx the parse tree
 	 */
-	void enterObjectExpr(MyParser.ObjectExprContext ctx);
+	void enterQuestionCondition(MyParser.QuestionConditionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code objectExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Exit a parse tree produced by {@link MyParser#questionCondition}.
 	 * @param ctx the parse tree
 	 */
-	void exitObjectExpr(MyParser.ObjectExprContext ctx);
+	void exitQuestionCondition(MyParser.QuestionConditionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code booleanExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Enter a parse tree produced by {@link MyParser#navigate}.
 	 * @param ctx the parse tree
 	 */
-	void enterBooleanExpr(MyParser.BooleanExprContext ctx);
+	void enterNavigate(MyParser.NavigateContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code booleanExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Exit a parse tree produced by {@link MyParser#navigate}.
 	 * @param ctx the parse tree
 	 */
-	void exitBooleanExpr(MyParser.BooleanExprContext ctx);
+	void exitNavigate(MyParser.NavigateContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code directiveExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Enter a parse tree produced by {@link MyParser#functionExp}.
 	 * @param ctx the parse tree
 	 */
-	void enterDirectiveExpr(MyParser.DirectiveExprContext ctx);
+	void enterFunctionExp(MyParser.FunctionExpContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code directiveExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Exit a parse tree produced by {@link MyParser#functionExp}.
 	 * @param ctx the parse tree
 	 */
-	void exitDirectiveExpr(MyParser.DirectiveExprContext ctx);
+	void exitFunctionExp(MyParser.FunctionExpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#content}.
+	 * @param ctx the parse tree
+	 */
+	void enterContent(MyParser.ContentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#content}.
+	 * @param ctx the parse tree
+	 */
+	void exitContent(MyParser.ContentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpression(MyParser.ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpression(MyParser.ExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ngForDirective}
 	 * labeled alternative in {@link MyParser#directivesStatment}.
@@ -686,15 +1098,51 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitLogicalTerm(MyParser.LogicalTermContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyParser#ifElseStat}.
+	 * Enter a parse tree produced by {@link MyParser#ifStat}.
 	 * @param ctx the parse tree
 	 */
-	void enterIfElseStat(MyParser.IfElseStatContext ctx);
+	void enterIfStat(MyParser.IfStatContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyParser#ifElseStat}.
+	 * Exit a parse tree produced by {@link MyParser#ifStat}.
 	 * @param ctx the parse tree
 	 */
-	void exitIfElseStat(MyParser.IfElseStatContext ctx);
+	void exitIfStat(MyParser.IfStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ifQuestionMark}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfQuestionMark(MyParser.IfQuestionMarkContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ifQuestionMark}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfQuestionMark(MyParser.IfQuestionMarkContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ifReturn}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfReturn(MyParser.IfReturnContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ifReturn}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfReturn(MyParser.IfReturnContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ifElse}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfElse(MyParser.IfElseContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ifElse}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfElse(MyParser.IfElseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#variable_type}.
 	 * @param ctx the parse tree
@@ -726,59 +1174,83 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitNewObjectFromClass(MyParser.NewObjectFromClassContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyParser#toStringNode}.
+	 * @param ctx the parse tree
+	 */
+	void enterToStringNode(MyParser.ToStringNodeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#toStringNode}.
+	 * @param ctx the parse tree
+	 */
+	void exitToStringNode(MyParser.ToStringNodeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code typedVariableDecl}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 */
 	void enterTypedVariableDecl(MyParser.TypedVariableDeclContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code typedVariableDecl}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 */
 	void exitTypedVariableDecl(MyParser.TypedVariableDeclContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code inferredVariableDecl}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 */
 	void enterInferredVariableDecl(MyParser.InferredVariableDeclContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code inferredVariableDecl}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 */
 	void exitInferredVariableDecl(MyParser.InferredVariableDeclContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code objectFromClass}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 */
 	void enterObjectFromClass(MyParser.ObjectFromClassContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code objectFromClass}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 */
 	void exitObjectFromClass(MyParser.ObjectFromClassContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyParser#arrowFunction}.
+	 * Enter a parse tree produced by {@link MyParser#variableDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterArrowFunction(MyParser.ArrowFunctionContext ctx);
+	void enterVariableDeclaration(MyParser.VariableDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyParser#arrowFunction}.
+	 * Exit a parse tree produced by {@link MyParser#variableDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitArrowFunction(MyParser.ArrowFunctionContext ctx);
+	void exitVariableDeclaration(MyParser.VariableDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyParser#arrowBody}.
+	 * Enter a parse tree produced by the {@code varArrowFunction}
+	 * labeled alternative in {@link MyParser#arrowFunction}.
 	 * @param ctx the parse tree
 	 */
-	void enterArrowBody(MyParser.ArrowBodyContext ctx);
+	void enterVarArrowFunction(MyParser.VarArrowFunctionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyParser#arrowBody}.
+	 * Exit a parse tree produced by the {@code varArrowFunction}
+	 * labeled alternative in {@link MyParser#arrowFunction}.
 	 * @param ctx the parse tree
 	 */
-	void exitArrowBody(MyParser.ArrowBodyContext ctx);
+	void exitVarArrowFunction(MyParser.VarArrowFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code eventHandlerArrowFunction}
+	 * labeled alternative in {@link MyParser#arrowFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterEventHandlerArrowFunction(MyParser.EventHandlerArrowFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code eventHandlerArrowFunction}
+	 * labeled alternative in {@link MyParser#arrowFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitEventHandlerArrowFunction(MyParser.EventHandlerArrowFunctionContext ctx);
 }

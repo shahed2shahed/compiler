@@ -45,7 +45,6 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
         string = ctx.BEHAVIORSUBJECT().getText() + ctx.IDENTIFIER().toString() + ctx.FROM().getText() + ctx.STRING().getText();
         return new ImportStatment(string);
     }
-
     @Override
     public StatementNode visitComponentDeclaration(MyParser.ComponentDeclarationContext ctx) {
         ComponentDeclaration componentDeclaration = new ComponentDeclaration();
@@ -165,8 +164,8 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     @Override
     public Expression visitNavigate(MyParser.NavigateContext ctx) {
         Navigate nav = new Navigate();
-        for (var child  : ctx.values()) {
-            nav.addChild((Values) visitValues(child));
+        for (var child  : ctx.content()) {
+            nav.addChild((Content) visitContent(child));
         }
         return nav;
     }
@@ -205,12 +204,24 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
     }
 
     @Override
+    public TemplateHtmlDeclaration visitStyle(MyParser.StyleContext ctx) {
+
+        return new Style( ctx.STYLE().getText() , ctx.COLON().getText() , ctx.STRING().getText());
+    }
+
+    @Override
     public TemplateElement visitTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx) {
-        TemplateHtmlDeclaration templateElement = new TemplateHtmlDeclaration();
+//        TemplateHtmlDeclaration templateElement = new TemplateHtmlDeclaration();
+        List<HtmlDeclare> declare = new ArrayList<>();
         for (var child : ctx.htmlDeclare()){
-            templateElement.addHtmlDeclare( (HtmlDeclare) visit(child));
+            declare.add((HtmlDeclare) visit(child));
         }
-        return templateElement;
+
+        Style style = null;
+        if(ctx.style()!=null){
+            style = (Style)visitStyle(ctx.style());
+        }
+        return new TemplateHtmlDeclaration(declare , style);
     }
 
     @Override
@@ -417,14 +428,7 @@ public class MyVisitor extends MyParserBaseVisitor<AstNode> {
 
     @Override
     public NgForExpression visitNgForExpression(MyParser.NgForExpressionContext ctx) {
-//        String value;
-//        if(ctx.OF1()!=null){
-//            value = ctx.LET1() + " " + ctx.ID1(0) + " " + ctx.OF1() + " " + ctx.ID1(1);
-//        }
-//        else {
-//            value = ctx.LET1() + " " + ctx.ID1(0) + " " + ctx.EQUAL1() + " " + ctx.ID1(1);
-//        }
-//        return new NgForExpression(value);
+
         NgForExpression node = new NgForExpression();
 
         if (ctx.OF1() != null) {

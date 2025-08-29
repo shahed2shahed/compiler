@@ -35,98 +35,97 @@ import { ProductService } from './product.service';
 
         <div class="buttons">
           <button type="submit" [disabled]="!f.valid">Save Product</button>
-    //      <button type="button" class="cancel" (click)="cancel()" >Cancel</button>
         </div>
       </form>
     </div>
   `,
-  // styles: [`
-  //   .form-container {
-  //     max-width: 500px;
-  //     margin: auto;
-  //     background: #fff;
-  //     padding: 20px;
-  //     border-radius: 10px;
-  //     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  //     direction: ltr;
-  //     font-family: 'Segoe UI', sans-serif;
-  //   }
-  //   h2 {
-  //     text-align: center;
-  //     margin-bottom: 20px;
-  //     color: #333;
-  //   }
-  //   .form-group {
-  //     margin-bottom: 15px;
-  //     display: flex;
-  //     flex-direction: column;
-  //   }
-  //   label {
-  //     font-weight: bold;
-  //     margin-bottom: 5px;
-  //     color: #444;
-  //   }
-  //   label span {
-  //     color: red;
-  //   }
-  //   input, textarea {
-  //     padding: 10px;
-  //     border: 1px solid #ddd;
-  //     border-radius: 6px;
-  //     font-size: 14px;
-  //     transition: 0.3s;
-  //   }
-  //   input:focus, textarea:focus {
-  //     border-color: #007bff;
-  //     outline: none;
-  //     box-shadow: 0 0 4px rgba(0,123,255,0.3);
-  //   }
-  //   textarea {
-  //     min-height: 80px;
-  //     resize: vertical;
-  //   }
-  //   .file-input input[type="file"] {
-  //     border: none;
-  //     padding: 5px;
-  //     background: #f8f8f8;
-  //   }
-  //   .buttons {
-  //     display: flex;
-  //     gap: 10px;
-  //     justify-content: center;
-  //     margin-top: 20px;
-  //   }
-  //   button {
-  //     padding: 10px 20px;
-  //     border: none;
-  //     border-radius: 6px;
-  //     font-size: 14px;
-  //     cursor: pointer;
-  //     transition: 0.3s;
-  //   }
-  //   button[type="submit"] {
-  //     background: #28a745;
-  //     color: white;
-  //   }
-  //   button[type="submit"]:hover {
-  //     background: #218838;
-  //   }
-  //   .cancel {
-  //     background: #dc3545;
-  //     color: white;
-  //   }
-  //   .cancel:hover {
-  //     background: #c82333;
-  //   }
-  //   button:disabled {
-  //     background: #ccc;
-  //     cursor: not-allowed;
-  //   }
-  // `]
+  styles: [` "
+    .form-container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      direction: ltr;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #444;
+    }
+    label span {
+      color: red;
+    }
+    input, textarea {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    input:focus, textarea:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 4px rgba(0,123,255,0.3);
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .file-input input[type=file] {
+      border: none;
+      padding: 5px;
+      background: #f8f8f8;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button[type=submit] {
+      background: #28a745;
+      color: white;
+    }
+    button[type=submit]:hover {
+      background: #218838;
+    }
+    .cancel {
+      background: #dc3545;
+      color: white;
+    }
+    .cancel:hover {
+      background: #c82333;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  "`]
 })
 export class AddProductComponent {
-  product: any = { name: '', price: 0, description: '', image: '' };
- // private fileDataUrl: string | null = null;
+  //product: any = { name: '', price: 0, description: '', image: '' };
+  //private fileDataUrl: string | null = null;
 
   constructor(private productService: ProductService, private route: Router) {}
 
@@ -137,7 +136,7 @@ export class AddProductComponent {
     const reader = new FileReader();
     reader.onload = () => {
       this.fileDataUrl = reader.result as string;
-      this.product.image = this.fileDataUrl;
+    //  this.product.image = this.fileDataUrl;
     };
    reader.readAsDataURL(file);
   }
@@ -145,15 +144,11 @@ export class AddProductComponent {
   saveProduct() {
     const imageValue = this.fileDataUrl ?? '';
     this.productService.addProduct({
-           name: this.product.name,
+       name: this.product.name,
        price: this.product.price,
-      description: this.product.description,
+       description: this.product.description,
        image: imageValue
     });
-    this.router.navigate(['/']);
-  }
-
-  cancel() {
     this.router.navigate(['/']);
   }
 }

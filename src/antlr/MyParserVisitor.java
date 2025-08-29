@@ -47,6 +47,32 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitComponentBody(MyParser.ComponentBodyContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MyParser#componentEle}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComponentEle(MyParser.ComponentEleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#style}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStyle(MyParser.StyleContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code templateHtmlDeclaration}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code templateHtmlUrl}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MyParser#selectorProperty}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -88,26 +114,6 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBootstrapProperty(MyParser.BootstrapPropertyContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code templateHtmlDeclaration}
-	 * labeled alternative in {@link MyParser#templateProperty}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code templateHtmlUrl}
-	 * labeled alternative in {@link MyParser#templateProperty}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MyParser#componentEle}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComponentEle(MyParser.ComponentEleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#classType}.
 	 * @param ctx the parse tree

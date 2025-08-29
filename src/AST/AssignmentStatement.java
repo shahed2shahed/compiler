@@ -21,6 +21,17 @@ public class AssignmentStatement extends Assignment{
     }
 
     @Override
+    public String generate() {
+        System.out.println("in generateKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+        StringBuilder sb = new StringBuilder();
+        if(left!=null) sb.append(left.generateJS());
+        sb.append(" = ");
+        if(right!=null) sb.append(right.generate());
+        sb.append(";");
+
+    return sb.toString();
+    }
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Assignment :");

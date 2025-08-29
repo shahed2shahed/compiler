@@ -11,6 +11,13 @@ public class TypedVariableDecl extends VariableDeclarationStat{
     }
 
     @Override
+    public String generateVarJS(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("= "+ types.generateVarJS()+"\n");
+        return sb.toString();
+    }
+
+    @Override
     public String generate(){
         StringBuilder sb = new StringBuilder();
         System.out.println("Variab" + unionType.getLeft().generate());

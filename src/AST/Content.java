@@ -10,6 +10,28 @@ public class Content extends FunctionExp{
     }
 
     @Override
+    public String generate(){
+        StringBuilder sb = new StringBuilder();
+        if (variableDeclaration != null){
+            sb.append(variableDeclaration.generate());
+        }
+        if (values != null){
+            sb.append(values.generate());
+        }
+        return sb.toString();
+    }
+
+
+    @Override
+    public String generateJS(){
+    StringBuilder sb = new StringBuilder();
+    if (variableDeclaration != null){
+        sb.append(variableDeclaration.generate());
+    }
+    return sb.toString();
+    }
+
+    @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();

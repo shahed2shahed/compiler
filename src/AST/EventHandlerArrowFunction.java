@@ -1,6 +1,5 @@
 package AST;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventHandlerArrowFunction extends ArrowFunction{
@@ -13,13 +12,29 @@ public class EventHandlerArrowFunction extends ArrowFunction{
         this.property = property;
         this.parameters = parameters;
         this.type = type;
-        this.body = new ArrayList<Body>();
+        this.body = body;
     }
 
-    public void addChild(Body node) {
-        this.body.add(node);
-    }
+    @Override
+    public String generateVarJS() {
+        StringBuilder s = new StringBuilder();
+        if (property!=null){
+            s.append(property.generate());
+        }
+        s.append(" =");
+        s.append(parameters.generate());
+        s.append("=> { \n");
 
+        if (!body.isEmpty()){
+            for (var bodyI : body) {
+                s.append(bodyI.generate());
+                s.append("\n");
+            }
+        }
+        s.append("};");
+        s.append("\n");
+        return s.toString();
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -32,7 +47,7 @@ public class EventHandlerArrowFunction extends ArrowFunction{
         if (type != null) {
             sb.append("Type : " + type + "\n");
         }
-        if (body != null) {
+        if (body != null && !body.isEmpty()) {
             sb.append("Body : \n");
             for (Body child : this.body) {
                 sb.append(child + "\n");

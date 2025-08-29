@@ -25,6 +25,8 @@ public String generateJS(List<Types> bodyChildren ,StringBuilder s) {
         String indexVar = node.getIndexVar();
 
         js.append("\n");
+        js.append(" let products = JSON.parse(localStorage.getItem(\"products\") || \"[]\");\n");
+
         js.append("function renderProducts() {");
         js.append('\n');
         js.append("div").append(getI() -1).append(".innerHTML = '';\n");

@@ -3,13 +3,13 @@ package AST;
 import java.util.ArrayList;
 
 public class Navigate extends Expression {
-    ArrayList<Values> children;
+    ArrayList<Content> children;
 
     public Navigate() {
         this.children = new ArrayList<>();
     }
 
-    public void addChild(Values node) {
+    public void addChild(Content node) {
         this.children.add(node);
     }
 
@@ -18,7 +18,7 @@ public class Navigate extends Expression {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Navigate { \n");
-        for (Values child : this.children) {
+        for (Content child : this.children) {
             sb.append(child + "\n");
         }
         sb.append("}\n");

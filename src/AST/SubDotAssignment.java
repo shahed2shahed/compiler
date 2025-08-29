@@ -15,6 +15,17 @@ public class SubDotAssignment extends Assignment{
     }
 
     @Override
+    public String generate() {
+        StringBuilder str = new StringBuilder();
+        str.append("[");
+        for (Values node : values) {
+            str.append(node.generate());
+        }
+        str.append("]");
+        return str.toString();
+    }
+
+    @Override
     public String toString() {
 
         StringBuilder sb = new StringBuilder();

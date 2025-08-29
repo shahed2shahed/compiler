@@ -14,7 +14,6 @@ public class ComponentSymbolTable{
             this.moduleName = moduleName;
         }
     }
-
     List<ImportEntry> importedModules = new ArrayList<>();
     public void addImport(String key, String moduleName) {
         importedModules.add(new ImportEntry(key, moduleName));
@@ -29,8 +28,6 @@ public class ComponentSymbolTable{
         }
         return false;
     }
-
-
 
     @Override
     public String toString() {

@@ -9,7 +9,7 @@ public class Parameters extends AstNode{
 
 
     public Parameters(){
-        this.parameters = new ArrayList<ParametersContent>();
+        this.parameters = new ArrayList<>();
     }
     public List<ParametersContent> getParameters(){
         return parameters;
@@ -37,6 +37,13 @@ public class Parameters extends AstNode{
         for(ParametersContent node : parameters){
             str.append(node.generateRoutJS());
         }
+        return str.toString();
+    }
+
+    @Override
+    public String generate(){
+        StringBuilder str = new StringBuilder();
+        str.append("()");
         return str.toString();
     }
 

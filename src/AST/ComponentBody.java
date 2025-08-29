@@ -33,6 +33,16 @@ public class ComponentBody extends ComponentDeclaration{
     }
 
     @Override
+    public String generateCSS() {
+        StringBuilder sb = new StringBuilder();
+        for (ComponentEle decl : componentEle) {
+            sb.append(decl.generateCSS());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
     public String generateJS() {
         StringBuilder sb = new StringBuilder();
         for (ComponentEle decl : componentEle) {

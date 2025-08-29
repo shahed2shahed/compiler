@@ -2,73 +2,78 @@ parser grammar MyParser;
 
 options { tokenVocab = MyLexer; }
 
-program: ////////////
+program:
     (statement)*
     ;
 
-statement: /////////////
-      importStatment ///////
-    | componentDeclaration ////////
-    | classStatment ////
-    | functionCall /////
+statement:
+      importStatment
+    | componentDeclaration
+    | classStatment
+    | functionCall
     ;
 
-importStatment: ///////////
+importStatment:
     IMPORT CURLY_OPEN_BRACKET (IDENTIFIER|BEHAVIORSUBJECT) (COMMA IDENTIFIER)* CURLY_CLOSE_BRACKET FROM STRING SEMI_COLON
     ;
 
-module: //////
+module:
       COMPONENT
     | NGMODULE
     | INJECTABLE
     ;
 
-componentDeclaration: //////////
+componentDeclaration:
     module OPEN_BRACKET CURLY_OPEN_BRACKET componentBody CURLY_CLOSE_BRACKET CLOSE_BRACKET COMMA?;
 
-componentBody: ///////////////
+componentBody:
     componentEle (COMMA componentEle)* COMMA?
     ;
 
-selectorProperty: //////////////
+componentEle:
+      selectorProperty
+    | standaloneProperty
+    | importsProperty
+    | exportsProperty
+    | bootstrapProperty
+    | templateProperty
+    ;
+
+
+style: STYLE COLON SQUARE_OPEN_BRACKET QUOT STRING QUOT SQUARE_CLOSE_BRACKET;
+
+templateProperty:
+      TEMPLATE COLON QUOT htmlDeclare+ QUOT (COMMA style)? #templateHtmlDeclaration
+    | IDENTIFIER COLON STRING #templateHtmlUrl
+    ;
+
+
+selectorProperty:
     SELECTOR COLON STRING
     ;
 
-standaloneProperty: //////////////
+standaloneProperty:
     STANDALONE COLON BOOLEAN
     ;
 
 propertyFun:;
 
-propertyStat: ///////////
+propertyStat:
     COLON SQUARE_OPEN_BRACKET (IDENTIFIER|propertyFun) (COMMA IDENTIFIER)* SQUARE_CLOSE_BRACKET
     ;
 
-importsProperty: /////////////
+importsProperty:
     IMPORTS propertyStat
     ;
 
-exportsProperty: ///////////
+exportsProperty:
     EXPORTS propertyStat
     ;
 
-bootstrapProperty: //////////
+bootstrapProperty:
     IDENTIFIER propertyStat
     ;
 
-templateProperty: //////////////
-      TEMPLATE COLON QUOT htmlDeclare+ QUOT #templateHtmlDeclaration ///////////
-    | IDENTIFIER COLON STRING #templateHtmlUrl ////////
-    ;
-
-componentEle: //////////
-      selectorProperty  /////////
-    | standaloneProperty ////////
-    | importsProperty ///////
-    | exportsProperty /////////
-    | bootstrapProperty ////////
-    | templateProperty //////////
-    ;
 
 classType: //////////
       IMPLEMENTS
@@ -215,12 +220,11 @@ subDotAssignment: ///////////
         (QUESTION_MARK DOT SQUARE_OPEN_BRACKET values SQUARE_CLOSE_BRACKET)*
         ;
 
-assignment: /////////////
-      IDENTIFIER EQUAL expression SEMI_COLON             #simpleAssignment //////////
-    | propertyAccess subDotAssignment (EQUAL NOT? type (operations values)? )? SEMI_COLON?  #dotAssignment /////////
-    | assignment EQUAL assignment (AS primitiveType SEMI_COLON)? #assignmentStatement /////////
-  //  | assignment EQUAL assignment (AS primitiveType SEMI_COLON)* #assignmentStatement
-    | propertyAccess EQUAL objectLiteral SEMI_COLON #assignmentStatementIniti //////
+assignment:
+      IDENTIFIER EQUAL expression SEMI_COLON             #simpleAssignment
+    | propertyAccess subDotAssignment (EQUAL NOT? type (operations values)? )? SEMI_COLON?  #dotAssignment
+    | assignment EQUAL assignment (AS primitiveType SEMI_COLON)? #assignmentStatement
+    | propertyAccess EQUAL objectLiteral SEMI_COLON #assignmentStatementIniti
     ;
 
 templateExpression:
@@ -315,64 +319,65 @@ marks: //////////////
     |NOT
     ;
 
-arrayDeclaration: /////////////
+arrayDeclaration:
     SQUARE_OPEN_BRACKET (expression (COMMA expression COMMA*)* )? SQUARE_CLOSE_BRACKET
     ;
 
-conditionStat: ////////////
+conditionStat:
     CURLY_OPEN_BRACKET expression* CURLY_CLOSE_BRACKET
     ;
 
-tryStat:////////
+tryStat:
     TRY conditionStat
     ;
 
-catchStat: /////////////
+catchStat:
      CATCH conditionStat
     ;
 
-operationExpr://///////
+operationExpr:
       values (operations values)?
      ;
 
-questionCondition: ///////////
+questionCondition:
     propertyAccess QUESTION_MARK+ values
     ;
 
-navigate: IDENTIFIER DOT ROUTER DOT NAVIGATE OPEN_BRACKET SQUARE_OPEN_BRACKET values (COMMA values)* SQUARE_CLOSE_BRACKET CLOSE_BRACKET SEMI_COLON;
+navigate: IDENTIFIER DOT ROUTER DOT NAVIGATE OPEN_BRACKET SQUARE_OPEN_BRACKET content (COMMA content)* SQUARE_CLOSE_BRACKET CLOSE_BRACKET SEMI_COLON;
 functionExp : NUMBER? OPEN_BRACKET? propertyAccess* OPEN_BRACKET CURLY_OPEN_BRACKET* content* CURLY_CLOSE_BRACKET* CLOSE_BRACKET* SEMI_COLON;
 
 content:
              values
-           | variableDeclaration;
+           | variableDeclaration
+           | propertyAccess ;
 
-expression: ///////////
-      values //////////
+expression:
+      values
     | navigate
-    | arrayDeclaration //////////
-    | variableDeclaration /////
-    | ifElseStat //////
-    | tryStat //////////
-    | catchStat /////////
-    | objectLiteral /////////
-    | functionExp //////////
-    | directivesStatment ///////////
-    | propertyAccess ////////
-    | assignment //////////
-    | questionCondition /////////
-    | operationExpr ///////////
+    | arrayDeclaration
+    | variableDeclaration
+    | ifElseStat
+    | tryStat
+    | catchStat
+    | objectLiteral
+    | functionExp
+    | directivesStatment
+    | propertyAccess
+    | assignment
+    | questionCondition
+    | operationExpr
     ;
 
-directivesStatment: ////////////
-      NgFor EQUAL1 ngForValue          #ngForDirective //////////////
-    | NgIf EQUAL2 ngIfValue            #ngIfDirective ////////////
+directivesStatment:
+      NgFor EQUAL1 ngForValue          #ngForDirective
+    | NgIf EQUAL2 ngIfValue            #ngIfDirective
     ;
 
-ngForValue: //////////
+ngForValue:
       DQUOT1 ngForExpression* DQUOT2
     ;
 
-ngForExpression: ////////////
+ngForExpression:
       LET1 ID1 OF1 ID1 (SEMI_COLON5? LET1 ID1 EQUAL1 ID1)?
     ;
 

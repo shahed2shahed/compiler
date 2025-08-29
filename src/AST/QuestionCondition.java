@@ -8,7 +8,12 @@ public class QuestionCondition extends Expression {
         this.property = property;
         this.values = values;
     }
-
+    @Override
+    public String generateJSS(){
+        StringBuilder s = new StringBuilder();
+        s.append(property.generateVarJS());
+        return s.toString();
+    }
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

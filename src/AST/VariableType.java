@@ -16,6 +16,13 @@ public class VariableType extends AstNode{
     }
 
     @Override
+    public String generate(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(value);
+        sb.append(" ");
+        return sb.toString();
+    }
+    @Override
     public String toString() {
         return value;
     }

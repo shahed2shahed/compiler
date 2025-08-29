@@ -1,0 +1,80 @@
+
+
+
+/////////////////////////////////////edit 
+<div class="form-container">
+  <h2>Edit Product</h2>
+  <form id="editProductForm" novalidate>
+    
+    <div class="form-group">
+      <label>Product Name<span>*</span></label>
+      <input id="name" name="name" required placeholder="Enter product name" />
+    </div>
+
+    <div class="form-group">
+      <label>Price</label>
+      <input id="price" name="price" type="number" placeholder="Example: 50" />
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="description" name="description" placeholder="Enter product description"></textarea>
+    </div>
+
+    <div class="form-group file-input">
+      <label>Product Image</label>
+      <input type="file" id="imageInput" accept="image/*" />
+    </div>
+
+    <div class="buttons">
+      <button type="submit" id="saveBtn">Save Changes</button>
+    </div>
+  </form>
+</div>
+
+
+
+
+
+
+// جلب المنتج حسب ID (من query string مثلاً)
+const urlParams = new URLSearchParams(window.location.search);
+const productId = Number(urlParams.get("id"));
+
+
+let product = products.find(p => p.id === productId) || { id: 0, name: "", price: 0, description: "", image: "", date: "" };
+
+// ربط الـ inputs مع بيانات المنتج
+document.getElementById("name").value = product.name;
+document.getElementById("price").value = product.price;
+document.getElementById("description").value = product.description;
+
+// التعامل مع اختيار الصورة
+let fileDataUrl = null;
+document.getElementById("imageInput").addEventListener("change", function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function() {
+    fileDataUrl = reader.result;
+    product.image = fileDataUrl;
+  };
+  reader.readAsDataURL(file);
+});
+
+// حفظ التعديلات عند submit
+document.getElementById("editProductForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  product.name = document.getElementById("name").value;
+  product.price = Number(document.getElementById("price").value);
+  product.description = document.getElementById("description").value;
+
+  // تحديث المنتج في المصفوفة
+  const index = products.findIndex(p => p.id === product.id);
+  if (index >= 0) products[index] = product;
+
+  // الانتقال لصفحة تفاصيل المنتج (محاكاة)
+  window.location.href = `product-details.html?id=${product.id}`;
+});
+

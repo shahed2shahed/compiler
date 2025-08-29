@@ -8,6 +8,7 @@ public class VariableDeclaration extends Expression {
     VariableType type;
     List<PropertyAccess> access;
     VariableDeclarationStat stat;
+    private static String image;
 
     public VariableDeclaration() {
         super();
@@ -25,15 +26,28 @@ public class VariableDeclaration extends Expression {
     }
 
     @Override
+    public String generateVarJS(){
+        StringBuilder sb = new StringBuilder();
+        if (type != null) {
+            sb.append(type.generate());
+        }
+
+        if (access != null && access.size() > 0) {
+            for(PropertyAccess p : access){
+                sb.append(p.generate());
+            }
+        }
+
+        if (stat != null) {
+            sb.append(stat.generateVarJS());
+        }
+        return sb.toString();
+    }
+
+    @Override
     public String generateJS(){
         StringBuilder sb = new StringBuilder();
-//        if (access != null) {
-//            sb.append("const ");
-//            for (PropertyAccess pa : access) {
-//                sb.append(pa.generate());
-//            }
-//        }
-//
+
         if (stat.getClass().getSimpleName().equals("TypedVariableDecl")) {
             sb.append(stat.generate());
         }
@@ -47,6 +61,35 @@ public class VariableDeclaration extends Expression {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public String generate(){
+        StringBuilder sb = new StringBuilder();
+        if (access != null && access.size() > 0) {
+
+            for(PropertyAccess p : access){
+                if(p.toString().equals("imageValue")){
+                    StringBuilder e = new StringBuilder();
+
+                    image = e.append(stat.generateJSS()).toString();
+                    sb.append("");
+                }
+                else {
+                    sb.append(p.generate());
+
+                    if (stat != null) {
+                        sb.append(stat.generateJS());
+                    }
+                }
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static String getImage() {
+        return image;
     }
 
     @Override
@@ -67,4 +110,6 @@ public class VariableDeclaration extends Expression {
 
         return sb.toString();
   }
+
+
 }

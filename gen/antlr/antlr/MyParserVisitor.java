@@ -1,4 +1,4 @@
-// Generated from C:/Users/ASUS/IdeaProjects/CompilerProjectFinal/src/antlr/antlr/MyParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/ASUS/Desktop/compiler/src/antlr/antlr/MyParser.g4 by ANTLR 4.13.2
 package antlr.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -29,6 +29,12 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitImportStatment(MyParser.ImportStatmentContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MyParser#module}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitModule(MyParser.ModuleContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MyParser#componentDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -40,6 +46,32 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitComponentBody(MyParser.ComponentBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#componentEle}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComponentEle(MyParser.ComponentEleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#style}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStyle(MyParser.StyleContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code templateHtmlDeclaration}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code templateHtmlUrl}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#selectorProperty}.
 	 * @param ctx the parse tree
@@ -53,23 +85,55 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStandaloneProperty(MyParser.StandalonePropertyContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MyParser#propertyFun}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPropertyFun(MyParser.PropertyFunContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#propertyStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPropertyStat(MyParser.PropertyStatContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MyParser#importsProperty}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitImportsProperty(MyParser.ImportsPropertyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyParser#templateProperty}.
+	 * Visit a parse tree produced by {@link MyParser#exportsProperty}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTemplateProperty(MyParser.TemplatePropertyContext ctx);
+	T visitExportsProperty(MyParser.ExportsPropertyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyParser#componentEle}.
+	 * Visit a parse tree produced by {@link MyParser#bootstrapProperty}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitComponentEle(MyParser.ComponentEleContext ctx);
+	T visitBootstrapProperty(MyParser.BootstrapPropertyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#classType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitClassType(MyParser.ClassTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code commonRelation}
+	 * labeled alternative in {@link MyParser#classRelation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCommonRelation(MyParser.CommonRelationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code otherRelation}
+	 * labeled alternative in {@link MyParser#classRelation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOtherRelation(MyParser.OtherRelationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#classStatment}.
 	 * @param ctx the parse tree
@@ -82,6 +146,24 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTypes(MyParser.TypesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#brackets}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBrackets(MyParser.BracketsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#stateManagement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStateManagement(MyParser.StateManagementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#expressionInBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressionInBody(MyParser.ExpressionInBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#body}.
 	 * @param ctx the parse tree
@@ -101,61 +183,192 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrint_stat(MyParser.Print_statContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code callWithPara}
+	 * Visit a parse tree produced by the {@code callFunctionPara}
 	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCallWithPara(MyParser.CallWithParaContext ctx);
+	T visitCallFunctionPara(MyParser.CallFunctionParaContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code callWithoutPara}
+	 * Visit a parse tree produced by the {@code methodCallWithValue}
 	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCallWithoutPara(MyParser.CallWithoutParaContext ctx);
+	T visitMethodCallWithValue(MyParser.MethodCallWithValueContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code namedFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Visit a parse tree produced by the {@code methodCallWithListValue}
+	 * labeled alternative in {@link MyParser#functionCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNamedFunctionDecl(MyParser.NamedFunctionDeclContext ctx);
+	T visitMethodCallWithListValue(MyParser.MethodCallWithListValueContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code arrowFunctionAsFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Visit a parse tree produced by the {@code objectLiteralArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArrowFunctionAsFunctionDecl(MyParser.ArrowFunctionAsFunctionDeclContext ctx);
+	T visitObjectLiteralArgumentList(MyParser.ObjectLiteralArgumentListContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code assignedFunctionDecl}
-	 * labeled alternative in {@link MyParser#functionDeclaration}.
+	 * Visit a parse tree produced by the {@code withObjectPropertyArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssignedFunctionDecl(MyParser.AssignedFunctionDeclContext ctx);
+	T visitWithObjectPropertyArgumentList(MyParser.WithObjectPropertyArgumentListContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code withExpressionArgumentList}
+	 * labeled alternative in {@link MyParser#argumentList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWithExpressionArgumentList(MyParser.WithExpressionArgumentListContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code conditionEqualty}
+	 * labeled alternative in {@link MyParser#conditions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConditionEqualty(MyParser.ConditionEqualtyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code conditionValue}
+	 * labeled alternative in {@link MyParser#conditions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConditionValue(MyParser.ConditionValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#returnType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnType(MyParser.ReturnTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#returnStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnStat(MyParser.ReturnStatContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#objectLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectLiteral(MyParser.ObjectLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code identifierObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentifierObjectProperty(MyParser.IdentifierObjectPropertyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code importsObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImportsObjectProperty(MyParser.ImportsObjectPropertyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exportsObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExportsObjectProperty(MyParser.ExportsObjectPropertyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code dotPropertyAccessObjectProperty}
+	 * labeled alternative in {@link MyParser#objectProperty}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDotPropertyAccessObjectProperty(MyParser.DotPropertyAccessObjectPropertyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#propertyAccess}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPropertyAccess(MyParser.PropertyAccessContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code simpleDecStat}
+	 * labeled alternative in {@link MyParser#functionDeclarationStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleDecStat(MyParser.SimpleDecStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code simpleArrayDecStat}
+	 * labeled alternative in {@link MyParser#functionDeclarationStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleArrayDecStat(MyParser.SimpleArrayDecStatContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#normalfunctionDecl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNormalfunctionDecl(MyParser.NormalfunctionDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#functionDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionDeclaration(MyParser.FunctionDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code paraWithType}
-	 * labeled alternative in {@link MyParser#parameters}.
+	 * labeled alternative in {@link MyParser#parametersType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParaWithType(MyParser.ParaWithTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code paraWithoutType}
-	 * labeled alternative in {@link MyParser#parameters}.
+	 * Visit a parse tree produced by the {@code paraValue}
+	 * labeled alternative in {@link MyParser#parametersType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParaWithoutType(MyParser.ParaWithoutTypeContext ctx);
+	T visitParaValue(MyParser.ParaValueContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code simpleAssignment}
-	 * labeled alternative in {@link MyParser#assignment}.
+	 * Visit a parse tree produced by the {@code paraHasAccessModifiers}
+	 * labeled alternative in {@link MyParser#parametersContent}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSimpleAssignment(MyParser.SimpleAssignmentContext ctx);
+	T visitParaHasAccessModifiers(MyParser.ParaHasAccessModifiersContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code paraHasPropertyAccess}
+	 * labeled alternative in {@link MyParser#parametersContent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParaHasPropertyAccess(MyParser.ParaHasPropertyAccessContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#parameters}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameters(MyParser.ParametersContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code values}
+	 * labeled alternative in {@link MyParser#templatePropertytemplatePropertyclassRelationclassRelationfunctionCallfunctionCallfunctionCallargumentListargumentListargumentListconditionsconditionsobjectPropertyobjectPropertyobjectPropertyobjectPropertyfunctionDeclarationStatfunctionDeclarationStatparametersTypeparametersTypeparametersContentparametersContentassignmentassignmentassignmentassignmentprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypeprimitiveTypedirectivesStatmentdirectivesStatmentconditionExpressionconditionExpressionconditionExpressionifElseStatifElseStatifElseStatvariableDeclarationStatvariableDeclarationStatvariableDeclarationStatarrowFunctionarrowFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValues(MyParser.ValuesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#operations}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOperations(MyParser.OperationsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#subDotAssignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSubDotAssignment(MyParser.SubDotAssignmentContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code dotAssignment}
 	 * labeled alternative in {@link MyParser#assignment}.
@@ -163,6 +376,27 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDotAssignment(MyParser.DotAssignmentContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code assignmentStatement}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignmentStatement(MyParser.AssignmentStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code assignmentStatementIniti}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignmentStatementIniti(MyParser.AssignmentStatementInitiContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code simpleAssignment}
+	 * labeled alternative in {@link MyParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleAssignment(MyParser.SimpleAssignmentContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#templateExpression}.
 	 * @param ctx the parse tree
@@ -205,6 +439,18 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCloseTag(MyParser.CloseTagContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#simpleArray}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleArray(MyParser.SimpleArrayContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#map}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMap(MyParser.MapContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#type}.
 	 * @param ctx the parse tree
@@ -280,12 +526,6 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArrayNumberType(MyParser.ArrayNumberTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyParser#tupleType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTupleType(MyParser.TupleTypeContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MyParser#marks}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -298,54 +538,59 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArrayDeclaration(MyParser.ArrayDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code stringExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Visit a parse tree produced by {@link MyParser#conditionStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStringExpr(MyParser.StringExprContext ctx);
+	T visitConditionStat(MyParser.ConditionStatContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code numberExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Visit a parse tree produced by {@link MyParser#tryStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNumberExpr(MyParser.NumberExprContext ctx);
+	T visitTryStat(MyParser.TryStatContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code arrayExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Visit a parse tree produced by {@link MyParser#catchStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArrayExpr(MyParser.ArrayExprContext ctx);
+	T visitCatchStat(MyParser.CatchStatContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ifElseExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Visit a parse tree produced by {@link MyParser#operationExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIfElseExpr(MyParser.IfElseExprContext ctx);
+	T visitOperationExpr(MyParser.OperationExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code objectExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Visit a parse tree produced by {@link MyParser#questionCondition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitObjectExpr(MyParser.ObjectExprContext ctx);
+	T visitQuestionCondition(MyParser.QuestionConditionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code booleanExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Visit a parse tree produced by {@link MyParser#navigate}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBooleanExpr(MyParser.BooleanExprContext ctx);
+	T visitNavigate(MyParser.NavigateContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code directiveExpr}
-	 * labeled alternative in {@link MyParser#expression}.
+	 * Visit a parse tree produced by {@link MyParser#functionExp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDirectiveExpr(MyParser.DirectiveExprContext ctx);
+	T visitFunctionExp(MyParser.FunctionExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#content}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitContent(MyParser.ContentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression(MyParser.ExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ngForDirective}
 	 * labeled alternative in {@link MyParser#directivesStatment}.
@@ -412,11 +657,32 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLogicalTerm(MyParser.LogicalTermContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyParser#ifElseStat}.
+	 * Visit a parse tree produced by {@link MyParser#ifStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIfElseStat(MyParser.IfElseStatContext ctx);
+	T visitIfStat(MyParser.IfStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ifQuestionMark}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfQuestionMark(MyParser.IfQuestionMarkContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ifReturn}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfReturn(MyParser.IfReturnContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ifElse}
+	 * labeled alternative in {@link MyParser#ifElseStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfElse(MyParser.IfElseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyParser#variable_type}.
 	 * @param ctx the parse tree
@@ -436,36 +702,50 @@ public interface MyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewObjectFromClass(MyParser.NewObjectFromClassContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MyParser#toStringNode}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitToStringNode(MyParser.ToStringNodeContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code typedVariableDecl}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTypedVariableDecl(MyParser.TypedVariableDeclContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code inferredVariableDecl}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInferredVariableDecl(MyParser.InferredVariableDeclContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code objectFromClass}
-	 * labeled alternative in {@link MyParser#variableDeclaration}.
+	 * labeled alternative in {@link MyParser#variableDeclarationStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitObjectFromClass(MyParser.ObjectFromClassContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyParser#arrowFunction}.
+	 * Visit a parse tree produced by {@link MyParser#variableDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArrowFunction(MyParser.ArrowFunctionContext ctx);
+	T visitVariableDeclaration(MyParser.VariableDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyParser#arrowBody}.
+	 * Visit a parse tree produced by the {@code varArrowFunction}
+	 * labeled alternative in {@link MyParser#arrowFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArrowBody(MyParser.ArrowBodyContext ctx);
+	T visitVarArrowFunction(MyParser.VarArrowFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code eventHandlerArrowFunction}
+	 * labeled alternative in {@link MyParser#arrowFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEventHandlerArrowFunction(MyParser.EventHandlerArrowFunctionContext ctx);
 }

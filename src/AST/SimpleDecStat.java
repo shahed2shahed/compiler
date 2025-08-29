@@ -11,7 +11,7 @@ public class SimpleDecStat extends FunctionDeclarationStat{
         this.unionTypeNode = unionTypeNode;
     }
 
-    @Override
+        @Override
     public String generateJS(){
         StringBuilder sb = new StringBuilder();
         sb.append(parameters.generateJS());

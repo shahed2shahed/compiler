@@ -15,6 +15,31 @@ public class DotAssignment extends  Assignment {
         this.values = values;
     }
 
+    @Override
+    public String generateVarJS(){
+        StringBuilder varJS = new StringBuilder();
+        varJS.append(property.generate());
+        varJS.append(subDotAssignment.generate());
+        varJS.append(";");
+        return varJS.toString();
+    }
+
+    @Override
+    public String generateJS(){
+        StringBuilder varJS = new StringBuilder();
+        varJS.append(property.generateJS());
+        //    varJS.append(subDotAssignment.generate());
+        return varJS.toString();
+    }
+
+    @Override
+    public String generate(){
+        StringBuilder varJS = new StringBuilder();
+        varJS.append(property.generate());
+    //    varJS.append(subDotAssignment.generate());
+        return varJS.toString();
+    }
+
     public DotAssignment(PropertyAccess property , SubDotAssignment subDotAssignment , Type type) {
         this.property = property;
         this.subDotAssignment = subDotAssignment;

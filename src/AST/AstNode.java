@@ -11,6 +11,7 @@ public abstract class AstNode {
     public String generate() { return ""; }
     public String generateHTML(String css , String js) { return ""; }
     public String generateCSS()  { return ""; }
+    public String generateVarJS()  { return ""; }
     public String generateJS()   { return ""; }
     public String generateJSS()   { return ""; }
     public String generateNgSubmit()   { return ""; }

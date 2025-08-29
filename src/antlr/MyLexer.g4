@@ -5,6 +5,7 @@ lexer grammar MyLexer;
 IMPORT      : 'import';
 CLICK       :  'click' -> pushMode(EVENTBINDING);
 FROM        : 'from';
+STYLE       : 'styles';
 LET         : 'let';
 VAR         : 'var';
 CONST       : 'const';
@@ -73,9 +74,14 @@ SLASH               : '/';
 DQUOT                : '"';
 QUOT                : '`';
 
-STRING:
-      ('"' (~["\r\n] | '\\"')* '"')
-    | ('\'' (~['\r\n] | '\\"')* '\'');
+//STRING:
+//      ('"' (~["\r\n] | '\\"')* '"')
+//    | ('\'' (~['\r\n] | '\\"')* '\'');
+
+STRING
+    : '"' ( ~["] | '\\"' | '\r' | '\n' )* '"'
+    | '\'' ( ~['] | '\\\'' | '\r' | '\n' )* '\''
+    ;
 
 NUMBER_VAL:
     [0-9]+ ( '.' [0-9]+ )?

@@ -68,6 +68,50 @@ public interface MyParserListener extends ParseTreeListener {
 	 */
 	void exitComponentBody(MyParser.ComponentBodyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyParser#componentEle}.
+	 * @param ctx the parse tree
+	 */
+	void enterComponentEle(MyParser.ComponentEleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#componentEle}.
+	 * @param ctx the parse tree
+	 */
+	void exitComponentEle(MyParser.ComponentEleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyParser#style}.
+	 * @param ctx the parse tree
+	 */
+	void enterStyle(MyParser.StyleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyParser#style}.
+	 * @param ctx the parse tree
+	 */
+	void exitStyle(MyParser.StyleContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code templateHtmlDeclaration}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 */
+	void enterTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code templateHtmlDeclaration}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 */
+	void exitTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code templateHtmlUrl}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 */
+	void enterTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code templateHtmlUrl}
+	 * labeled alternative in {@link MyParser#templateProperty}.
+	 * @param ctx the parse tree
+	 */
+	void exitTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MyParser#selectorProperty}.
 	 * @param ctx the parse tree
 	 */
@@ -137,40 +181,6 @@ public interface MyParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBootstrapProperty(MyParser.BootstrapPropertyContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code templateHtmlDeclaration}
-	 * labeled alternative in {@link MyParser#templateProperty}.
-	 * @param ctx the parse tree
-	 */
-	void enterTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code templateHtmlDeclaration}
-	 * labeled alternative in {@link MyParser#templateProperty}.
-	 * @param ctx the parse tree
-	 */
-	void exitTemplateHtmlDeclaration(MyParser.TemplateHtmlDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code templateHtmlUrl}
-	 * labeled alternative in {@link MyParser#templateProperty}.
-	 * @param ctx the parse tree
-	 */
-	void enterTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code templateHtmlUrl}
-	 * labeled alternative in {@link MyParser#templateProperty}.
-	 * @param ctx the parse tree
-	 */
-	void exitTemplateHtmlUrl(MyParser.TemplateHtmlUrlContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MyParser#componentEle}.
-	 * @param ctx the parse tree
-	 */
-	void enterComponentEle(MyParser.ComponentEleContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MyParser#componentEle}.
-	 * @param ctx the parse tree
-	 */
-	void exitComponentEle(MyParser.ComponentEleContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyParser#classType}.
 	 * @param ctx the parse tree

@@ -14,6 +14,19 @@ public class IfStat extends IfElseStat{
         this.types.add(node);
     }
 
+    @Override
+    public String generate() {
+        StringBuilder str = new StringBuilder();
+        str.append("if (");
+        for(var chaild : this.types){
+            str.append(chaild.generate());
+        }
+        str.append(") ");
+        str.append("return;");
+        str.append("\n");
+
+        return str.toString();
+    }
 
     @Override
     public String toString() {

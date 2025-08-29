@@ -7,6 +7,9 @@ public class NormalfunctionDecl extends FunctionDeclaration{
     String functionName;
     FunctionDeclarationStat stat;
     List<Body> body;
+    static String lastGeneratedId ;
+    static String save ;
+
 
     public NormalfunctionDecl(){
 
@@ -21,13 +24,48 @@ public class NormalfunctionDecl extends FunctionDeclaration{
         this.body.add(node);
     }
 
+
+    @Override
+    public String generateJS(StringBuilder r){
+        return r.toString();
+    }
+
+
     @Override
     public String generateJS(){
-
         StringBuilder s = new StringBuilder();
 
         s.append("\n");
+
+        if(functionName.equals("onFileSelected")){
+            StringBuilder r = new StringBuilder();
+            if (body != null && body.size() > 0) {
+                for (Body body : body) {
+                    r.append(body.generateVarJS());
+                }
+            }
+              lastGeneratedId = r.toString();
+            return s.toString();
+        }
+
+        if(functionName.equals("saveProduct")){
+            StringBuilder t = new StringBuilder();
+                t.append("const newProduct = {\n");
+                t.append(" id: newId,\n");
+
+
+            if (body != null && !body.isEmpty()) {
+                for (Body body : body) {
+                    t.append(body.generate());
+                }
+            }
+            t.append("};\n");
+            save = t.toString();
+            return s.toString();
+        }
+
         if (functionName.equals("ngOnInit")) {
+            s.append(" let products = JSON.parse(localStorage.getItem(\"products\") || \"[]\");\n");
             s.append(" function getProductIdFromUrl() {\n");
             s.append(" const params = new URLSearchParams(window.location.search);\n");
             s.append(" return Number(params.get(\"id\")); } \n");
@@ -59,10 +97,15 @@ public class NormalfunctionDecl extends FunctionDeclaration{
             }
             s.append("}\n");
 
-
-
         return s.toString();
+    }
 
+    public static String getLastGeneratedId() {
+        return lastGeneratedId;
+    }
+
+    public static String getSave() {
+        return save;
     }
 
     @Override

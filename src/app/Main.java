@@ -18,7 +18,7 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 public class Main {
     public static void main(String[] args) {
         try {
-            String testsDir = "GenerateTest"; // المجلد اللي فيه كل التيستات
+            String testsDir = "GenerateTest";
             File folder = new File(testsDir);
 
             String[] html = {"index.html", "details.html" , "add-product.html" , "edit-product.html"};
@@ -42,11 +42,12 @@ public class Main {
 
                     String htmlCode = program.generateHTML(css[testIndex], js[testIndex]);
                     String jsCode = program.generateJS();
+                    String cssCode = program.generateCSS();
 
 
                     CodeGenerator.writeFile(html[testIndex], htmlCode);
                     CodeGenerator.writeFile(js[testIndex], jsCode);
-//                    CodeGenerator.writeFile(css[testIndex], htmlCode);
+                    CodeGenerator.writeFile(css[testIndex], cssCode);
                     System.out.println(program);
                     System.out.println(astVisitor.symbolTable2.toString());
                     testIndex++;

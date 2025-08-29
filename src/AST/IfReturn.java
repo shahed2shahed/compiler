@@ -8,6 +8,12 @@ public class IfReturn extends IfElseStat{
     }
 
     @Override
+    public String generateVarJS() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ifStat.generate());
+        return sb.toString();
+    }
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("IfElse Statement :\n");

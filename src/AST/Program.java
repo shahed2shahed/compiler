@@ -89,4 +89,16 @@ public class Program extends AstNode {
     }
 
 
+    @Override
+    public String generateCSS() {
+        StringBuilder sb = new StringBuilder();
+
+        for (StatementNode child : children) {
+            sb.append(child.generateCSS());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+
 }

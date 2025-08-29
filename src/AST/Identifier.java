@@ -42,7 +42,7 @@ public class Identifier extends PrimitiveTypeNode {
 
 
                 js.append("\n");
-                js.append("function renderDetails(product) {");
+        js.append("function renderDetails(product) {");
                 js.append('\n');
                 js.append("div0.innerHTML = `\n");
 

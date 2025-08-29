@@ -52,7 +52,6 @@ public class SymbolTable {
         return eventBindingToNonFunction;
     }
 
-
 @Override
 public String toString() {
     return "[Symbol Table]\n" +

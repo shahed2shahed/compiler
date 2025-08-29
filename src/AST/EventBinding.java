@@ -22,11 +22,9 @@ public class EventBinding extends Types {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//        sb.append("click").append(click);
-sb.append(click);
-sb.append(" ");
-//        sb.append("function name").append(functionName);
-sb.append(functionName);
-        return   sb.toString();
+        sb.append("click").append(click);
+        sb.append(" ");
+        sb.append("function name").append(functionName);
+        return sb.toString();
     }
 }

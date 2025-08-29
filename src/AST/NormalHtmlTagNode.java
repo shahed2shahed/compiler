@@ -1,13 +1,17 @@
 package AST;
 import java.util.List;
 
+import static AST.SelfClosingTag.getLast;
+
 public class NormalHtmlTagNode extends HtmlDeclare {
 
      OpenTag openTag;
      List<Types> htmlBody;
      CloseTag closeTag;
+     static int  r = 0;
      private boolean autoIdAdded = false;
 
+    static String  var;
      public NormalHtmlTagNode() {}
      public NormalHtmlTagNode(OpenTag openTag, List<Types> htmlBody, CloseTag closeTag) {
         this.openTag = openTag;
@@ -150,113 +154,121 @@ public class NormalHtmlTagNode extends HtmlDeclare {
     }
 
 
-@Override
-public String generateJS() {
-    StringBuilder sb = new StringBuilder();
-    boolean isNgDirective = false;
-    String classValue = "";
-    StringBuilder s = new StringBuilder();
+
+    @Override
+    public String generateJS() {
+        StringBuilder sb = new StringBuilder();
+        boolean isNgDirective = false;
+        boolean isNgSubmit = false;
+        String classValue = "";
+        String classV = "";
+
+        StringBuilder s = new StringBuilder();
 
         for (Types child : openTag.getContent()) {
+            if (child instanceof ClassEx) {
+                for (Types v : openTag.getContent()) {
+                    if (v instanceof Values) {
+                        classV += ((Values) v).getMark();
+                        classV = classV.replaceAll("^\"|\"$", "");
+                        if (classV.equals("form-group")) {
 
-
-            if(child.toString().equals("h5")) {
-                isNgDirective = true;
-                sb.append(child.generateJSWithBody(htmlBody )).append(" ");
-            }
-
-                if (child instanceof NgForDirective) {
-                    isNgDirective = true;
-
-                  //  sb.append(((NgForDirective) child).generateJS());
-                    for (Types attr : openTag.getContent()) {
-                        System.out.println("opeeen" + attr.getClass().getSimpleName());
-                        if (attr instanceof ClassEx) {
-                            for (Types v : openTag.getContent()) {
-                                if (v instanceof Values) {
-                                    classValue += ((Values) v).getMark();
-                                    classValue = classValue.replaceAll("^\"|\"$", "");
+                             if (getLast() != null) {
+                                    sb.append(getLast());
                                 }
+
+                            sb.append(v.generateJSWithBody(htmlBody));
+                        }
+                    }
+                }
+            }
+
+            if (child.toString().equals("ngSubmit")) {
+                isNgSubmit = true;
+            }
+
+            if (child.toString().equals("h5")) {
+                isNgDirective = true;
+                sb.append(child.generateJSWithBody(htmlBody)).append(" ");
+            }
+
+            if (child instanceof NgForDirective) {
+                isNgDirective = true;
+                for (Types attr : openTag.getContent()) {
+                    if (attr instanceof ClassEx) {
+                        for (Types v : openTag.getContent()) {
+                            if (v instanceof Values) {
+                                classValue += ((Values) v).getMark();
+                                classValue = classValue.replaceAll("^\"|\"$", "");
                             }
-                             s.append(".className = \"").append(classValue).append("\";\n");
                         }
+                        s.append(".className = \"").append(classValue).append("\"\n");
                     }
-
-                    System.out.println("sOHH" + s);
-                    sb.append(child.generateJSWithBody(htmlBody , s)).append(" ");
-                  //  sb.append(child.generateJS(openTag.getTagName())).append("\n");
                 }
+                sb.append(child.generateJSWithBody(htmlBody , s)).append(" ");
+            }
 
-            if (!isNgDirective) {
-            if (child instanceof EventBinding | child instanceof NgIfDirective) {
-                sb.append(" const " + openTag.getTagName()).
-                        append(" = document.getElementById('").
-                        append(openTag.generateJS()).append("');");
-                sb.append("\n");
+            if (!isNgDirective || !isNgSubmit) {
+                if (child instanceof EventBinding || child instanceof NgIfDirective) {
+                    sb.append(" const " + openTag.getTagName())
+                            .append(" = document.getElementById('")
+                            .append(openTag.generateJS()).append("');\n");
+                }
             }
         }
-            }
 
-    boolean childHasNgFor = false;
-    if (htmlBody != null) {
-        for (Types child : htmlBody) {
-            if (child instanceof NormalHtmlTagNode) {
-                NormalHtmlTagNode elem = (NormalHtmlTagNode) child;
-                if (elem.getOpenTag() != null) {
-                    for (Types c : elem.getOpenTag().getContent()) {
-                        if (c instanceof NgForDirective || c.toString().equals("h5")) {
-                            childHasNgFor = true;
-                            break;
+        boolean childHasNgFor = false;
+        if (htmlBody != null) {
+            for (Types child : htmlBody) {
+                if (child instanceof NormalHtmlTagNode) {
+                    NormalHtmlTagNode elem = (NormalHtmlTagNode) child;
+                    if (elem.getOpenTag() != null) {
+                        for (Types c : elem.getOpenTag().getContent()) {
+                            if (c instanceof NgForDirective || c.toString().equals("h5")) {
+                                childHasNgFor = true;
+                                break;
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    if(childHasNgFor) {
-        sb.append(" const " + openTag.getTagName()+i++).
-                append(" = document.getElementById('").
-                append(openTag.generateJS()).append("');");
-        sb.append("\n");
-    }
+        if (isNgSubmit) {
+            sb.append("let products = JSON.parse(localStorage.getItem(\"products\") || \"[]\");\n");
+            sb.append("let fileDataUrl = null;\n");
+            var = openTag.getTagName() + i++;
+            sb.append(" const " + var)
+                    .append(" = document.getElementById('")
+                    .append(openTag.generateJS()).append("');\n");
+        }
 
-            if (!isNgDirective) {
-                if(htmlBody != null) {
-                    for (Types child : htmlBody) {
-                        sb.append(child.generateJS());
-                        sb.append(" ");
-                    }
-                  }
+        if (childHasNgFor) {
+            var = openTag.getTagName() + i++;
+            sb.append(" const " + var)
+                    .append(" = document.getElementById('")
+                    .append(openTag.generateJS()).append("');\n");
+        }
+
+        if (!isNgDirective) {
+            if (htmlBody != null) {
+                for (Types child : htmlBody) {
+                    sb.append(child.generateJS()).append(" ");
                 }
+            }
+        }
+
         return sb.toString();
     }
 
 
 
+    public static String getLastGenerated() {
+        return var;
+    }
 
-//    @Override
-//    public String generateJS(String varAdd){
-//         StringBuilder builder = new StringBuilder();
-//        if (openTag != null) {
-//            boolean isNgDirective = false;
-//            String classValue = "";
-//
-//            for (Types attr : openTag.getContent()) {
-//                System.out.println("opeeen" + attr.getClass().getSimpleName());
-//                if (attr instanceof ClassEx) {
-//                    for (Types v : openTag.getContent()) {
-//                        if (v instanceof Values) {
-//                            classValue += ((Values) v).getMark();
-//                            classValue = classValue.replaceAll("^\"|\"$", "");
-//                        }
-//                    }
-//                    builder.append(".className = \"").append(classValue).append("\";\n");
-//                }
-//            }
-//        }
-//        return builder.toString();
-//}
+
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -272,10 +284,6 @@ public String generateJS() {
                 }
                 sb.append(" }\n");
             }
-//            else {
-//                sb.append("  No Html Body\n");
-//            }
-
             sb.append("  Close Tag: ");
                     sb.append(closeTag).append("\n");
         return sb.toString();}

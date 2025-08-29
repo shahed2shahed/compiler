@@ -6,9 +6,15 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+import static AST.NormalfunctionDecl.getLastGeneratedId;
+import static AST.OpenTag.getLastGenerated;
+
 public class SelfClosingTag extends HtmlDeclare{
 
     List<Types> content ;
+    static String  ngModel;
+
+    StringBuilder l = new StringBuilder();
 
     public SelfClosingTag() {
 
@@ -27,26 +33,6 @@ public class SelfClosingTag extends HtmlDeclare{
         this.content.add(node);
     }
 
-//    @Override
-//    public String generate() {
-//        StringBuilder sb = new StringBuilder();
-//        if (content != null && !content.isEmpty()) {
-//            sb.append("<");
-//            for (Types child : content) {
-//                System.out.println("xxxxxx"+child.toString());
-//
-//                if (child.toString().equals("ngModel")) {
-//                    sb.append(child.generateHTML(content));
-//                }
-//                else {
-//                    sb.append(child.generate());
-//                }
-//                sb.append(" ");
-//            }
-//        }
-//        sb.append("/>");
-//        return sb.toString();
-//    }
 @Override
 public String generate() {
     StringBuilder sb = new StringBuilder();
@@ -182,19 +168,74 @@ public String generate() {
         return sb.toString();
     }
 
+    @Override
+    public String generateJS() {
+        StringBuilder sb = new StringBuilder();
+        if (content == null || content.isEmpty()) return "";
 
+        String tagName = content.get(0).generate().trim();
 
+        boolean changeAttached = false;
 
+        for (var child : content) {
+            System.out.println(child.getClass().getSimpleName());
+            if (child.generate().equals("change") && !changeAttached) {
+                String var = tagName + i++;
+                sb.append("const " + var).
+                        append(" = document.getElementById('").
+                        append("imageInput").append("');");
+                sb.append("\n");
 
+                sb.append(var).append(".addEventListener(\"change\", (event) => {\n").
+                        append(getLastGeneratedId()+"\n").
+                        append("});\n");
+
+                changeAttached = true;
+            }
+
+            if (child.generate().equals("ngModel")) {
+                for (int j = 0; j < content.size(); j++) {
+                    String token = content.get(j).generate().trim();
+                    if (token.equals("name")) {
+                        if (j + 2 < content.size()) {
+                            String value = content.get(j + 2).generate().trim();
+                            value = value.replace("\"", "");
+
+                            if (value != null && !value.isEmpty()) {
+                                System.out.println("Adding ngModel for: " + value);
+                                if (value.equals("name")) {
+                                    ngModel = l.append("const ").append(value).append(i++).append(" = ")
+                                            .append("document.getElementById('")
+                                            .append(value).append("').value.trim();\n").toString();
+                                } else {
+                                    ngModel = l.append("const ").append(value).append(i++).append(" = ")
+                                            .append("document.getElementById('")
+                                            .append(value).append("').value;\n").toString();
+                                }
+                            } else {
+                                System.out.println("Skipped null or empty value");
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String getLast() {
+        return ngModel;
+    }
 
     @Override
     public String generateJSS() {
         StringBuilder sb = new StringBuilder();
 
         if (content != null && !content.isEmpty()) {
-            sb.append("<img");  // نطبع التاغ مرة وحدة
+            sb.append("<img");
 
-            String currentName = null;      // اسم الـ attribute (src / alt / ...)
+            String currentName = null;
             boolean bracketBinding = false; // هل الاسم ضمن [] مثل [src]
             boolean haveEquals = false;     // شفنا علامة =
             String currentValue = null;     // القيمة بين "" أو ''
@@ -247,8 +288,6 @@ public String generate() {
                     currentValue = null;
                     continue;
                 }
-
-                // أي أجزاء غير متوقعة نتجاهلها (لتفادي تسريب رموز مثل {{ ... }} كتوكن منفصل)
             }
 
             sb.append(">");
@@ -284,64 +323,6 @@ public String generate() {
         return t;
     }
 
-
-
-
-
-
-
-
-
-//    @Override
-//    public String generateJS(String tagVar) {
-//        if (content == null || content.isEmpty()) return "";
-//
-//        String tagName = content.get(0).toString().trim(); // أول عنصر هو اسم التاغ
-//        String varName = "elem";
-//        StringBuilder sb = new StringBuilder();
-//
-//        // إنشاء العنصر
-//        sb.append("const ").append(varName).append(" = document.createElement('")
-//                .append(tagName).append("');\n");
-//
-//        // معالجة بقية الـ content كـ Attributes
-//        StringBuilder rawLineBuilder = new StringBuilder();
-//        for (int i = 1; i < content.size(); i++) {
-//            rawLineBuilder.append(content.get(i).toString().trim());
-//            rawLineBuilder.append(" ");
-//        }
-//        String rawLine = rawLineBuilder.toString().trim();
-//        System.out.println("[DEBUG] Raw attribute line: " + rawLine);
-//
-//        // Regex لالتقاط attributes من الشكل: [src]="product.image" أو alt="{{ product.name }}"
-//        Pattern pattern = Pattern.compile("(\\[[^\\]]+\\]|\\w+)\\s*=\\s*\"([^\"]+)\"");
-//        Matcher matcher = pattern.matcher(rawLine);
-//
-//        while (matcher.find()) {
-//            String attrName = matcher.group(1).trim();
-//            String attrValue = matcher.group(2).trim();
-//
-//            // التعامل مع [src] إلى src
-//            if (attrName.startsWith("[") && attrName.endsWith("]")) {
-//                    attrName = attrName.substring(1, attrName.length() - 1).trim();
-//            }
-//
-//            // التعامل مع {{ ... }} داخل alt
-//            if (attrValue.startsWith("{{") && attrValue.endsWith("}}")) {
-//                attrValue = attrValue.substring(2, attrValue.length() - 2).trim();
-//            }
-//
-//            System.out.println("[DEBUG] Processed attribute: " + attrName + " = " + attrValue);
-//
-//            sb.append(varName).append(".").append(attrName).append(" = ").append(attrValue).append(";\n");
-//        }
-//
-//        // إضافة العنصر إلى div
-//        sb.append(tagVar+".appendChild(").append(varName).append(");\n");
-//
-//        System.out.println("[DEBUG] Finished element generation: " + varName);
-//        return sb.toString();
-//    }
 
     @Override
     public String toString() {
